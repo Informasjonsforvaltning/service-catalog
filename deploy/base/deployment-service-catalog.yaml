@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-catalog
+  labels:
+    app: service-catalog
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service-catalog
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: service-catalog
+      annotations:
+        prometheus.io/scrape: "false"
+    spec:
+      containers:
+        - name: service-catalog
+          image: service-catalog
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8080
+            initialDelaySeconds: 20
+            periodSeconds: 30
+            successThreshold: 1
+            failureThreshold: 5
+          resources:
+            requests:
+              memory: 100Mi
