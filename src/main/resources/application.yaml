@@ -10,3 +10,4 @@ management:
   health:
     livenessState.enabled: true
     readinessState.enabled: true
+spring.data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_SERVICE}/serviceCatalog?authSource=admin
