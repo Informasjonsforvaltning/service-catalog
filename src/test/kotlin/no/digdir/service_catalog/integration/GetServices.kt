@@ -1,8 +1,12 @@
 package no.digdir.service_catalog.integration
 
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import no.digdir.service_catalog.model.Service
 import no.digdir.service_catalog.utils.ApiTestContext
+import no.digdir.service_catalog.utils.SERVICES
 import no.digdir.service_catalog.utils.apiGet
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
@@ -14,19 +18,16 @@ import org.springframework.test.context.ContextConfiguration
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ContextConfiguration(initializers = [ApiTestContext.Initializer::class])
 @Tag("integration")
-class HealthTest: ApiTestContext() {
-    @Test
-    fun ping() {
-        val response = apiGet(port, "/actuator/health/liveness", null)
-
-        assertEquals(HttpStatus.OK.value(), response["status"])
-    }
+class GetServices: ApiTestContext() {
+    private val mapper = jacksonObjectMapper()
 
     @Test
-    fun ready() {
-        val response = apiGet(port, "/actuator/health/readiness", null)
+    fun `able to get all services`() {
+        val response = apiGet(port, "/services", null)
+        Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-        assertEquals(HttpStatus.OK.value(), response["status"])
+        val result: List<Service> = mapper.readValue(response["body"] as String)
+        Assertions.assertEquals(SERVICES, result)
     }
 
 }
