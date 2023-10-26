@@ -10,4 +10,20 @@ management:
   health:
     livenessState.enabled: true
     readinessState.enabled: true
-spring.data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_SERVICE}/serviceCatalog?authSource=admin
+spring:
+  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_SERVICE}/serviceCatalog?authSource=admin
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${SSO_HOST}/auth/realms/fdk
+          jwk-set-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+---
+spring:
+  config.activate.on-profile: test
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:5050/auth/realms/fdk
+          jwk-set-uri: http://localhost:5050/auth/realms/fdk/protocol/openid-connect/certs

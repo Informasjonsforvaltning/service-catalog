@@ -9,6 +9,8 @@ import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
+import java.net.HttpURLConnection
+import java.net.URL
 
 abstract class ApiTestContext {
     @LocalServerPort
@@ -37,7 +39,19 @@ abstract class ApiTestContext {
             .waitingFor(Wait.forListeningPort())
 
         init {
+            startMockServer()
             mongoContainer.start()
+
+            try {
+                val con = URL("http://localhost:5050/ping").openConnection() as HttpURLConnection
+                con.connect()
+                if (con.responseCode != 200) {
+                    stopMockServer()
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                stopMockServer()
+            }
         }
     }
 }
