@@ -11,7 +11,9 @@ import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        properties = ["spring.profiles.active=test"])
 @ContextConfiguration(initializers = [ApiTestContext.Initializer::class])
 @Tag("integration")
 class HealthTest: ApiTestContext() {
