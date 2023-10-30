@@ -4,6 +4,7 @@ import no.digdir.service_catalog.model.PublicService
 import no.digdir.service_catalog.security.EndpointPermissions
 import no.digdir.service_catalog.service.PublicServiceService
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
@@ -25,4 +26,17 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         } else {
             ResponseEntity(HttpStatus.FORBIDDEN)
         }
+
+    @GetMapping(value = [ "/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getPublicServiceById(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable catalogId: String,
+        @PathVariable id: String): ResponseEntity<PublicService> =
+            if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
+                publicServiceService.findPublicServiceById(id, catalogId)
+                    ?.let { ResponseEntity(it, HttpStatus.OK) }
+                    ?: ResponseEntity(HttpStatus.NOT_FOUND)
+            } else {
+                ResponseEntity(HttpStatus.FORBIDDEN)
+            }
 }
