@@ -1,5 +1,6 @@
 package no.digdir.service_catalog.utils
 
+import no.digdir.service_catalog.mongodb.PublicServiceRepository
 import no.digdir.service_catalog.mongodb.ServiceRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -18,10 +19,17 @@ abstract class ApiTestContext {
 
     @Autowired
     private lateinit var serviceRepository: ServiceRepository
+
+    @Autowired
+    private lateinit var publicServiceRepository: PublicServiceRepository
+
     @BeforeEach
     fun resetDatabase() {
         serviceRepository.deleteAll()
         serviceRepository.saveAll(SERVICES)
+
+        publicServiceRepository.deleteAll()
+        publicServiceRepository.saveAll(PUBLIC_SERVICES)
     }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
