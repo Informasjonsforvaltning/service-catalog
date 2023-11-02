@@ -1,5 +1,6 @@
 package no.digdir.service_catalog.controller
 
+import no.digdir.service_catalog.model.JsonPatchOperation
 import no.digdir.service_catalog.model.PublicService
 import no.digdir.service_catalog.security.EndpointPermissions
 import no.digdir.service_catalog.service.PublicServiceService
@@ -11,7 +12,9 @@ import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
@@ -39,4 +42,19 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
             } else {
                 ResponseEntity(HttpStatus.FORBIDDEN)
             }
+
+    @PatchMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun patchPublicService(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable catalogId: String,
+        @PathVariable id: String,
+        @RequestBody patchOperations: List<JsonPatchOperation>
+    ): ResponseEntity<PublicService> =
+        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+            publicServiceService.patchPublicService(id, catalogId, patchOperations)
+                ?.let { ResponseEntity(it, HttpStatus.OK) }
+                ?: ResponseEntity(HttpStatus.NOT_FOUND)
+        } else {
+            ResponseEntity(HttpStatus.FORBIDDEN)
+        }
 }

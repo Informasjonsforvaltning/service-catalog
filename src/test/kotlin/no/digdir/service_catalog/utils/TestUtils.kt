@@ -1,6 +1,13 @@
 package no.digdir.service_catalog.utils
 
+import org.springframework.http.HttpEntity
+import org.springframework.http.HttpHeaders
+import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
+import org.springframework.web.client.HttpClientErrorException
+import org.springframework.web.client.RestTemplate
 import java.io.BufferedReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -16,21 +23,21 @@ fun apiGet(port: Int, endpoint: String, acceptHeader: String?): Map<String,Any> 
         if(isOK(connection.responseCode)) {
             val responseBody = connection.inputStream.bufferedReader().use(BufferedReader::readText)
             mapOf(
-                    "body"   to responseBody,
-                    "header" to connection.headerFields.toString(),
-                    "status" to connection.responseCode)
+                "body"   to responseBody,
+                "header" to connection.headerFields.toString(),
+                "status" to connection.responseCode)
         } else {
             mapOf(
-                    "status" to connection.responseCode,
-                    "header" to " ",
-                    "body"   to " "
+                "status" to connection.responseCode,
+                "header" to " ",
+                "body"   to " "
             )
         }
     } catch (e: Exception) {
         mapOf(
-                "status" to e.toString(),
-                "header" to " ",
-                "body"   to " "
+            "status" to e.toString(),
+            "header" to " ",
+            "body"   to " "
         )
     }}
 
@@ -38,44 +45,40 @@ private fun isOK(response: Int?): Boolean =
         if(response == null) false
         else HttpStatus.resolve(response)?.is2xxSuccessful == true
 
-fun apiAuthorizedRequest(path: String, port: Int, body: String?, token: String?, method: String): Map<String, Any> {
-    val connection  = URL("http://localhost:$port$path").openConnection() as HttpURLConnection
-    connection.requestMethod = method
-    connection.setRequestProperty("Content-type", "application/json")
-    connection.setRequestProperty("Accept", "application/json")
+fun apiAuthorizedRequest(
+    path: String, port: Int, body: String?, token: String?, httpMethod: HttpMethod,
+    accept: MediaType = MediaType.APPLICATION_JSON
+): Map<String, Any> {
 
-    if(!token.isNullOrEmpty()) {
-        connection.setRequestProperty("Authorization", "Bearer $token")
-    }
+
+    val request = RestTemplate()
+    request.requestFactory = HttpComponentsClientHttpRequestFactory()
+    val url = "http://localhost:$port$path"
+    val headers = HttpHeaders()
+    headers.accept = listOf(accept)
+    token?.let { headers.setBearerAuth(it) }
+    headers.contentType = MediaType.APPLICATION_JSON
+    val entity: HttpEntity<String> = HttpEntity(body, headers)
 
     return try {
-        connection.doOutput = true
-        connection.connect()
+        val response = request.exchange(url, httpMethod, entity, String::class.java)
+        mapOf(
+            "body" to response.body,
+            "header" to response.headers,
+            "status" to response.statusCode.value()
+        )
 
-        if(body != null) {
-            val writer = OutputStreamWriter(connection.outputStream)
-            writer.write(body)
-            writer.close()
-        }
-
-        if(isOK(connection.responseCode)){
-            mapOf(
-                    "body"   to connection.inputStream.bufferedReader().use(BufferedReader :: readText),
-                    "header" to connection.headerFields.toString(),
-                    "status" to connection.responseCode
-            )
-        } else {
-            mapOf(
-                    "status" to connection.responseCode,
-                    "header" to " ",
-                    "body" to " "
-            )
-        }
+    } catch (e: HttpClientErrorException) {
+        mapOf(
+            "status" to e.statusCode.value(),
+            "header" to " ",
+            "body" to e.toString()
+        )
     } catch (e: Exception) {
         mapOf(
-                "status" to e.toString(),
-                "header" to " ",
-                "body"   to " "
+            "status" to e.toString(),
+            "header" to " ",
+            "body" to " "
         )
     }
 }
