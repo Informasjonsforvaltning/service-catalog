@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -54,6 +55,19 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
             publicServiceService.patchPublicService(id, catalogId, patchOperations)
                 ?.let { ResponseEntity(it, HttpStatus.OK) }
                 ?: ResponseEntity(HttpStatus.NOT_FOUND)
+        } else {
+            ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
+    @DeleteMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun deletePublicService(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable catalogId: String,
+        @PathVariable id: String,
+    ): ResponseEntity<HttpStatus> =
+        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+            publicServiceService.deletePublicService(id, catalogId)
+            ResponseEntity(HttpStatus.NO_CONTENT)
         } else {
             ResponseEntity(HttpStatus.FORBIDDEN)
         }
