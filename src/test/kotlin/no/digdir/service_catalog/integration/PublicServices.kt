@@ -265,4 +265,74 @@ class PublicServices: ApiTestContext() {
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
     }
+
+    @Nested
+    internal inner class DeletePublicService {
+        val pathService1 = "/catalogs/910244132/public-services/1"
+
+        @Test
+        fun `unauthorized when missing token` () {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                null,
+                HttpMethod.DELETE)
+
+            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun `forbidden when authenticated as read user` () {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.DELETE)
+
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service in different catalog`() {
+            val response = apiAuthorizedRequest(
+                "/catalogs/123456789/public-services/1",
+                port,
+                null,
+                JwtToken(Access.WRONG_ORG_WRITE).toString(),
+                HttpMethod.DELETE)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service not in database`() {
+            val response = apiAuthorizedRequest(
+                "/catalogs/910244132/public-services/1000",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.DELETE)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `able to delete public service when authenticated as a write user`() {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.DELETE)
+            Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response["status"])
+
+            val notFoundResponse = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.GET)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), notFoundResponse["status"])
+        }
+    }
 }
