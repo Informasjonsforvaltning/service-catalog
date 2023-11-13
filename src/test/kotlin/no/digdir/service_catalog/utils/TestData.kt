@@ -2,6 +2,7 @@ package no.digdir.service_catalog.utils
 
 import no.digdir.service_catalog.model.LocalizedStrings
 import no.digdir.service_catalog.model.PublicService
+import no.digdir.service_catalog.model.PublicServiceToBeCreated
 import no.digdir.service_catalog.model.Service
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 
@@ -33,5 +34,7 @@ val PUBLIC_SERVICE_1 =
 val PUBLIC_SERVICE_2 =
     PublicService("2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"), null)
+
+val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"), null)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)

@@ -3,12 +3,14 @@ package no.digdir.service_catalog.service
 import no.digdir.service_catalog.model.JsonPatchOperation
 import no.digdir.service_catalog.model.OpEnum
 import no.digdir.service_catalog.model.PublicService
+import no.digdir.service_catalog.model.PublicServiceToBeCreated
 import no.digdir.service_catalog.mongodb.PublicServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
+import java.util.*
 
 @Service
 class PublicServiceService(private val publicServiceRepository: PublicServiceRepository) {
@@ -39,6 +41,19 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
                 ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         } catch (ex: Exception) {
             logger.error("Failed to delete public service with id $id in catalog $catalogId", ex)
+            throw ex
+        }
+
+    fun createPublicService(catalogId: String, publicServiceToBeCreated: PublicServiceToBeCreated): PublicService =
+        try {
+            PublicService(
+                id = UUID.randomUUID().toString(),
+                catalogId = catalogId,
+                title = publicServiceToBeCreated.title,
+                description = publicServiceToBeCreated.description
+            ).let { publicServiceRepository.insert(it) }
+        } catch (ex: Exception) {
+            logger.error("Failed to create public service for $catalogId", ex)
             throw ex
         }
 

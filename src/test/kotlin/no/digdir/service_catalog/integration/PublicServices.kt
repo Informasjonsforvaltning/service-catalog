@@ -6,11 +6,7 @@ import no.digdir.service_catalog.model.JsonPatchOperation
 import no.digdir.service_catalog.model.LocalizedStrings
 import no.digdir.service_catalog.model.OpEnum
 import no.digdir.service_catalog.model.PublicService
-import no.digdir.service_catalog.utils.ApiTestContext
-import no.digdir.service_catalog.utils.PUBLIC_SERVICES
-import no.digdir.service_catalog.utils.PUBLIC_SERVICE_1
-import no.digdir.service_catalog.utils.PUBLIC_SERVICE_2
-import no.digdir.service_catalog.utils.apiAuthorizedRequest
+import no.digdir.service_catalog.utils.*
 import no.digdir.service_catalog.utils.jwt.Access
 import no.digdir.service_catalog.utils.jwt.JwtToken
 import org.junit.jupiter.api.Assertions
@@ -22,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
+import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
@@ -335,6 +332,82 @@ class PublicServices: ApiTestContext() {
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), notFoundResponse["status"])
         }
     }
+
+    @Nested
+    internal inner class CreatePublicService {
+        private val path = "/catalogs/910244132/public-services"
+
+        @Test
+        fun `create PublicService as OrgWrite`() {
+            val before = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_ADMIN).toString(),
+                HttpMethod.GET
+            )
+            assertEquals(HttpStatus.OK.value(), before["status"])
+
+            val createResponse = apiAuthorizedRequest(
+                path,
+                port,
+                mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST
+            )
+            assertEquals(HttpStatus.CREATED.value(), createResponse["status"])
+
+            val after = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_ADMIN).toString(),
+                HttpMethod.GET
+            )
+            assertEquals(HttpStatus.OK.value(), after["status"])
+
+            val allPublicServicesBefore: List<PublicService> = mapper.readValue(before["body"] as String)
+            val allPublicServicesAfter: List<PublicService> = mapper.readValue(after["body"] as String)
+            assertEquals(allPublicServicesBefore.size + 1, allPublicServicesAfter.size)
+        }
+
+        @Test
+        fun `create PublicService as OrgAdmin`() {
+            val createResponse = apiAuthorizedRequest(
+                path,
+                port,
+                mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
+                JwtToken(Access.ORG_ADMIN).toString(),
+                HttpMethod.POST
+            )
+            assertEquals(HttpStatus.CREATED.value(), createResponse["status"])
+        }
+
+        @Test
+        fun `create PublicService as OrgRead forbidden`() {
+            val createResponse = apiAuthorizedRequest(
+                path,
+                port,
+                mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.POST
+            )
+            assertEquals(HttpStatus.FORBIDDEN.value(), createResponse["status"])
+        }
+
+        @Test
+        fun `create PublicService as WrongOrg forbidden`() {
+            val createResponse = apiAuthorizedRequest(
+                path,
+                port,
+                mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
+                JwtToken(Access.WRONG_ORG_WRITE).toString(),
+                HttpMethod.POST
+            )
+            assertEquals(HttpStatus.FORBIDDEN.value(), createResponse["status"])
+        }
+    }
+
 
     @Nested
     internal inner class PublishPublicService {
