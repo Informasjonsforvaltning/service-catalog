@@ -335,4 +335,85 @@ class PublicServices: ApiTestContext() {
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), notFoundResponse["status"])
         }
     }
+
+    @Nested
+    internal inner class PublishPublicService {
+        val pathService1 = "/catalogs/910244132/public-services/1/publish"
+        @Test
+        fun `unauthorized when missing token` () {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                null,
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun `forbidden when authenticated as read user` () {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service in different catalog`() {
+            val response = apiAuthorizedRequest(
+                "/catalogs/123456789/public-services/1/publish",
+                port,
+                null,
+                JwtToken(Access.WRONG_ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service not in database`() {
+            val response = apiAuthorizedRequest(
+                "/catalogs/910244132/public-services/1000/publish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `able to publish public service when authenticated as a write user`() {
+            val response = apiAuthorizedRequest(
+                pathService1,
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
+
+            val result: PublicService = mapper.readValue(response["body"] as String)
+            val expected = PUBLIC_SERVICE_1.copy(isPublished = true)
+            Assertions.assertEquals(expected, result)
+        }
+
+        @Test
+        fun `bad request when updating isPublished with normal patch updates`() {
+            val operations = listOf(JsonPatchOperation(
+                op = OpEnum.REPLACE,
+                path = "/isPublished",
+                value = true))
+            val response = apiAuthorizedRequest(
+                "/catalogs/910244132/public-services/1",
+                port,
+                mapper.writeValueAsString(operations),
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.PATCH)
+
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
+    }
 }
