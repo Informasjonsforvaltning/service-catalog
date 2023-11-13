@@ -14,5 +14,6 @@ data class PublicService (
     val id: String,
     val catalogId: String,
     val title: LocalizedStrings?,
-    val description: LocalizedStrings?
+    val description: LocalizedStrings?,
+    val isPublished: Boolean = false
 )

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
@@ -68,6 +69,18 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             publicServiceService.deletePublicService(id, catalogId)
             ResponseEntity(HttpStatus.NO_CONTENT)
+        } else {
+            ResponseEntity(HttpStatus.FORBIDDEN)
+        }
+
+    @PostMapping(value = ["/{id}/publish"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun publishPublicService(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable catalogId: String,
+        @PathVariable id: String,
+    ): ResponseEntity<PublicService> =
+        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+            ResponseEntity(publicServiceService.publishPublicService(id, catalogId), HttpStatus.OK)
         } else {
             ResponseEntity(HttpStatus.FORBIDDEN)
         }

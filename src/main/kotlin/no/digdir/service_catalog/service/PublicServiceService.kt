@@ -1,6 +1,7 @@
 package no.digdir.service_catalog.service
 
 import no.digdir.service_catalog.model.JsonPatchOperation
+import no.digdir.service_catalog.model.OpEnum
 import no.digdir.service_catalog.model.PublicService
 import no.digdir.service_catalog.mongodb.PublicServiceRepository
 import org.slf4j.LoggerFactory
@@ -38,6 +39,16 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
                 ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         } catch (ex: Exception) {
             logger.error("Failed to delete public service with id $id in catalog $catalogId", ex)
+            throw ex
+        }
+
+    fun publishPublicService(id: String, catalogId: String): PublicService?  =
+        try {
+            findPublicServiceById(id, catalogId)
+                ?.let { publicServiceRepository.save(it.copy(isPublished = true)) }
+                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        } catch (ex: Exception) {
+            logger.error("Failed to publish public service with id $id in catalog $catalogId", ex)
             throw ex
         }
 }
