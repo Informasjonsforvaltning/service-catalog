@@ -20,6 +20,6 @@ data class PublicService (
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PublicServiceToBeCreated(
-    val title: LocalizedStrings,
+    val title: LocalizedStrings?,
     val description: LocalizedStrings?
 )
