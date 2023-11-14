@@ -8,6 +8,7 @@ import org.springframework.http.MediaType
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory
 import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
+import org.springframework.web.server.ResponseStatusException
 import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
@@ -48,8 +49,6 @@ fun apiAuthorizedRequest(
     path: String, port: Int, body: String?, token: String?, httpMethod: HttpMethod,
     accept: MediaType = MediaType.APPLICATION_JSON
 ): Map<String, Any> {
-
-
     val request = RestTemplate()
     request.requestFactory = HttpComponentsClientHttpRequestFactory()
     val url = "http://localhost:$port$path"
@@ -66,7 +65,6 @@ fun apiAuthorizedRequest(
             "header" to response.headers,
             "status" to response.statusCode.value()
         )
-
     } catch (e: HttpClientErrorException) {
         mapOf(
             "status" to e.statusCode.value(),

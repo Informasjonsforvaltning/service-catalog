@@ -58,10 +58,18 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
     fun publishPublicService(id: String, catalogId: String): PublicService?  =
         try {
             findPublicServiceById(id, catalogId)
-                ?.let { publicServiceRepository.save(it.copy(isPublished = true)) }
+                ?.let { publicServiceRepository.save(it.copy(published = true)) }
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
             logger.error("Failed to publish public service with id $id in catalog $catalogId", ex)
             throw ex
         }
+
+    fun publishedServicesInCatalog(catalogId: String): List<PublicService> =
+        publicServiceRepository.getByCatalogIdAndPublished(catalogId, true)
+
+    fun getPublishedPublicServiceInCatalog(id: String, catalogId: String): PublicService =
+        findPublicServiceById(id, catalogId)
+            ?.takeIf { it.published }
+            ?: throw CustomNotFoundException()
 }

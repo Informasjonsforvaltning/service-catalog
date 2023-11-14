@@ -9,13 +9,16 @@ import org.springframework.data.mongodb.core.mapping.Document
 @Document(collection = "publicServices")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@CompoundIndexes(value = [CompoundIndex(name = "catalog_id", def = "{'catalogId' : 1}")])
+@CompoundIndexes(value = [
+    CompoundIndex(name = "catalog_id", def = "{'catalogId' : 1}"),
+    CompoundIndex(name = "catalog_id_published", def = "{'catalogId' : 1, 'published': 1}")
+])
 data class PublicService (
     val id: String,
     val catalogId: String,
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val isPublished: Boolean = false
+    val published: Boolean = false
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)

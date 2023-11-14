@@ -469,7 +469,7 @@ class PublicServices: ApiTestContext() {
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicService = mapper.readValue(response["body"] as String)
-            val expected = PUBLIC_SERVICE_1.copy(isPublished = true)
+            val expected = PUBLIC_SERVICE_1.copy(published = true)
             Assertions.assertEquals(expected, result)
         }
 
