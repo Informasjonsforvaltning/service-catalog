@@ -25,15 +25,19 @@ val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 val PUBLIC_SERVICE_0 =
     PublicService("0", "910244132",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
-        description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"))
+        description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
+        published = true)
 val PUBLIC_SERVICE_1 =
     PublicService("1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
+        published = true
     )
 val PUBLIC_SERVICE_2 =
     PublicService("2", "910244132",
-        title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"), null)
+        title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
+        description = null,
+        published = true)
 
 val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"), null)
 

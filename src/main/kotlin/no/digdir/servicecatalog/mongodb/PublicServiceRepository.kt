@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface PublicServiceRepository : MongoRepository<PublicService, String> {
     fun getByCatalogId(catalogId: String): List<PublicService>
+    fun getByCatalogIdAndPublished(catalogId: String, isPublished: Boolean): List<PublicService>
 }

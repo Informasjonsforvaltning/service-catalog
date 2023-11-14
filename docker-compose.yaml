@@ -1,0 +1,29 @@
+version: "3"
+services:
+
+  app:
+    build: .
+    image: eu.gcr.io/digdir-fdk-infra/service-catalog
+    environment:
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=admin
+      - MONGODB_HOST=mongodb:27017
+      - MONGODB_AUTH=admin
+      - MONGODB_REPLICASET=replicaset
+      - SSO_HOST=https://sso.staging.fellesdatakatalog.digdir.no
+      - SERVICE_CATALOG_URI=https://localhost:8080
+    ports:
+      - "9090:8080"
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: bitnami/mongodb:latest
+    environment:
+      - MONGODB_ROOT_PASSWORD=admin
+      # Activate this if connecting from localhost
+      - MONGODB_ADVERTISED_HOSTNAME=localhost
+      - MONGODB_REPLICA_SET_MODE=primary
+      - MONGODB_REPLICA_SET_KEY=replicaset
+    ports:
+      - "27017:27017"

@@ -18,6 +18,8 @@ spring:
         jwt:
           issuer-uri: ${SSO_HOST}/auth/realms/fdk
           jwk-set-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+application:
+  serviceCatalogUri: ${SERVICE_CATALOG_URI}
 ---
 spring:
   config.activate.on-profile: test
@@ -27,3 +29,17 @@ spring:
         jwt:
           issuer-uri: http://localhost:5050/auth/realms/fdk
           jwk-set-uri: http://localhost:5050/auth/realms/fdk/protocol/openid-connect/certs
+application:
+  serviceCatalogUri: http://localhost:5050
+---
+spring:
+  config.activate.on-profile: dev
+  data.mongodb.uri: mongodb://root:admin@localhost:27017/serviceCatalog?authSource=admin&replicaSet=replicaset
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk
+          jwk-set-uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk/protocol/openid-connect/certs
+application:
+  serviceCatalogUri: http://localhost:8080
