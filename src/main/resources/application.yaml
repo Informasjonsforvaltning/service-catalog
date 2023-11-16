@@ -11,7 +11,7 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
-  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_SERVICE}/serviceCatalog?authSource=admin&replicaSet=rs0
+  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGODB_HOST}/serviceCatalog?authSource=${MONGODB_AUTH}&replicaSet=${MONGODB_REPLICASET}
   security:
     oauth2:
       resourceserver:
