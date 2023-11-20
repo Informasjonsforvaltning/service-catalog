@@ -9,17 +9,20 @@ import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator
 import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.oauth2.jwt.JwtClaimNames.AUD
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.config.annotation.web.invoke
 
 @Configuration
 open class SecurityConfig {
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        http.authorizeHttpRequests { authorize ->
-            authorize.requestMatchers(HttpMethod.OPTIONS).permitAll()
-                    .requestMatchers(HttpMethod.GET, "/actuator/health/readiness").permitAll()
-                    .requestMatchers(HttpMethod.GET, "/actuator/health/liveness").permitAll()
-                    .anyRequest().authenticated() }
-                .oauth2ResourceServer { resourceServer -> resourceServer.jwt() }
+        http {
+            authorizeHttpRequests {
+                authorize(HttpMethod.GET, "/actuator/health/readiness", permitAll)
+                authorize(HttpMethod.GET, "/actuator/health/liveness", permitAll)
+                authorize(anyRequest, authenticated)
+            }
+            oauth2ResourceServer { jwt { } }
+        }
         return http.build()
     }
 
