@@ -1,14 +1,13 @@
 package no.digdir.service_catalog.service
 
 import com.fasterxml.jackson.core.JsonProcessingException
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.json.Json
 import jakarta.json.JsonException
+import no.digdir.service_catalog.configuration.CustomBadRequestException
+import no.digdir.service_catalog.configuration.CustomInternalServerErrorException
 import no.digdir.service_catalog.model.JsonPatchOperation
-import org.springframework.http.HttpStatus
-import org.springframework.web.server.ResponseStatusException
 import java.io.StringReader
 
 inline fun <reified T> patchOriginal(original: T, operations: List<JsonPatchOperation>): T {
@@ -17,10 +16,10 @@ inline fun <reified T> patchOriginal(original: T, operations: List<JsonPatchOper
         return applyPatch(original, operations)
     } catch (ex: Exception) {
         when (ex) {
-            is JsonException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, ex.message)
-            is JsonProcessingException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, ex.message)
-            is IllegalArgumentException -> throw ResponseStatusException(HttpStatus.BAD_REQUEST, ex.message)
-            else -> throw ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, ex.message)
+            is JsonException -> throw CustomBadRequestException(message = ex.message)
+            is JsonProcessingException -> throw CustomBadRequestException(message = ex.message)
+            is IllegalArgumentException -> throw CustomBadRequestException(message = ex.message)
+            else -> throw CustomInternalServerErrorException(message = ex.message)
         }
     }
 }
@@ -41,6 +40,6 @@ inline fun <reified T> applyPatch(originalObject: T, operations: List<JsonPatchO
 fun validateOperations(operations: List<JsonPatchOperation>) {
     val invalidPaths = listOf("/id", "/catalogId", "/isPublished")
     if (operations.any { it.path in invalidPaths }) {
-        throw ResponseStatusException(HttpStatus.BAD_REQUEST, "Patch of paths $invalidPaths is not permitted")
+        throw CustomBadRequestException(message = "Patch of paths $invalidPaths is not permitted")
     }
 }

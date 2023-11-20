@@ -1,15 +1,13 @@
 package no.digdir.service_catalog.service
 
+import no.digdir.service_catalog.configuration.CustomNotFoundException
 import no.digdir.service_catalog.model.JsonPatchOperation
-import no.digdir.service_catalog.model.OpEnum
 import no.digdir.service_catalog.model.PublicService
 import no.digdir.service_catalog.model.PublicServiceToBeCreated
 import no.digdir.service_catalog.mongodb.PublicServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import org.springframework.web.server.ResponseStatusException
 import java.util.*
 
 @Service
@@ -38,7 +36,7 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
         try {
             findPublicServiceById(id, catalogId)
                 ?.run { publicServiceRepository.delete(this) }
-                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+                ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
             logger.error("Failed to delete public service with id $id in catalog $catalogId", ex)
             throw ex
@@ -61,7 +59,7 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
         try {
             findPublicServiceById(id, catalogId)
                 ?.let { publicServiceRepository.save(it.copy(isPublished = true)) }
-                ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+                ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
             logger.error("Failed to publish public service with id $id in catalog $catalogId", ex)
             throw ex
