@@ -1,5 +1,9 @@
 package no.digdir.service_catalog.configuration
 
+import no.digdir.service_catalog.exception.CustomBadRequestException
+import no.digdir.service_catalog.exception.CustomInternalServerErrorException
+import no.digdir.service_catalog.exception.CustomNotAcceptableException
+import no.digdir.service_catalog.exception.CustomNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
