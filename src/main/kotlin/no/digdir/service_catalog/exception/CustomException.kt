@@ -1,4 +1,4 @@
-package no.digdir.service_catalog.configuration
+package no.digdir.service_catalog.exception
 
 class CustomNotFoundException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
 class CustomNotAcceptableException(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)

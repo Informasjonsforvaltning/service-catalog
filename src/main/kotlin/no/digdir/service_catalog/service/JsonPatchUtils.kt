@@ -5,8 +5,8 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import jakarta.json.Json
 import jakarta.json.JsonException
-import no.digdir.service_catalog.configuration.CustomBadRequestException
-import no.digdir.service_catalog.configuration.CustomInternalServerErrorException
+import no.digdir.service_catalog.exception.CustomBadRequestException
+import no.digdir.service_catalog.exception.CustomInternalServerErrorException
 import no.digdir.service_catalog.model.JsonPatchOperation
 import java.io.StringReader
 

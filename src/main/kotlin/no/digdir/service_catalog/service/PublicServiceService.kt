@@ -1,6 +1,6 @@
 package no.digdir.service_catalog.service
 
-import no.digdir.service_catalog.configuration.CustomNotFoundException
+import no.digdir.service_catalog.exception.CustomNotFoundException
 import no.digdir.service_catalog.model.JsonPatchOperation
 import no.digdir.service_catalog.model.PublicService
 import no.digdir.service_catalog.model.PublicServiceToBeCreated
