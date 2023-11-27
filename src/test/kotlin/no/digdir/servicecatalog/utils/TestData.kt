@@ -4,6 +4,7 @@ import no.digdir.servicecatalog.model.LocalizedStrings
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.PublicServiceToBeCreated
 import no.digdir.servicecatalog.model.Service
+import no.digdir.servicecatalog.model.ServiceToBeCreated
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 
 const val MONGO_USER = "testuser"
@@ -16,9 +17,20 @@ val MONGO_ENV_VALUES: Map<String, String> = ImmutableMap.of(
     "MONGO_INITDB_ROOT_PASSWORD", MONGO_PASSWORD
 )
 
-val SERVICE_0 = Service("0", "title 0")
-val SERVICE_1 = Service("1", "title 1")
-val SERVICE_2 = Service("2", "title 2")
+val SERVICE_0 = Service("00", "910244132",
+    title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
+    description = LocalizedStrings("Beskrivelse 00", "Beskriving 00", "Description 00"),
+    published = true)
+val SERVICE_1 = Service("01", "910244132",
+    title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
+    description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
+    published = false)
+val SERVICE_2 = Service("02", "910244132",
+    title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
+    description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
+    published = false)
+
+val SERVICE_TO_BE_CREATED = ServiceToBeCreated(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 

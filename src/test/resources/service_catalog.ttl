@@ -1,4 +1,5 @@
 @prefix cpsv:   <http://purl.org/vocab/cpsv#> .
+@prefix cpsvno: <https://data.norge.no/vocabulary/cpsvno#> .
 @prefix cv:     <http://data.europa.eu/m8g/> .
 @prefix dcat:   <http://www.w3.org/ns/dcat#> .
 @prefix dcatno: <https://data.norge.no/vocabulary/dcatno#> .
@@ -22,10 +23,20 @@
         a                       dcat:Catalog;
         dct:publisher           <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:title               "Catalog for 910244132";
-        dcatno:containsService  <http://localhost:5050/rdf/catalogs/910244132/public-services/2> , <http://localhost:5050/rdf/catalogs/910244132/public-services/1> , <http://localhost:5050/rdf/catalogs/910244132/public-services/0> .
+        dcatno:containsService  <http://localhost:5050/rdf/catalogs/910244132/public-services/2> ,
+            <http://localhost:5050/rdf/catalogs/910244132/public-services/1> ,
+            <http://localhost:5050/rdf/catalogs/910244132/public-services/0> ,
+            <http://localhost:5050/rdf/catalogs/910244132/services/00> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/2>
         a                         cpsv:PublicService;
         cv:hasCompetentAuthority  <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:identifier            <http://localhost:5050/rdf/catalogs/910244132/public-services/2>;
         dct:title                 "EN Tittel 2"@en , "NN Tittel 2"@nn , "NB Tittel 2"@nb .
+
+<http://localhost:5050/rdf/catalogs/910244132/services/00>
+        a                cpsvno:Service;
+        cv:ownedBy       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
+        dct:description  "Description 00"@en , "Beskriving 00"@nn , "Beskrivelse 00"@nb;
+        dct:identifier   <http://localhost:5050/rdf/catalogs/910244132/services/00>;
+        dct:title        "EN Tittel 00"@en , "NN Tittel 00"@nn , "NB Tittel 00"@nb .

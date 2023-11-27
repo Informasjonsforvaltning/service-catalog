@@ -148,4 +148,70 @@ class RDF: ApiTestContext() {
             Assertions.assertTrue(expected.isIsomorphicWith(result))
         }
     }
+
+    @Nested
+    internal inner class GetServiceRDF {
+        private val servicePath = "/rdf/catalogs/910244132/services/00"
+        private val notExistingServicePath = "/rdf/catalogs/910244132/services/1000"
+
+        @Test
+        fun `able to get rdf for service`() {
+            val response = apiAuthorizedRequest(
+                servicePath,
+                port,
+                null,
+                null,
+                HttpMethod.GET,
+                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+            Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
+
+            val expected = responseReader.parseFile("service.ttl", Lang.TURTLE.name)
+            val result = ModelFactory.createDefaultModel().read(StringReader(response["body"] as String), null, Lang.TURTLE.name)
+            Assertions.assertTrue(expected.isIsomorphicWith(result))
+        }
+
+        @Test
+        fun `not found when service not in database`() {
+            val response = apiAuthorizedRequest(
+                notExistingServicePath,
+                port,
+                null,
+                null,
+                HttpMethod.GET,
+                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `not acceptable for media type jason`() {
+            val response = apiAuthorizedRequest(
+                servicePath,
+                port,
+                null,
+                null,
+                HttpMethod.GET,
+                MediaType.APPLICATION_JSON
+            )
+            Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), response["status"])
+        }
+
+        @Test
+        fun `able to get rdf for service with media type xml`() {
+            val response = apiAuthorizedRequest(
+                servicePath,
+                port,
+                null,
+                null,
+                HttpMethod.GET,
+                MediaType.asMediaType(MimeType.valueOf(Lang.RDFXML.headerString))
+            )
+            Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
+
+            val expected = responseReader.parseFile("service.ttl", Lang.TURTLE.name)
+            val result = ModelFactory
+                .createDefaultModel()
+                .read(StringReader(response["body"] as String), null, Lang.RDFXML.name)
+            Assertions.assertTrue(expected.isIsomorphicWith(result))
+        }
+    }
 }

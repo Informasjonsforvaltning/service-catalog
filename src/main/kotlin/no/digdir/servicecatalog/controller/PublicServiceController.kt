@@ -103,6 +103,6 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
 
 private fun locationHeaderForCreated(newId: String, catalogId: String): HttpHeaders =
     HttpHeaders().apply {
-        add(HttpHeaders.LOCATION, "/$catalogId/catalogs/{catalogId}/public-services/$newId")
+        add(HttpHeaders.LOCATION, "/catalogs/$catalogId/public-services/$newId")
         add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION)
     }

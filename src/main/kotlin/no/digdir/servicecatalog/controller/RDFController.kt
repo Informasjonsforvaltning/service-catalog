@@ -30,6 +30,19 @@ class RDFController(private val rdfService: RDFService) {
         @PathVariable catalogId: String,
         @PathVariable id: String
     ): ResponseEntity<String> =
-        rdfService.serializeService(catalogId, id, jenaLangFromAcceptHeader(accept))
-            .let { ResponseEntity(it, HttpStatus.OK) }
+        ResponseEntity(
+            rdfService.serializePublicService(catalogId, id, jenaLangFromAcceptHeader(accept)),
+            HttpStatus.OK
+        )
+
+    @GetMapping(value = ["/{catalogId}/services/{id}"])
+    fun getServiceRDF(
+        @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
+        @PathVariable catalogId: String,
+        @PathVariable id: String
+    ): ResponseEntity<String> =
+        ResponseEntity(
+            rdfService.serializeService(catalogId, id, jenaLangFromAcceptHeader(accept)),
+            HttpStatus.OK
+        )
 }
