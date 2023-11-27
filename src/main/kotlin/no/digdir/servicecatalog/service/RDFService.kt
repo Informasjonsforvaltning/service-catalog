@@ -2,7 +2,9 @@ package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
 import no.digdir.servicecatalog.model.PublicService
+import no.digdir.servicecatalog.model.Service
 import no.digdir.servicecatalog.rdf.CPSV
+import no.digdir.servicecatalog.rdf.CPSVNO
 import no.digdir.servicecatalog.rdf.CV
 import no.digdir.servicecatalog.rdf.DCATNO
 import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
@@ -14,12 +16,12 @@ import org.apache.jena.riot.Lang
 import org.apache.jena.vocabulary.DCAT
 import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
-import org.springframework.stereotype.Service
 
-@Service
+@org.springframework.stereotype.Service
 class RDFService(
     private val applicationProperties: ApplicationProperties,
-    private val publicServiceService: PublicServiceService) {
+    private val publicServiceService: PublicServiceService,
+    private val serviceService: ServiceService) {
 
     fun serializeCatalog(catalogId: String, lang: Lang): String {
         val model = ModelFactory.createDefaultModel()
@@ -31,13 +33,25 @@ class RDFService(
             .addProperty(DCTerms.publisher, model.createResource(publisherURI(catalogId)))
 
         publicServiceService.publishedServicesInCatalog(catalogId).forEach {
-            catalog.addPublicService(it)
+            catalog.addPublicServiceToCatalog(it)
+        }
+
+        serviceService.publishedServicesInCatalog(catalogId).forEach {
+            catalog.addServiceToCatalog(it)
         }
 
         return model.serialize(lang)
     }
 
     fun serializeService(catalogId: String, id: String, lang: Lang): String? =
+        with(serviceService.getPublishedServiceInCatalog(id, catalogId)) {
+            val model = ModelFactory.createDefaultModel()
+            model.setDefaultPrefixes()
+            model.createServiceResource(this, catalogURI(catalogId))
+            model.serialize(lang)
+        }
+
+    fun serializePublicService(catalogId: String, id: String, lang: Lang): String? =
         with(publicServiceService.getPublishedPublicServiceInCatalog(id, catalogId)) {
             val model = ModelFactory.createDefaultModel()
             model.setDefaultPrefixes()
@@ -53,7 +67,13 @@ class RDFService(
         setNsPrefix("cv", CV.uri)
     }
 
-    private fun Resource.addPublicService(publicService: PublicService): Resource {
+    private fun Resource.addServiceToCatalog(service: Service): Resource {
+        val serviceResource = model.createServiceResource(service, uri)
+        addProperty(DCATNO.containsService, serviceResource)
+        return this
+    }
+
+    private fun Resource.addPublicServiceToCatalog(publicService: PublicService): Resource {
         val publicServiceResource = model.createPublicServiceResource(publicService, uri)
         addProperty(DCATNO.containsService, publicServiceResource)
         return this
@@ -64,6 +84,9 @@ class RDFService(
 
     private fun catalogURI(catalogId: String): String =
         "${applicationProperties.serviceCatalogUri}/rdf/catalogs/$catalogId"
+
+    private fun serviceURI(id: String, catalogURI: String): String =
+        "${catalogURI}/services/$id"
 
     private fun publicServiceURI(id: String, catalogURI: String): String =
         "${catalogURI}/public-services/$id"
@@ -77,5 +100,16 @@ class RDFService(
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
+    }
+
+    private fun Model.createServiceResource(service: Service, catalogUri: String): Resource {
+        val serviceResource = createResource(serviceURI(service.id, catalogUri))
+            .addProperty(RDF.type, CPSVNO.Service)
+            .addProperty(CV.ownedBy, createResource(publisherURI(service.catalogId)))
+            .addLocalizedStringsAsProperty(DCTerms.title, service.title)
+            .addLocalizedStringsAsProperty(DCTerms.description, service.description)
+
+        serviceResource.addProperty(DCTerms.identifier, serviceResource)
+        return serviceResource
     }
 }

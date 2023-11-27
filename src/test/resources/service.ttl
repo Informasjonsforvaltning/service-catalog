@@ -1,0 +1,10 @@
+@prefix cpsvno: <https://data.norge.no/vocabulary/cpsvno#> .
+@prefix cv:     <http://data.europa.eu/m8g/> .
+@prefix dct:    <http://purl.org/dc/terms/> .
+
+<http://localhost:5050/rdf/catalogs/910244132/services/00>
+        a                cpsvno:Service;
+        cv:ownedBy       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
+        dct:description  "Description 00"@en , "Beskriving 00"@nn , "Beskrivelse 00"@nb;
+        dct:identifier   <http://localhost:5050/rdf/catalogs/910244132/services/00>;
+        dct:title        "EN Tittel 00"@en , "NN Tittel 00"@nn , "NB Tittel 00"@nb .
