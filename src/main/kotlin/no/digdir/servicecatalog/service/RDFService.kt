@@ -81,8 +81,8 @@ class RDFService(
         return this
     }
 
-    private fun Resource.addProducesOutput(output: Output?): Resource {
-        if (output != null) {
+    private fun Resource.addProducesOutput(outputs: List<Output>?): Resource {
+        outputs?.forEach { output ->
             val identifierURI = "$uri/output/${output.identifier}"
             val outputResource = model.createResource(identifierURI)
                 .addProperty(RDF.type, CV.Output)

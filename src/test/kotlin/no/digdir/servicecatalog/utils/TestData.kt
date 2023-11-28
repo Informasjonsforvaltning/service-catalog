@@ -22,12 +22,12 @@ val SERVICE_0 = Service("00", "910244132",
     title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
     description = LocalizedStrings("Beskrivelse 00", "Beskriving 00", "Description 00"),
     published = true,
-    produces = Output(
+    produces = listOf(Output(
         identifier = "321",
         title = LocalizedStrings(en = "Output title", nb = null, nn = null),
         description = LocalizedStrings(en = "Output description", nb = null, nn = null),
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-    ))
+    )))
 val SERVICE_1 = Service("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
     description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
@@ -46,12 +46,12 @@ val PUBLIC_SERVICE_0 =
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
         published = true,
-        produces = Output(
+        produces = listOf(Output(
             identifier = "123",
             title = LocalizedStrings(en = "Output title", nb = null, nn = null),
             description = LocalizedStrings(en = "Output description", nb = null, nn = null),
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-        )
+        ))
     )
 val PUBLIC_SERVICE_1 =
     PublicService("1", "910244132",
