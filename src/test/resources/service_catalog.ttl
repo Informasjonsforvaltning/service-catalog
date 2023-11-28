@@ -10,7 +10,14 @@
         cv:hasCompetentAuthority  <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:description           "Description 0"@en , "Beskriving 0"@nn , "Beskrivelse 0"@nb;
         dct:identifier            <http://localhost:5050/rdf/catalogs/910244132/public-services/0>;
-        dct:title                 "EN Tittel 0"@en , "NN Tittel 0"@nn , "NB Tittel 0"@nb .
+        dct:title                 "EN Tittel 0"@en , "NN Tittel 0"@nn , "NB Tittel 0"@nb;
+        cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123> .
+
+<http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
+        a                cv:Output;
+        dct:description  "Output description"@en;
+        dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
+        dct:title        "Output title"@en .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/1>
         a                         cpsv:PublicService;
@@ -39,4 +46,11 @@
         cv:ownedBy       <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:description  "Description 00"@en , "Beskriving 00"@nn , "Beskrivelse 00"@nb;
         dct:identifier   <http://localhost:5050/rdf/catalogs/910244132/services/00>;
-        dct:title        "EN Tittel 00"@en , "NN Tittel 00"@nn , "NB Tittel 00"@nb .
+        dct:title        "EN Tittel 00"@en , "NN Tittel 00"@nn , "NB Tittel 00"@nb;
+        cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321> .
+
+<http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
+        a                cv:Output;
+        dct:description  "Output description"@en;
+        dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
+        dct:title        "Output title"@en .

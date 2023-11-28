@@ -1,5 +1,6 @@
 package no.digdir.servicecatalog.rdf
 
+import no.digdir.servicecatalog.MAIN_LOGGER
 import no.digdir.servicecatalog.model.LocalizedStrings
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.Property
@@ -8,8 +9,8 @@ import org.apache.jena.riot.Lang
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import java.io.ByteArrayOutputStream
-import java.lang.Exception
 import java.net.URI
+import kotlin.Exception
 
 fun Model.serialize(lang: Lang): String =
     ByteArrayOutputStream().use { out ->
@@ -22,6 +23,24 @@ fun Resource.addLocalizedStringsAsProperty(property: Property, strings: Localize
     if (strings?.nb != null) addProperty(property, strings.nb, "nb")
     if (strings?.nn != null) addProperty(property, strings.nn, "nn")
     if (strings?.en != null) addProperty(property, strings.en, "en")
+    return this
+}
+
+fun Resource.addStringsAsResources(property: Property, strings: List<String>?): Resource {
+    strings?.forEach {
+        val stringAsURI = try {
+            it.let(::URI).takeIf { parsedURI ->
+                parsedURI.isAbsolute
+                        && !parsedURI.isOpaque
+                        && !parsedURI.host.isNullOrEmpty()
+            }
+        } catch (ex: Exception) {
+            MAIN_LOGGER.error("unable to parse $it as uri", ex)
+            null
+        }
+        if (stringAsURI != null) addProperty(property, model.createResource(it))
+        else MAIN_LOGGER.error("$it is not valid as uri")
+    }
     return this
 }
 
