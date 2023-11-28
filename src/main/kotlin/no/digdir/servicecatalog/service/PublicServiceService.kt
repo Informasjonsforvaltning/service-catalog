@@ -48,7 +48,8 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
                 id = UUID.randomUUID().toString(),
                 catalogId = catalogId,
                 title = publicServiceToBeCreated.title,
-                description = publicServiceToBeCreated.description
+                description = publicServiceToBeCreated.description,
+                produces = publicServiceToBeCreated.produces
             ).let { publicServiceRepository.insert(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create public service for $catalogId", ex)

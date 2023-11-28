@@ -47,7 +47,8 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
                 id = UUID.randomUUID().toString(),
                 catalogId = catalogId,
                 title = serviceToBeCreated.title,
-                description = serviceToBeCreated.description
+                description = serviceToBeCreated.description,
+                produces = serviceToBeCreated.produces
             ).let { serviceRepository.insert(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create service for $catalogId", ex)

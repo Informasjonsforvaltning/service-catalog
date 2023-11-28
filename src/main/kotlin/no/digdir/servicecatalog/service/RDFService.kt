@@ -1,6 +1,7 @@
 package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
+import no.digdir.servicecatalog.model.Output
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.Service
 import no.digdir.servicecatalog.rdf.CPSV
@@ -8,6 +9,7 @@ import no.digdir.servicecatalog.rdf.CPSVNO
 import no.digdir.servicecatalog.rdf.CV
 import no.digdir.servicecatalog.rdf.DCATNO
 import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
+import no.digdir.servicecatalog.rdf.addStringsAsResources
 import no.digdir.servicecatalog.rdf.serialize
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
@@ -79,6 +81,20 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addProducesOutput(outputs: List<Output>?): Resource {
+        outputs?.forEach { output ->
+            val identifierURI = "$uri/output/${output.identifier}"
+            val outputResource = model.createResource(identifierURI)
+                .addProperty(RDF.type, CV.Output)
+                .addLocalizedStringsAsProperty(DCTerms.title, output.title)
+                .addLocalizedStringsAsProperty(DCTerms.description, output.description)
+                .addStringsAsResources(DCTerms.language, output.language)
+
+            addProperty(CPSV.produces, outputResource)
+        }
+        return this
+    }
+
     private fun publisherURI(catalogId: String): String =
         "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
 
@@ -97,6 +113,7 @@ class RDFService(
             .addProperty(CV.hasCompetentAuthority, createResource(publisherURI(publicService.catalogId)))
             .addLocalizedStringsAsProperty(DCTerms.title, publicService.title)
             .addLocalizedStringsAsProperty(DCTerms.description, publicService.description)
+            .addProducesOutput(publicService.produces)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -108,6 +125,7 @@ class RDFService(
             .addProperty(CV.ownedBy, createResource(publisherURI(service.catalogId)))
             .addLocalizedStringsAsProperty(DCTerms.title, service.title)
             .addLocalizedStringsAsProperty(DCTerms.description, service.description)
+            .addProducesOutput(service.produces)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource

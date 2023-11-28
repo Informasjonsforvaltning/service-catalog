@@ -18,11 +18,13 @@ data class Service (
     val catalogId: String,
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val published: Boolean = false
+    val published: Boolean = false,
+    val produces: List<Output>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ServiceToBeCreated(
     val title: LocalizedStrings?,
-    val description: LocalizedStrings?
+    val description: LocalizedStrings?,
+    val produces: List<Output>?
 )
