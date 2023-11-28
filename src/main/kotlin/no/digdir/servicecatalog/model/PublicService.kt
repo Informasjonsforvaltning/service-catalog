@@ -19,7 +19,7 @@ data class PublicService (
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val published: Boolean = false,
-    val produces: Output?
+    val produces: List<Output>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
