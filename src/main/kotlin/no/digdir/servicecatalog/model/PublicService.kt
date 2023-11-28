@@ -26,5 +26,5 @@ data class PublicService (
 data class PublicServiceToBeCreated(
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val produces: Output?
+    val produces: List<Output>?
 )
