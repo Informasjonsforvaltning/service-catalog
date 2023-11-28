@@ -26,5 +26,5 @@ data class Service (
 data class ServiceToBeCreated(
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val produces: Output?
+    val produces: List<Output>?
 )
