@@ -2,7 +2,7 @@ package no.digdir.servicecatalog.integration
 
 import no.digdir.servicecatalog.utils.ApiTestContext
 import no.digdir.servicecatalog.utils.TestResponseReader
-import no.digdir.servicecatalog.utils.apiAuthorizedRequest
+import no.digdir.servicecatalog.utils.apiGet
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.riot.Lang
 import org.junit.jupiter.api.Assertions
@@ -33,14 +33,7 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `able to get rdf catalog`() {
-            val response = apiAuthorizedRequest(
-                catalogPath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString))
-            )
+            val response = apiGet(port, catalogPath, Lang.TURTLE.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("service_catalog.ttl", Lang.TURTLE.name)
@@ -52,14 +45,7 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `able to get rdf catalog with media type xml`() {
-            val response = apiAuthorizedRequest(
-                catalogPath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.RDFXML.headerString))
-            )
+            val response = apiGet(port, catalogPath, Lang.RDFXML.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("service_catalog.ttl", Lang.TURTLE.name)
@@ -71,14 +57,7 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `not acceptable for media type jason`() {
-            val response = apiAuthorizedRequest(
-                catalogPath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.APPLICATION_JSON
-            )
+            val response = apiGet(port, catalogPath, MediaType.APPLICATION_JSON_VALUE)
             Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), response["status"])
         }
     }
@@ -90,13 +69,7 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `able to get rdf for public service`() {
-            val response = apiAuthorizedRequest(
-                publicServicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+            val response = apiGet(port, publicServicePath, Lang.TURTLE.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("public_service.ttl", Lang.TURTLE.name)
@@ -106,39 +79,19 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `not found when public service not in database`() {
-            val response = apiAuthorizedRequest(
-                notExistingPublicServicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+            val response = apiGet(port, notExistingPublicServicePath, Lang.TURTLE.headerString)
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
         @Test
         fun `not acceptable for media type jason`() {
-            val response = apiAuthorizedRequest(
-                publicServicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.APPLICATION_JSON
-            )
+            val response = apiGet(port, publicServicePath, MediaType.APPLICATION_JSON_VALUE)
             Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), response["status"])
         }
 
         @Test
         fun `able to get rdf for public service with media type xml`() {
-            val response = apiAuthorizedRequest(
-                publicServicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.RDFXML.headerString))
-            )
+            val response = apiGet(port, publicServicePath, Lang.RDFXML.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("public_service.ttl", Lang.TURTLE.name)
@@ -156,13 +109,9 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `able to get rdf for service`() {
-            val response = apiAuthorizedRequest(
-                servicePath,
+            val response = apiGet(
                 port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+                servicePath,Lang.TURTLE.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("service.ttl", Lang.TURTLE.name)
@@ -172,39 +121,19 @@ class RDF: ApiTestContext() {
 
         @Test
         fun `not found when service not in database`() {
-            val response = apiAuthorizedRequest(
-                notExistingServicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.TURTLE.headerString)))
+            val response = apiGet(port, notExistingServicePath, Lang.TURTLE.headerString)
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
         @Test
         fun `not acceptable for media type jason`() {
-            val response = apiAuthorizedRequest(
-                servicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.APPLICATION_JSON
-            )
+            val response = apiGet(port, servicePath, MediaType.APPLICATION_JSON_VALUE)
             Assertions.assertEquals(HttpStatus.NOT_ACCEPTABLE.value(), response["status"])
         }
 
         @Test
         fun `able to get rdf for service with media type xml`() {
-            val response = apiAuthorizedRequest(
-                servicePath,
-                port,
-                null,
-                null,
-                HttpMethod.GET,
-                MediaType.asMediaType(MimeType.valueOf(Lang.RDFXML.headerString))
-            )
+            val response = apiGet(port, servicePath, Lang.RDFXML.headerString)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("service.ttl", Lang.TURTLE.name)
