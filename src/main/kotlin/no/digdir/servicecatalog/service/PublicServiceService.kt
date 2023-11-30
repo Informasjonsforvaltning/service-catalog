@@ -1,5 +1,6 @@
 package no.digdir.servicecatalog.service
 
+import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.exception.CustomNotFoundException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.PublicService
@@ -59,6 +60,7 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
     fun publishPublicService(id: String, catalogId: String): PublicService?  =
         try {
             findPublicServiceById(id, catalogId)
+                ?. also { if (it.published) throw CustomBadRequestException() }
                 ?.let { publicServiceRepository.save(it.copy(published = true)) }
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {

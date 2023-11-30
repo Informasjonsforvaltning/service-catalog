@@ -57,7 +57,7 @@ val PUBLIC_SERVICE_1 =
     PublicService("1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
-        published = true, produces = null)
+        published = false, produces = null)
 val PUBLIC_SERVICE_2 =
     PublicService("2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
