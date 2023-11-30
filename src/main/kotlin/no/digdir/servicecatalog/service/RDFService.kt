@@ -1,6 +1,7 @@
 package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
+import no.digdir.servicecatalog.model.ContactPoint
 import no.digdir.servicecatalog.model.Output
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.Service
@@ -18,6 +19,8 @@ import org.apache.jena.riot.Lang
 import org.apache.jena.vocabulary.DCAT
 import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
+import org.apache.jena.vocabulary.VCARD
+import org.apache.jena.vocabulary.VCARD4
 
 @org.springframework.stereotype.Service
 class RDFService(
@@ -67,6 +70,7 @@ class RDFService(
         setNsPrefix("dcatno", DCATNO.uri)
         setNsPrefix("cpsv", CPSV.uri)
         setNsPrefix("cv", CV.uri)
+        setNsPrefix("vcard", VCARD4.getURI())
     }
 
     private fun Resource.addServiceToCatalog(service: Service): Resource {
@@ -95,6 +99,27 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addContactPoints(contactPoints: List<ContactPoint>?): Resource {
+        contactPoints?.forEach { contactPoint ->
+            val contactResource = model.createResource()
+                .addProperty(RDF.type, CV.ContactPoint)
+                .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
+                .addStringsAsResources(VCARD4.language, contactPoint.language)
+
+            contactPoint.contactPage
+                ?.forEach { contactResource.addProperty(CV.contactPage, it) }
+
+            contactPoint.telephone
+                ?.forEach { contactResource.addProperty(CV.telephone, it) }
+
+            contactPoint.email
+                ?.forEach { contactResource.addProperty(CV.email, it) }
+
+            addProperty(CV.contactPoint, contactResource)
+        }
+        return this
+    }
+
     private fun publisherURI(catalogId: String): String =
         "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
 
@@ -114,6 +139,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.title, publicService.title)
             .addLocalizedStringsAsProperty(DCTerms.description, publicService.description)
             .addProducesOutput(publicService.produces)
+            .addContactPoints(publicService.contactPoints)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -126,6 +152,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.title, service.title)
             .addLocalizedStringsAsProperty(DCTerms.description, service.description)
             .addProducesOutput(service.produces)
+            .addContactPoints(service.contactPoints)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource
