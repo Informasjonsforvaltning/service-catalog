@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @CrossOrigin
-@RequestMapping(value = ["/catalogs/{catalogId}/services"])
+@RequestMapping(value = ["/internal/catalogs/{catalogId}/services"])
 class ServiceController(private val serviceService: ServiceService, private val endpointPermissions: EndpointPermissions) {
 
     @GetMapping
@@ -104,6 +104,6 @@ class ServiceController(private val serviceService: ServiceService, private val 
 
 private fun locationHeaderForCreated(newId: String, catalogId: String): HttpHeaders =
     HttpHeaders().apply {
-        add(HttpHeaders.LOCATION, "/catalogs/$catalogId/services/$newId")
+        add(HttpHeaders.LOCATION, "/internal/catalogs/$catalogId/services/$newId")
         add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION)
     }

@@ -19,7 +19,8 @@ open class SecurityConfig {
             authorizeHttpRequests {
                 authorize(HttpMethod.GET, "/actuator/health/readiness", permitAll)
                 authorize(HttpMethod.GET, "/actuator/health/liveness", permitAll)
-                authorize(HttpMethod.GET, "/rdf/**", permitAll)
+                authorize(HttpMethod.GET, "/internal/**", authenticated)
+                authorize(HttpMethod.GET, "/**", permitAll)
                 authorize(anyRequest, authenticated)
             }
             oauth2ResourceServer { jwt { } }

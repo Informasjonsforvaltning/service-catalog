@@ -38,7 +38,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class GetServices {
-        val path = "/catalogs/910244132/services"
+        val path = "/internal/catalogs/910244132/services"
         @Test
         fun `able to get all services`() {
             val response = apiAuthorizedRequest(
@@ -78,7 +78,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class GetService {
-        val path = "/catalogs/910244132/services/01"
+        val path = "/internal/catalogs/910244132/services/01"
         @Test
         fun `able to get service by id`() {
             val response = apiAuthorizedRequest(
@@ -106,7 +106,7 @@ class Services: ApiTestContext() {
         @Test
         fun `receive not found when service is not found`() {
             val response = apiAuthorizedRequest(
-                "/catalogs/910244132/services/1000",
+                "/internal/catalogs/910244132/services/1000",
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
@@ -117,7 +117,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class PatchService {
-        val path = "/catalogs/910244132/services/02"
+        val path = "/internal/catalogs/910244132/services/02"
         val replaceOperation = JsonPatchOperation(
             op = OpEnum.REPLACE,
             path = "/title/nb",
@@ -271,7 +271,7 @@ class Services: ApiTestContext() {
         fun `not found when service not in database`() {
             val operations = listOf(replaceOperation)
             val response = apiAuthorizedRequest(
-                "/catalogs/910244132/services/1000",
+                "/internal/catalogs/910244132/services/1000",
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
@@ -283,7 +283,7 @@ class Services: ApiTestContext() {
         fun `not found when service in different catalog`() {
             val operations = listOf(replaceOperation)
             val response = apiAuthorizedRequest(
-                "/catalogs/123456789/services/01",
+                "/internal/catalogs/123456789/services/01",
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
@@ -294,7 +294,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class DeleteService {
-        val path = "/catalogs/910244132/services/02"
+        val path = "/internal/catalogs/910244132/services/02"
 
         @Test
         fun `unauthorized when missing token` () {
@@ -323,7 +323,7 @@ class Services: ApiTestContext() {
         @Test
         fun `not found when service in different catalog`() {
             val response = apiAuthorizedRequest(
-                "/catalogs/123456789/services/01",
+                "/internal/catalogs/123456789/services/01",
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
@@ -334,7 +334,7 @@ class Services: ApiTestContext() {
         @Test
         fun `not found when service not in database`() {
             val response = apiAuthorizedRequest(
-                "/catalogs/910244132/services/1000",
+                "/internal/catalogs/910244132/services/1000",
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
@@ -364,7 +364,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class CreateService {
-        private val path = "/catalogs/910244132/services"
+        private val path = "/internal/catalogs/910244132/services"
 
         @Test
         fun `create Service as OrgWrite`() {
@@ -433,7 +433,7 @@ class Services: ApiTestContext() {
 
     @Nested
     internal inner class PublishService {
-        val path = "/catalogs/910244132/services/01/publish"
+        val path = "/internal/catalogs/910244132/services/01/publish"
         @Test
         fun `unauthorized when missing token` () {
             val response = apiAuthorizedRequest(
@@ -461,7 +461,7 @@ class Services: ApiTestContext() {
         @Test
         fun `not found when service in different catalog`() {
             val response = apiAuthorizedRequest(
-                "/catalogs/123456789/services/01/publish",
+                "/internal/catalogs/123456789/services/01/publish",
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
@@ -472,7 +472,7 @@ class Services: ApiTestContext() {
         @Test
         fun `not found when service not in database`() {
             val response = apiAuthorizedRequest(
-                "/catalogs/910244132/services/1000/publish",
+                "/internal/catalogs/910244132/services/1000/publish",
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
@@ -504,7 +504,7 @@ class Services: ApiTestContext() {
                 value = true)
             )
             val response = apiAuthorizedRequest(
-                "/catalogs/910244132/services/01",
+                "/internal/catalogs/910244132/services/01",
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
