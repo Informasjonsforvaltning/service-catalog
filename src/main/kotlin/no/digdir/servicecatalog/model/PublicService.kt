@@ -19,12 +19,14 @@ data class PublicService (
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val published: Boolean = false,
-    val produces: List<Output>?
+    val produces: List<Output>?,
+    val contactPoints: List<ContactPoint>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class PublicServiceToBeCreated(
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val produces: List<Output>?
+    val produces: List<Output>?,
+    val contactPoints: List<ContactPoint>?
 )
