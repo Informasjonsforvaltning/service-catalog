@@ -409,7 +409,6 @@ class PublicServices: ApiTestContext() {
         }
     }
 
-
     @Nested
     internal inner class PublishPublicService {
         val pathService1 = "/internal/catalogs/910244132/public-services/1/publish"
@@ -494,6 +493,83 @@ class PublicServices: ApiTestContext() {
         fun `bad request when publishing already published public service`() {
             val response = apiAuthorizedRequest(
                 "/internal/catalogs/910244132/public-services/0/publish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
+    }
+
+    @Nested
+    internal inner class UnpublishPublicService {
+        val path = "/internal/catalogs/910244132/public-services/0/unpublish"
+        @Test
+        fun `unauthorized when missing token` () {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                null,
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun `forbidden when authenticated as read user` () {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service in different catalog`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/123456789/public-services/0/unpublish",
+                port,
+                null,
+                JwtToken(Access.WRONG_ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when public service not in database`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/public-services/1000/unpublish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `able to unpublish public service when authenticated as a write user`() {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
+
+            val result: PublicService = mapper.readValue(response["body"] as String)
+            val expected = PUBLIC_SERVICE_0.copy(published = false)
+            Assertions.assertEquals(expected, result)
+        }
+
+        @Test
+        fun `bad request when unpublishing non-published public service`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/public-services/1/unpublish",
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),

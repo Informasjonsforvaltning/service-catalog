@@ -68,6 +68,17 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
             throw ex
         }
 
+    fun unpublishPublicService(id: String, catalogId: String): PublicService?  =
+        try {
+            findPublicServiceById(id, catalogId)
+                ?. also { if (!it.published) throw CustomBadRequestException() }
+                ?.let { publicServiceRepository.save(it.copy(published = false)) }
+                ?: throw CustomNotFoundException()
+        } catch (ex: Exception) {
+            logger.error("Failed to unpublish public service with id $id in catalog $catalogId", ex)
+            throw ex
+        }
+
     fun publishedServicesInCatalog(catalogId: String): List<PublicService> =
         publicServiceRepository.getByCatalogIdAndPublished(catalogId, true)
 
