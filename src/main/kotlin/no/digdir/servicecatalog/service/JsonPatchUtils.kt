@@ -38,7 +38,7 @@ inline fun <reified T> applyPatch(originalObject: T, operations: List<JsonPatchO
 }
 
 fun validateOperations(operations: List<JsonPatchOperation>) {
-    val invalidPaths = listOf("/id", "/catalogId", "/isPublished")
+    val invalidPaths = listOf("/id", "/catalogId", "/published")
     if (operations.any { it.path in invalidPaths }) {
         throw CustomBadRequestException(message = "Patch of paths $invalidPaths is not permitted")
     }
