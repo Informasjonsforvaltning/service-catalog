@@ -8,6 +8,7 @@ import no.digdir.servicecatalog.model.OpEnum
 import no.digdir.servicecatalog.model.Service
 import no.digdir.servicecatalog.utils.ApiTestContext
 import no.digdir.servicecatalog.utils.SERVICES
+import no.digdir.servicecatalog.utils.SERVICE_0
 import no.digdir.servicecatalog.utils.SERVICE_1
 import no.digdir.servicecatalog.utils.SERVICE_2
 import no.digdir.servicecatalog.utils.SERVICE_TO_BE_CREATED
@@ -517,6 +518,83 @@ class Services: ApiTestContext() {
         fun `bad request when publishing already published service`() {
             val response = apiAuthorizedRequest(
                 "/internal/catalogs/910244132/services/00/publish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
+    }
+
+    @Nested
+    internal inner class UnpublishService {
+        val path = "/internal/catalogs/910244132/services/00/unpublish"
+        @Test
+        fun `unauthorized when missing token` () {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                null,
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+        }
+
+        @Test
+        fun `forbidden when authenticated as read user` () {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_READ).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when service in different catalog`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/123456789/services/00/unpublish",
+                port,
+                null,
+                JwtToken(Access.WRONG_ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `not found when service not in database`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/services/1000/unpublish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
+        }
+
+        @Test
+        fun `able to unpublish service when authenticated as a write user`() {
+            val response = apiAuthorizedRequest(
+                path,
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+            Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
+
+            val result: Service = mapper.readValue(response["body"] as String)
+            val expected = SERVICE_0.copy(published = false)
+            Assertions.assertEquals(expected, result)
+        }
+
+        @Test
+        fun `bad request when unpublishing non-published service`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/services/01/unpublish",
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),

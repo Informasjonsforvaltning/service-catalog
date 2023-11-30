@@ -99,6 +99,18 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         } else {
             ResponseEntity(HttpStatus.FORBIDDEN)
         }
+
+    @PostMapping(value = ["/{id}/unpublish"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun unpublishPublicService(
+        @AuthenticationPrincipal jwt: Jwt,
+        @PathVariable catalogId: String,
+        @PathVariable id: String,
+    ): ResponseEntity<PublicService> =
+        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+            ResponseEntity(publicServiceService.unpublishPublicService(id, catalogId), HttpStatus.OK)
+        } else {
+            ResponseEntity(HttpStatus.FORBIDDEN)
+        }
 }
 
 private fun locationHeaderForCreated(newId: String, catalogId: String): HttpHeaders =
