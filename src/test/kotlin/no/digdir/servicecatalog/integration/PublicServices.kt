@@ -474,10 +474,10 @@ class PublicServices: ApiTestContext() {
         }
 
         @Test
-        fun `bad request when updating isPublished with normal patch updates`() {
+        fun `bad request when updating published with normal patch updates`() {
             val operations = listOf(JsonPatchOperation(
                 op = OpEnum.REPLACE,
-                path = "/isPublished",
+                path = "/published",
                 value = true))
             val response = apiAuthorizedRequest(
                 "/internal/catalogs/910244132/public-services/1",
