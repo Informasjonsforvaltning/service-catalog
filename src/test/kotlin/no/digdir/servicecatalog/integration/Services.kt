@@ -512,5 +512,17 @@ class Services: ApiTestContext() {
 
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
         }
+
+        @Test
+        fun `bad request when publishing already published service`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/services/00/publish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
+
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
     }
 }

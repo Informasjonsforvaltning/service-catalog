@@ -19,19 +19,11 @@
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
         dct:title        "Output title"@en .
 
-<http://localhost:5050/rdf/catalogs/910244132/public-services/1>
-        a                         cpsv:PublicService;
-        cv:hasCompetentAuthority  <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
-        dct:description           "Description 1"@en , "Beskriving 1"@nn , "Beskrivelse 1"@nb;
-        dct:identifier            <http://localhost:5050/rdf/catalogs/910244132/public-services/1>;
-        dct:title                 "EN Tittel 1"@en , "NN Tittel 1"@nn , "NB Tittel 1"@nb .
-
 <http://localhost:5050/rdf/catalogs/910244132>
         a                       dcat:Catalog;
         dct:publisher           <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:title               "Catalog for 910244132";
         dcatno:containsService  <http://localhost:5050/rdf/catalogs/910244132/public-services/2> ,
-            <http://localhost:5050/rdf/catalogs/910244132/public-services/1> ,
             <http://localhost:5050/rdf/catalogs/910244132/public-services/0> ,
             <http://localhost:5050/rdf/catalogs/910244132/services/00> .
 

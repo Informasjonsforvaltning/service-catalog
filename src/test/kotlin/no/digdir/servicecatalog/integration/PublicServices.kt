@@ -2,6 +2,7 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
+import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.LocalizedStrings
 import no.digdir.servicecatalog.model.OpEnum
@@ -485,6 +486,18 @@ class PublicServices: ApiTestContext() {
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
                 HttpMethod.PATCH)
+
+            Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
+        }
+
+        @Test
+        fun `bad request when publishing already published public service`() {
+            val response = apiAuthorizedRequest(
+                "/internal/catalogs/910244132/public-services/0/publish",
+                port,
+                null,
+                JwtToken(Access.ORG_WRITE).toString(),
+                HttpMethod.POST)
 
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
         }
