@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 @RequestMapping(
     produces = ["text/turtle", "text/n3", "application/rdf+json", "application/rdf+xml",
         "application/n-triples", "application/n-quads", "application/trig", "application/trix"],
-    value = ["/rdf/catalogs"])
+    value = ["/catalogs"])
 class RDFController(private val rdfService: RDFService) {
 
     @GetMapping(value = ["/{catalogId}"])

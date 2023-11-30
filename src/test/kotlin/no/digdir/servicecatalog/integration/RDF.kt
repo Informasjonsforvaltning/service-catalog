@@ -29,7 +29,7 @@ class RDF: ApiTestContext() {
 
     @Nested
     internal inner class GetCatalogRDF {
-        private val catalogPath = "/rdf/catalogs/910244132"
+        private val catalogPath = "/catalogs/910244132"
 
         @Test
         fun `able to get rdf catalog`() {
@@ -64,8 +64,8 @@ class RDF: ApiTestContext() {
 
     @Nested
     internal inner class GetPublicServiceRDF {
-        private val publicServicePath = "/rdf/catalogs/910244132/public-services/0"
-        private val notExistingPublicServicePath = "/rdf/catalogs/910244132/public-services/1000"
+        private val publicServicePath = "/catalogs/910244132/public-services/0"
+        private val notExistingPublicServicePath = "/catalogs/910244132/public-services/1000"
 
         @Test
         fun `able to get rdf for public service`() {
@@ -104,8 +104,8 @@ class RDF: ApiTestContext() {
 
     @Nested
     internal inner class GetServiceRDF {
-        private val servicePath = "/rdf/catalogs/910244132/services/00"
-        private val notExistingServicePath = "/rdf/catalogs/910244132/services/1000"
+        private val servicePath = "/catalogs/910244132/services/00"
+        private val notExistingServicePath = "/catalogs/910244132/services/1000"
 
         @Test
         fun `able to get rdf for service`() {
