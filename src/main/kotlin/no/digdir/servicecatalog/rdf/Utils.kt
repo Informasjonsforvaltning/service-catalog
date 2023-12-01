@@ -59,13 +59,14 @@ fun jenaLangFromAcceptHeader(accept: String?): Lang =
         else -> throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
     }
 
-fun Model.safeCreateResource(value: String? = null): Resource =
+fun Resource.addAsResourceIfValid(predicate: Property, value: String?): Resource =
     try {
         value
             ?.let(::URI)
             ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
-            ?.let { createResource(value) }
-            ?: createResource()
+            ?.let { model.createResource(value) }
+            ?.let { addProperty(predicate, it) }
+        this
     } catch (e: Exception) {
-        createResource()
+        this
     }

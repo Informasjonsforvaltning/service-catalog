@@ -5,10 +5,12 @@ import no.digdir.servicecatalog.model.ContactPoint
 import no.digdir.servicecatalog.model.Output
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.Service
+import no.digdir.servicecatalog.rdf.ADMS
 import no.digdir.servicecatalog.rdf.CPSV
 import no.digdir.servicecatalog.rdf.CPSVNO
 import no.digdir.servicecatalog.rdf.CV
 import no.digdir.servicecatalog.rdf.DCATNO
+import no.digdir.servicecatalog.rdf.addAsResourceIfValid
 import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
 import no.digdir.servicecatalog.rdf.addStringsAsResources
 import no.digdir.servicecatalog.rdf.serialize
@@ -73,6 +75,7 @@ class RDFService(
         setNsPrefix("cv", CV.uri)
         setNsPrefix("vcard", VCARD4.getURI())
         setNsPrefix("foaf", FOAF.getURI())
+        setNsPrefix("adms", ADMS.uri)
     }
 
     private fun Resource.addServiceToCatalog(service: Service): Resource {
@@ -150,6 +153,7 @@ class RDFService(
             .addProducesOutput(publicService.produces)
             .addContactPoints(publicService.contactPoints)
             .addHomepages(publicService.homepage)
+            .addAsResourceIfValid(ADMS.status, publicService.status)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -164,6 +168,7 @@ class RDFService(
             .addProducesOutput(service.produces)
             .addContactPoints(service.contactPoints)
             .addHomepages(service.homepage)
+            .addAsResourceIfValid(ADMS.status, service.status)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource
