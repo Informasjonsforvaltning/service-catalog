@@ -5,6 +5,7 @@
 @prefix dcatno: <https://data.norge.no/vocabulary/dcatno#> .
 @prefix dct:    <http://purl.org/dc/terms/> .
 @prefix vcard:  <http://www.w3.org/2006/vcard/ns#> .
+@prefix foaf:   <http://xmlns.com/foaf/0.1/> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0>
         a                         cpsv:PublicService;
@@ -19,6 +20,7 @@
                                     vcard:category  "Contact category title"@en;
                                     vcard:language  <http://publications.europa.eu/resource/authority/language/ENG>
                                   ];
+        foaf:homepage             "data.norge.no";
         cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
@@ -54,6 +56,7 @@
                            vcard:category  "Contact category title"@en;
                            vcard:language  <http://publications.europa.eu/resource/authority/language/ENG>
                          ];
+        foaf:homepage    "digdir.no" , "data.norge.no";
         cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
