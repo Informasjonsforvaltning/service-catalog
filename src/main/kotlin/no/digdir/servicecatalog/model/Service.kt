@@ -20,7 +20,8 @@ data class Service (
     val description: LocalizedStrings?,
     val published: Boolean = false,
     val produces: List<Output>?,
-    val contactPoints: List<ContactPoint>?
+    val contactPoints: List<ContactPoint>?,
+    val homepage: List<String>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -28,5 +29,6 @@ data class ServiceToBeCreated(
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val produces: List<Output>?,
-    val contactPoints: List<ContactPoint>?
+    val contactPoints: List<ContactPoint>?,
+    val homepage: List<String>?
 )

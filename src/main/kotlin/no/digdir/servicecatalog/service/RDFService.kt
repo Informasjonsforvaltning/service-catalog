@@ -16,6 +16,7 @@ import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.riot.Lang
+import org.apache.jena.sparql.vocabulary.FOAF
 import org.apache.jena.vocabulary.DCAT
 import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
@@ -71,6 +72,7 @@ class RDFService(
         setNsPrefix("cpsv", CPSV.uri)
         setNsPrefix("cv", CV.uri)
         setNsPrefix("vcard", VCARD4.getURI())
+        setNsPrefix("foaf", FOAF.getURI())
     }
 
     private fun Resource.addServiceToCatalog(service: Service): Resource {
@@ -120,6 +122,13 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addHomepages(homepages: List<String>?): Resource {
+        homepages?.forEach { homepage ->
+            addProperty(FOAF.homepage, homepage)
+        }
+        return this
+    }
+
     private fun publisherURI(catalogId: String): String =
         "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
 
@@ -140,6 +149,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.description, publicService.description)
             .addProducesOutput(publicService.produces)
             .addContactPoints(publicService.contactPoints)
+            .addHomepages(publicService.homepage)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -153,6 +163,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.description, service.description)
             .addProducesOutput(service.produces)
             .addContactPoints(service.contactPoints)
+            .addHomepages(service.homepage)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource
