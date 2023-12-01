@@ -51,7 +51,8 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
                 description = serviceToBeCreated.description,
                 produces = serviceToBeCreated.produces,
                 contactPoints = serviceToBeCreated.contactPoints,
-                homepage = serviceToBeCreated.homepage
+                homepage = serviceToBeCreated.homepage,
+                status = serviceToBeCreated.status
             ).let { serviceRepository.insert(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create service for $catalogId", ex)
