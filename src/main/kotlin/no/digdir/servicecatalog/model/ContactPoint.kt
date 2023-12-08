@@ -7,8 +7,8 @@ import com.fasterxml.jackson.annotation.JsonInclude
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class ContactPoint(
     val category: LocalizedStrings?,
-    val contactPage: List<String>?,
-    val telephone: List<String>?,
-    val email: List<String>?,
+    val contactPage: String?,
+    val telephone: String?,
+    val email: String?,
     val language: List<String>?
 )

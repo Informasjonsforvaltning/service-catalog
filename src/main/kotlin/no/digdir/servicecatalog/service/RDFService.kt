@@ -110,16 +110,9 @@ class RDFService(
                 .addProperty(RDF.type, CV.ContactPoint)
                 .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
                 .addStringsAsResources(VCARD4.language, contactPoint.language)
-
-            contactPoint.contactPage
-                ?.forEach { contactResource.addProperty(CV.contactPage, it) }
-
-            contactPoint.telephone
-                ?.forEach { contactResource.addProperty(CV.telephone, it) }
-
-            contactPoint.email
-                ?.forEach { contactResource.addProperty(CV.email, it) }
-
+                .addProperty(CV.contactPage, contactPoint.contactPage)
+                .addProperty(CV.telephone, contactPoint.telephone)
+                .addProperty(CV.email, contactPoint.email)
             addProperty(CV.contactPoint, contactResource)
         }
         return this

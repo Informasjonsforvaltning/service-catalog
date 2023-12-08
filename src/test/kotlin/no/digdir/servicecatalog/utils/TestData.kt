@@ -31,9 +31,9 @@ val SERVICE_0 = Service("00", "910244132",
     )),
     contactPoints = listOf(ContactPoint(
         category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
-        email = listOf("email@digdir.no"),
-        telephone = listOf("+4712345678"),
-        contactPage = listOf("digdir.no"),
+        email = "email@digdir.no",
+        telephone = "+4712345678",
+        contactPage = "digdir.no",
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
     )), homepage = listOf("digdir.no", "data.norge.no"), status = "http://purl.org/adms/status/Completed"
 )
@@ -63,9 +63,9 @@ val PUBLIC_SERVICE_0 =
         )),
         contactPoints = listOf(ContactPoint(
             category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
-            email = listOf("email@digdir.no"),
-            telephone = listOf("+4712345678"),
-            contactPage = listOf("digdir.no"),
+            email = "email@digdir.no",
+            telephone = "+4712345678",
+            contactPage = "digdir.no",
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
         )), homepage = listOf("data.norge.no"), status = "http://purl.org/adms/status/UnderDevelopment"
     )
