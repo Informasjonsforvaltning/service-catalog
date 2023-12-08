@@ -5,15 +5,7 @@ import no.digdir.servicecatalog.model.ContactPoint
 import no.digdir.servicecatalog.model.Output
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.Service
-import no.digdir.servicecatalog.rdf.ADMS
-import no.digdir.servicecatalog.rdf.CPSV
-import no.digdir.servicecatalog.rdf.CPSVNO
-import no.digdir.servicecatalog.rdf.CV
-import no.digdir.servicecatalog.rdf.DCATNO
-import no.digdir.servicecatalog.rdf.addAsResourceIfValid
-import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
-import no.digdir.servicecatalog.rdf.addStringsAsResources
-import no.digdir.servicecatalog.rdf.serialize
+import no.digdir.servicecatalog.rdf.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Resource
@@ -110,17 +102,10 @@ class RDFService(
                 .addProperty(RDF.type, CV.ContactPoint)
                 .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
                 .addStringsAsResources(VCARD4.language, contactPoint.language)
-                .addProperty(CV.contactPage, contactPoint.contactPage)
-                .addProperty(CV.telephone, contactPoint.telephone)
-                .addProperty(CV.email, contactPoint.email)
+                .addPropertyIfExists(CV.contactPage, contactPoint.contactPage)
+                .addPropertyIfExists(CV.telephone, contactPoint.telephone)
+                .addPropertyIfExists(CV.email, contactPoint.email)
             addProperty(CV.contactPoint, contactResource)
-        }
-        return this
-    }
-
-    private fun Resource.addHomepages(homepages: List<String>?): Resource {
-        homepages?.forEach { homepage ->
-            addProperty(FOAF.homepage, homepage)
         }
         return this
     }
@@ -145,7 +130,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.description, publicService.description)
             .addProducesOutput(publicService.produces)
             .addContactPoints(publicService.contactPoints)
-            .addHomepages(publicService.homepage)
+            .addPropertyIfExists(FOAF.homepage, publicService.homepage)
             .addAsResourceIfValid(ADMS.status, publicService.status)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
@@ -160,7 +145,7 @@ class RDFService(
             .addLocalizedStringsAsProperty(DCTerms.description, service.description)
             .addProducesOutput(service.produces)
             .addContactPoints(service.contactPoints)
-            .addHomepages(service.homepage)
+            .addPropertyIfExists(FOAF.homepage, service.homepage)
             .addAsResourceIfValid(ADMS.status, service.status)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
