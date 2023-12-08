@@ -35,7 +35,7 @@ val SERVICE_0 = Service("00", "910244132",
         telephone = "+4712345678",
         contactPage = "digdir.no",
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-    )), homepage = listOf("digdir.no", "data.norge.no"), status = "http://purl.org/adms/status/Completed"
+    )), homepage = "digdir.no", status = "http://purl.org/adms/status/Completed"
 )
 val SERVICE_1 = Service("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
@@ -67,7 +67,7 @@ val PUBLIC_SERVICE_0 =
             telephone = "+4712345678",
             contactPage = "digdir.no",
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-        )), homepage = listOf("data.norge.no"), status = "http://purl.org/adms/status/UnderDevelopment"
+        )), homepage = "data.norge.no", status = "http://purl.org/adms/status/UnderDevelopment"
     )
 val PUBLIC_SERVICE_1 =
     PublicService("1", "910244132",

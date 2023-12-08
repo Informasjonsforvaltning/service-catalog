@@ -21,7 +21,7 @@ data class PublicService (
     val published: Boolean = false,
     val produces: List<Output>?,
     val contactPoints: List<ContactPoint>?,
-    val homepage: List<String>?,
+    val homepage: String?,
     val status: String?
 )
 
@@ -31,6 +31,6 @@ data class PublicServiceToBeCreated(
     val description: LocalizedStrings?,
     val produces: List<Output>?,
     val contactPoints: List<ContactPoint>?,
-    val homepage: List<String>?,
+    val homepage: String?,
     val status: String?
 )

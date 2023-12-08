@@ -20,7 +20,7 @@
                            vcard:category  "Contact category title"@en;
                            vcard:language  <http://publications.europa.eu/resource/authority/language/ENG>
                          ];
-        foaf:homepage    "digdir.no" , "data.norge.no";
+        foaf:homepage    "digdir.no";
         cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>

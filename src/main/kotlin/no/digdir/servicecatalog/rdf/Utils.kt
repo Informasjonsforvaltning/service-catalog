@@ -70,3 +70,8 @@ fun Resource.addAsResourceIfValid(predicate: Property, value: String?): Resource
     } catch (e: Exception) {
         this
     }
+
+fun Resource.addPropertyIfExists(predicate: Property, value: String?): Resource {
+    value?.let { addProperty(predicate, value) }
+    return this
+}
