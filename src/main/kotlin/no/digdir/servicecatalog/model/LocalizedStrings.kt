@@ -10,3 +10,11 @@ data class LocalizedStrings(
         val nn: String?,
         val en: String?
 )
+
+fun LocalizedStrings.hasData() =
+        when {
+                !en.isNullOrBlank() -> true
+                !nb.isNullOrBlank() -> true
+                !nn.isNullOrBlank() -> true
+                else -> false
+        }

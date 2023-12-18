@@ -2,9 +2,11 @@ package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
 import no.digdir.servicecatalog.model.ContactPoint
+import no.digdir.servicecatalog.model.LocalizedStrings
 import no.digdir.servicecatalog.model.Output
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.Service
+import no.digdir.servicecatalog.model.hasData
 import no.digdir.servicecatalog.rdf.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
@@ -83,32 +85,45 @@ class RDFService(
     }
 
     private fun Resource.addProducesOutput(outputs: List<Output>?): Resource {
-        outputs?.forEach { output ->
-            val identifierURI = "$uri/output/${output.identifier}"
-            val outputResource = model.createResource(identifierURI)
-                .addProperty(RDF.type, CV.Output)
-                .addLocalizedStringsAsProperty(DCTerms.title, output.title)
-                .addLocalizedStringsAsProperty(DCTerms.description, output.description)
-                .addStringsAsResources(DCTerms.language, output.language)
+        outputs?.filter { it.isValid() }
+            ?.forEach { output ->
+                val identifierURI = "$uri/output/${output.identifier}"
+                val outputResource = model.createResource(identifierURI)
+                    .addProperty(RDF.type, CV.Output)
+                    .addLocalizedStringsAsProperty(DCTerms.title, output.title)
+                    .addLocalizedStringsAsProperty(DCTerms.description, output.description)
+                    .addStringsAsResources(DCTerms.language, output.language)
 
-            addProperty(CPSV.produces, outputResource)
-        }
+                addProperty(CPSV.produces, outputResource)
+            }
         return this
     }
+
+    private fun Output.isValid(): Boolean =
+        title != null && title.hasData()
 
     private fun Resource.addContactPoints(contactPoints: List<ContactPoint>?): Resource {
-        contactPoints?.forEach { contactPoint ->
-            val contactResource = model.createResource()
-                .addProperty(RDF.type, CV.ContactPoint)
-                .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
-                .addStringsAsResources(VCARD4.language, contactPoint.language)
-                .addPropertyIfExists(CV.contactPage, contactPoint.contactPage)
-                .addPropertyIfExists(CV.telephone, contactPoint.telephone)
-                .addPropertyIfExists(CV.email, contactPoint.email)
-            addProperty(CV.contactPoint, contactResource)
-        }
+        contactPoints?.filter { it.isValid() }
+            ?.forEach { contactPoint ->
+                val contactResource = model.createResource()
+                    .addProperty(RDF.type, CV.ContactPoint)
+                    .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
+                    .addStringsAsResources(VCARD4.language, contactPoint.language)
+                    .addPropertyIfExists(CV.contactPage, contactPoint.contactPage)
+                    .addPropertyIfExists(CV.telephone, contactPoint.telephone)
+                    .addPropertyIfExists(CV.email, contactPoint.email)
+                addProperty(CV.contactPoint, contactResource)
+            }
         return this
     }
+
+    private fun ContactPoint.isValid(): Boolean =
+        when {
+            !contactPage.isNullOrBlank() -> true
+            !email.isNullOrBlank() -> true
+            !telephone.isNullOrBlank() -> true
+            else -> false
+        }
 
     private fun publisherURI(catalogId: String): String =
         "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
