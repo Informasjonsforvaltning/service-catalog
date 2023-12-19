@@ -5,14 +5,16 @@ import no.digdir.servicecatalog.exception.CustomNotFoundException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.PublicService
 import no.digdir.servicecatalog.model.PublicServiceToBeCreated
+import no.digdir.servicecatalog.model.ServiceCount
 import no.digdir.servicecatalog.mongodb.PublicServiceRepository
 import org.slf4j.LoggerFactory
+import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PublicServiceService(private val publicServiceRepository: PublicServiceRepository) {
+class PublicServiceService(private val publicServiceRepository: PublicServiceRepository, private val mongoOperations: MongoOperations) {
     private val logger = LoggerFactory.getLogger(PublicServiceService::class.java)
 
     fun findPublicServicesByCatalogId(catalogId: String) =
@@ -89,4 +91,29 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
         findPublicServiceById(id, catalogId)
             ?.takeIf { it.published }
             ?: throw CustomNotFoundException()
+
+    private fun getAllCatalogIds(): List<String> {
+        return mongoOperations
+            .query(no.digdir.servicecatalog.model.Service::class.java)
+            .distinct("catalogId")
+            .`as`(String::class.java)
+            .all()
+    }
+
+    fun getServiceCountForAllCatalogs(): List<ServiceCount> =
+        getAllCatalogIds()
+            .map { getServiceCountForCatalog(it) }
+
+    private fun getServiceCountForCatalog(catalogId: String): ServiceCount =
+        ServiceCount(
+            catalogId = catalogId,
+            count = findPublicServicesByCatalogId(catalogId)
+                .distinctBy { it.id }
+                .size,
+        )
+
+    fun getServiceCountForListOfCatalogs(catalogIds: Set<String>): List<ServiceCount> =
+        catalogIds
+            .map { getServiceCountForCatalog(it) }
+            .filter { it.count > 0 }
 }

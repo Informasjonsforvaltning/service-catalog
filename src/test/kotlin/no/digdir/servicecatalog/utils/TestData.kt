@@ -1,12 +1,6 @@
 package no.digdir.servicecatalog.utils
 
-import no.digdir.servicecatalog.model.ContactPoint
-import no.digdir.servicecatalog.model.LocalizedStrings
-import no.digdir.servicecatalog.model.Output
-import no.digdir.servicecatalog.model.PublicService
-import no.digdir.servicecatalog.model.PublicServiceToBeCreated
-import no.digdir.servicecatalog.model.Service
-import no.digdir.servicecatalog.model.ServiceToBeCreated
+import no.digdir.servicecatalog.model.*
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 
 const val MONGO_USER = "testuser"
@@ -79,7 +73,18 @@ val PUBLIC_SERVICE_2 =
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null)
+val PUBLIC_SERVICE_DIFFERENT_CATALOG =
+    PublicService("0", "123456789",
+        title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
+        description = null,
+        published = true, produces = null, contactPoints = null, homepage = null, status = null)
 
 val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"), null, null, null, null, null)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
+
+val SERVICE_COUNT_1 = CombinedServiceCounts(catalogId = "910244132", serviceCount = 3, publicServiceCount = 3)
+
+val SERVICE_COUNT_2 = CombinedServiceCounts(catalogId = "123456789", serviceCount = 0, publicServiceCount = 1 )
+
+val LIST_OF_SERVICE_COUNTS_ROOT = listOf(SERVICE_COUNT_1, SERVICE_COUNT_2)

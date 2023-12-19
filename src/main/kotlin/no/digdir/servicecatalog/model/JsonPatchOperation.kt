@@ -16,7 +16,8 @@ enum class OpEnum(val value: String) {
     REMOVE("remove"),
     REPLACE("replace"),
     MOVE("move"),
-    COPY("copy");
+    COPY("copy"),
+    READ("read");
 
     @JsonValue
     fun jsonValue(): String = value
