@@ -1,6 +1,5 @@
 package no.digdir.servicecatalog.security
 
-import no.digdir.servicecatalog.model.OpEnum
 import org.springframework.security.oauth2.jwt.Jwt
 import org.springframework.stereotype.Service
 
@@ -40,18 +39,17 @@ class EndpointPermissions {
         return authorities?.contains(ROLE_ROOT_ADMIN) ?: false
     }
 
-    fun getOrgsByPermissions(jwt: Jwt, permission: OpEnum): Set<String> {
+    fun getOrgsWithMinimumReadPermission(jwt: Jwt): Set<String> {
         val authorities: String? = jwt.claims["authorities"] as? String
-        val regex = when(permission){
-            OpEnum.READ -> Regex("""[0-9]{9}""")
-            else -> Regex("""[0-9]{9}:$permission""")
-        }
+        val regex = Regex("""[0-9]{9}""")
 
         return authorities
-            ?.let { regex.findAll(it)}
-            ?.map { matchResult -> matchResult.value
-                .replace(Regex("[A-Za-z:]"), "")}
+            ?.let { regex.findAll(it) }
+            ?.map { matchResult ->
+                matchResult.value
+            }
             ?.toSet()
             ?: emptySet()
     }
+
 }

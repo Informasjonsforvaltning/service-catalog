@@ -74,7 +74,7 @@ val PUBLIC_SERVICE_2 =
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null)
 val PUBLIC_SERVICE_DIFFERENT_CATALOG =
-    PublicService("0", "123456789",
+    PublicService("123", "123456789",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null)
@@ -83,8 +83,8 @@ val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStr
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 
-val SERVICE_COUNT_1 = CombinedServiceCounts(catalogId = "910244132", serviceCount = 3, publicServiceCount = 3)
+val SERVICE_COUNT_1 = ServiceCount(catalogId = "910244132", serviceCount = 3, publicServiceCount = 3)
 
-val SERVICE_COUNT_2 = CombinedServiceCounts(catalogId = "123456789", serviceCount = 0, publicServiceCount = 1 )
+val SERVICE_COUNT_2 = ServiceCount(catalogId = "123456789", serviceCount = 0, publicServiceCount = 1 )
 
 val LIST_OF_SERVICE_COUNTS_ROOT = listOf(SERVICE_COUNT_1, SERVICE_COUNT_2)

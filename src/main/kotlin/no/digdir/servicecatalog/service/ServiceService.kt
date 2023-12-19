@@ -4,19 +4,14 @@ import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.exception.CustomNotFoundException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.Service
-import no.digdir.servicecatalog.model.ServiceCount
 import no.digdir.servicecatalog.model.ServiceToBeCreated
 import no.digdir.servicecatalog.mongodb.ServiceRepository
 import org.slf4j.LoggerFactory
-import org.springframework.data.mongodb.core.MongoOperations
 import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 @org.springframework.stereotype.Service
-class ServiceService(
-    private val serviceRepository: ServiceRepository,
-    private val mongoOperations: MongoOperations
-) {
+class ServiceService(private val serviceRepository: ServiceRepository) {
     private val logger = LoggerFactory.getLogger(ServiceService::class.java)
 
     fun findServicesByCatalogId(catalogId: String) =
@@ -93,29 +88,4 @@ class ServiceService(
         findServiceById(id, catalogId)
             ?.takeIf { it.published }
             ?: throw CustomNotFoundException()
-
-    fun getAllCatalogIds(): List<String> {
-        return mongoOperations
-            .query(Service::class.java)
-            .distinct("catalogId")
-            .`as`(String::class.java)
-            .all()
-    }
-
-    fun getServiceCountForAllCatalogs(): List<ServiceCount> =
-        getAllCatalogIds()
-            .map { getServiceCountForCatalog(it) }
-
-    private fun getServiceCountForCatalog(catalogId: String): ServiceCount =
-        ServiceCount(
-            catalogId = catalogId,
-            count = findServicesByCatalogId(catalogId)
-                .distinctBy { it.id }
-                .size,
-        )
-
-    fun getServiceCountForListOfCatalogs(catalogIds: Set<String>): List<ServiceCount> =
-        catalogIds
-            .map { getServiceCountForCatalog(it) }
-            .filter { it.count > 0 }
 }

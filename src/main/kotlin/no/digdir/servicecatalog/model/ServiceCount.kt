@@ -1,11 +1,11 @@
 package no.digdir.servicecatalog.model
 
-data class ServiceCount (
-    val catalogId: String,
-    val count: Int
-)
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
+import com.fasterxml.jackson.annotation.JsonInclude
 
-data class CombinedServiceCounts (
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+data class ServiceCount (
     val catalogId: String,
     val serviceCount: Int,
     val publicServiceCount: Int
