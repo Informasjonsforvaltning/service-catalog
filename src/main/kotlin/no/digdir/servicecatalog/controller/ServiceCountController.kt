@@ -34,9 +34,7 @@ class CatalogCountController(
             }
             else -> ResponseEntity(
                 countService.getServiceCountForListOfCatalogs(
-                    endpointPermissions.getOrgsWithMinimumReadPermission(
-                        jwt,
-                    )
+                    endpointPermissions.getOrgsWithMinimumReadPermission(jwt)
                 ), HttpStatus.OK
             )
         }

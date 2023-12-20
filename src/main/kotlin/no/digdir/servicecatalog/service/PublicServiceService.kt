@@ -8,10 +8,10 @@ import no.digdir.servicecatalog.model.PublicServiceToBeCreated
 import no.digdir.servicecatalog.mongodb.PublicServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
-
+import org.springframework.stereotype.Service
 import java.util.*
 
-@org.springframework.stereotype.Service
+@Service
 class PublicServiceService(private val publicServiceRepository: PublicServiceRepository) {
     private val logger = LoggerFactory.getLogger(PublicServiceService::class.java)
 

@@ -45,9 +45,7 @@ class EndpointPermissions {
 
         return authorities
             ?.let { regex.findAll(it) }
-            ?.map { matchResult ->
-                matchResult.value
-            }
+            ?.map { matchResult -> matchResult.value }
             ?.toSet()
             ?: emptySet()
     }
