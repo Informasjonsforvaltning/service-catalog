@@ -30,6 +30,7 @@ abstract class ApiTestContext {
 
         publicServiceRepository.deleteAll()
         publicServiceRepository.saveAll(PUBLIC_SERVICES)
+        publicServiceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG)
     }
 
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {

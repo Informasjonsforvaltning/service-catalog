@@ -33,4 +33,21 @@ class EndpointPermissions {
             else -> false
         }
     }
+    fun hasSysAdminPermission(jwt: Jwt): Boolean {
+        val authorities: String? = jwt.claims["authorities"] as? String
+
+        return authorities?.contains(ROLE_ROOT_ADMIN) ?: false
+    }
+
+    fun getOrgsWithMinimumReadPermission(jwt: Jwt): Set<String> {
+        val authorities: String? = jwt.claims["authorities"] as? String
+        val regex = Regex("""[0-9]{9}""")
+
+        return authorities
+            ?.let { regex.findAll(it) }
+            ?.map { matchResult -> matchResult.value }
+            ?.toSet()
+            ?: emptySet()
+    }
+
 }
