@@ -76,5 +76,14 @@ class ServiceCountTests : ApiTestContext() {
         Assertions.assertEquals(listOf(SERVICE_COUNT_1), result)
     }
 
-
+    @Test
+    fun `unauthorized when missing token`() {
+        val response = apiAuthorizedRequest(
+            path,
+            port,
+            null,
+            null,
+            HttpMethod.GET)
+        Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+    }
 }
