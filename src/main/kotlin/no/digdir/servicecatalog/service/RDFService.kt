@@ -10,6 +10,7 @@ import no.digdir.servicecatalog.model.hasData
 import no.digdir.servicecatalog.rdf.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
+import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.riot.Lang
 import org.apache.jena.sparql.vocabulary.FOAF
@@ -99,6 +100,13 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addSpatial(resources: List<String>?): Resource {
+        resources?.forEach {
+            addProperty(DCTerms.spatial, it)
+        }
+        return this
+    }
+
     private fun Output.isValid(): Boolean =
         title != null && title.hasData()
 
@@ -147,6 +155,7 @@ class RDFService(
             .addContactPoints(publicService.contactPoints)
             .addPropertyIfExists(FOAF.homepage, publicService.homepage)
             .addAsResourceIfValid(ADMS.status, publicService.status)
+            .addSpatial(publicService.dekningsområde)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource

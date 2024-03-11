@@ -20,7 +20,8 @@
                                     vcard:language  <http://publications.europa.eu/resource/authority/language/ENG>
                                   ];
         foaf:homepage             "data.norge.no";
-        cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123> .
+        cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123> ;
+        dct:spatial               "Norge" .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
         a                cv:Output;

@@ -23,7 +23,8 @@
                                     vcard:language  <http://publications.europa.eu/resource/authority/language/ENG>
                                   ];
         foaf:homepage             "data.norge.no";
-        cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123> .
+        cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>;
+        dct:spatial               "Norge" .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
         a                cv:Output;
@@ -43,7 +44,8 @@
         a                         cpsv:PublicService;
         cv:hasCompetentAuthority  <https://data.brreg.no/enhetsregisteret/api/enheter/910244132>;
         dct:identifier            <http://localhost:5050/rdf/catalogs/910244132/public-services/2>;
-        dct:title                 "EN Tittel 2"@en , "NN Tittel 2"@nn , "NB Tittel 2"@nb .
+        dct:title                 "EN Tittel 2"@en , "NN Tittel 2"@nn , "NB Tittel 2"@nb ;
+        dct:spatial               "Norge" .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00>
         a                cpsvno:Service;
