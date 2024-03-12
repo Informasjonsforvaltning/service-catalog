@@ -23,7 +23,7 @@ data class PublicService (
     val contactPoints: List<ContactPoint>?,
     val homepage: String?,
     val status: String?,
-    val dekningsområde: List<String>?
+    val spatial: List<String>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,5 +34,5 @@ data class PublicServiceToBeCreated(
     val contactPoints: List<ContactPoint>?,
     val homepage: String?,
     val status: String?,
-    val dekningsområde: List<String>?
+    val spatial: List<String>?
 )

@@ -64,25 +64,25 @@ val PUBLIC_SERVICE_0 =
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
         )),
         homepage = "data.norge.no", status = "http://purl.org/adms/status/UnderDevelopment",
-        dekningsområde = listOf("Norge")
+        spatial = listOf("Norge")
     )
 val PUBLIC_SERVICE_1 =
     PublicService("1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
         published = false, produces = null, contactPoints = null, homepage = null, status = null,
-        dekningsområde = listOf("Norge"))
+        spatial = listOf("Norge"))
 val PUBLIC_SERVICE_2 =
     PublicService("2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null,
-        dekningsområde = listOf("Norge"))
+        spatial = listOf("Norge"))
 val PUBLIC_SERVICE_DIFFERENT_CATALOG =
     PublicService("123", "123456789",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = null,
-        published = true, produces = null, contactPoints = null, homepage = null, status = null, dekningsområde = listOf("Norge"))
+        published = true, produces = null, contactPoints = null, homepage = null, status = null, spatial = listOf("Norge"))
 
 val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
     null, null, null, null, null, null)
