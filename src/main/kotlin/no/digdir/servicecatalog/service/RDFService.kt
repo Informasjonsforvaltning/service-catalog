@@ -155,7 +155,7 @@ class RDFService(
             .addContactPoints(publicService.contactPoints)
             .addPropertyIfExists(FOAF.homepage, publicService.homepage)
             .addAsResourceIfValid(ADMS.status, publicService.status)
-            .addSpatial(publicService.dekningsområde)
+            .addSpatial(publicService.spatial)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
