@@ -102,7 +102,7 @@ class RDFService(
 
     private fun Resource.addSpatial(resources: List<String>?): Resource {
         resources?.forEach {
-            addProperty(DCTerms.spatial, it)
+            addAsResourceIfValid(DCTerms.spatial, it)
         }
         return this
     }
