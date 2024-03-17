@@ -27,7 +27,7 @@
         <maven.exec.skip>false</maven.exec.skip>
 
         <kotlin.version>1.9.22</kotlin.version>
-        <testcontainers.version>1.19.3</testcontainers.version>
+        <testcontainers.version>1.19.7</testcontainers.version>
     </properties>
 
     <dependencies>
