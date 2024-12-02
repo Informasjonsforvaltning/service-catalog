@@ -1,5 +1,6 @@
 package no.digdir.servicecatalog.security
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -10,12 +11,28 @@ import org.springframework.security.oauth2.jwt.*
 import org.springframework.security.oauth2.jwt.JwtClaimNames.AUD
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
 
 @Configuration
-open class SecurityConfig {
+open class SecurityConfig(
+    @Value("\${application.cors.originPatterns}")
+    val corsOriginPatterns: Array<String>
+) {
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http {
+            cors {
+                configurationSource = CorsConfigurationSource {
+                    val config = CorsConfiguration()
+                    config.allowCredentials = false
+                    config.allowedHeaders = listOf("*")
+                    config.maxAge = 3600L
+                    config.allowedOriginPatterns = corsOriginPatterns.toList()
+                    config.allowedMethods = listOf("GET", "POST", "OPTIONS", "DELETE", "PATCH")
+                    config
+                }
+            }
             authorizeHttpRequests {
                 authorize(HttpMethod.GET, "/actuator/health/readiness", permitAll)
                 authorize(HttpMethod.GET, "/actuator/health/liveness", permitAll)
