@@ -11,6 +11,15 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
+  data.mongodb:
+      host: ${MONGODB_HOST}
+      username: ${MONGO_USERNAME}
+      password: ${MONGO_PASSWORD}
+      authentication-database: ${MONGODB_AUTH}
+      replica-set-name: ${MONGODB_REPLICASET}
+      port: 27017
+      database: serviceCatalog
+      auto-index-creation: true
   security:
     oauth2:
       resourceserver:
@@ -20,16 +29,16 @@ spring:
 application:
   serviceCatalogUri: ${SERVICE_CATALOG_URI}
   cors.originPatterns: "${CORS_ORIGIN_PATTERNS}"
-  mongodb:
-    username: ${MONGO_USERNAME}
-    password: ${MONGO_PASSWORD}
-    host: ${MONGODB_HOST}
-    auth: ${MONGODB_AUTH}
-    rs: ${MONGODB_REPLICASET}
-    db: serviceCatalog
 ---
 spring:
   config.activate.on-profile: test
+  data:
+    mongodb:
+      host: localhost
+      username: testuser
+      password: testpassword
+      authentication-database: admin
+      replica-set-name: null
   security:
     oauth2:
       resourceserver:
@@ -39,15 +48,16 @@ spring:
 application:
   serviceCatalogUri: http://localhost:5050
   cors.originPatterns: "*"
-  mongodb:
-    username: testuser
-    password: testpassword
-    auth: admin
-    rs:
 ---
 spring:
   config.activate.on-profile: dev
-  data.mongodb.uri: mongodb://root:admin@localhost:27017/serviceCatalog?authSource=admin&replicaSet=replicaset
+  data:
+    mongodb:
+      host: localhost
+      username: root
+      password: adm?i=n
+      authentication-database: admin
+      replica-set-name: null
   security:
     oauth2:
       resourceserver:
@@ -57,9 +67,3 @@ spring:
 application:
   serviceCatalogUri: http://localhost:8080
   cors.originPatterns: "*"
-  mongodb:
-    username: root
-    password: admin
-    host: localhost:27017
-    auth: admin
-    rs:

@@ -1,28 +1,11 @@
 version: "3"
 services:
 
-  app:
-    build: .
-    image: eu.gcr.io/digdir-fdk-infra/service-catalog
-    environment:
-      - MONGO_USERNAME=root
-      - MONGO_PASSWORD=admin
-      - MONGODB_HOST=mongodb:27017
-      - MONGODB_AUTH=admin
-      - MONGODB_REPLICASET=
-      - SSO_HOST=https://sso.staging.fellesdatakatalog.digdir.no
-      - SERVICE_CATALOG_URI=https://localhost:8080
-      - CORS_ORIGIN_PATTERNS=*
-    ports:
-      - "9090:8080"
-    depends_on:
-      - mongodb
-
   mongodb:
     image: mongo:latest
     environment:
       - MONGO_INITDB_DATABASE=serviceCatalog
-      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_ROOT_PASSWORD=adm?i=n
       - MONGO_INITDB_ROOT_USERNAME=root
     ports:
       - "27017:27017"

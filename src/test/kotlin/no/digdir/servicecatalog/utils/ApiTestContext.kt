@@ -36,7 +36,7 @@ abstract class ApiTestContext {
     internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
         override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
             TestPropertyValues.of(
-                "application.mongodb.host=localhost:${mongoContainer.getMappedPort(MONGO_PORT)}"
+                "spring.data.mongodb.port=${mongoContainer.getMappedPort(MONGO_PORT)}"
             ).applyTo(configurableApplicationContext.environment)
         }
     }
