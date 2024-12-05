@@ -9,21 +9,20 @@ services:
       - MONGO_PASSWORD=admin
       - MONGODB_HOST=mongodb:27017
       - MONGODB_AUTH=admin
-      - MONGODB_REPLICASET=replicaset
+      - MONGODB_REPLICASET=
       - SSO_HOST=https://sso.staging.fellesdatakatalog.digdir.no
       - SERVICE_CATALOG_URI=https://localhost:8080
+      - CORS_ORIGIN_PATTERNS=*
     ports:
       - "9090:8080"
     depends_on:
       - mongodb
 
   mongodb:
-    image: bitnami/mongodb:latest
+    image: mongo:latest
     environment:
-      - MONGODB_ROOT_PASSWORD=admin
-      # Activate this if connecting from localhost
-      - MONGODB_ADVERTISED_HOSTNAME=localhost
-      - MONGODB_REPLICA_SET_MODE=primary
-      - MONGODB_REPLICA_SET_KEY=replicaset
+      - MONGO_INITDB_DATABASE=serviceCatalog
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_ROOT_USERNAME=root
     ports:
       - "27017:27017"

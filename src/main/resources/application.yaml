@@ -11,7 +11,6 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
-  data.mongodb.uri: mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGODB_HOST}/serviceCatalog?authSource=${MONGODB_AUTH}&replicaSet=${MONGODB_REPLICASET}
   security:
     oauth2:
       resourceserver:
@@ -21,6 +20,13 @@ spring:
 application:
   serviceCatalogUri: ${SERVICE_CATALOG_URI}
   cors.originPatterns: "${CORS_ORIGIN_PATTERNS}"
+  mongodb:
+    username: ${MONGO_USERNAME}
+    password: ${MONGO_PASSWORD}
+    host: ${MONGODB_HOST}
+    auth: ${MONGODB_AUTH}
+    rs: ${MONGODB_REPLICASET}
+    db: serviceCatalog
 ---
 spring:
   config.activate.on-profile: test
@@ -33,6 +39,11 @@ spring:
 application:
   serviceCatalogUri: http://localhost:5050
   cors.originPatterns: "*"
+  mongodb:
+    username: testuser
+    password: testpassword
+    auth: admin
+    rs:
 ---
 spring:
   config.activate.on-profile: dev
@@ -46,3 +57,9 @@ spring:
 application:
   serviceCatalogUri: http://localhost:8080
   cors.originPatterns: "*"
+  mongodb:
+    username: root
+    password: admin
+    host: localhost:27017
+    auth: admin
+    rs:
