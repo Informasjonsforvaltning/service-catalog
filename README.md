@@ -2,8 +2,12 @@
 
 This application provides an API for the management of services.
 
-A service is defined according to the [CPSV-AP-NO](https://data.norge.no/specification/cpsv-ap-no#_abstract_in_english)
+A service is defined according to the [CPSV-AP-NO](https://data.norge.no/specification/cpsv-ap-no)
 specification.
+
+For a broader understanding of the system’s context, refer to
+the [architecture documentation](https://github.com/Informasjonsforvaltning/architecture-documentation) wiki. For more
+specific context on this application, see the **Registration** subsystem section.
 
 ## Getting Started
 
