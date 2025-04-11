@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping(value = ["/internal/catalogs/{catalogId}/public-services"])
 class PublicServiceController(private val publicServiceService: PublicServiceService, private val endpointPermissions: EndpointPermissions) {

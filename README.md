@@ -2,8 +2,7 @@
 
 This application provides an API for the management of services.
 
-A service is defined according to the [CPSV-AP-NO](https://data.norge.no/specification/cpsv-ap-no)
-specification.
+A service is defined according to the [CPSV-AP-NO](https://data.norge.no/specification/cpsv-ap-no) specification.
 
 For a broader understanding of the system’s context, refer to
 the [architecture documentation](https://github.com/Informasjonsforvaltning/architecture-documentation) wiki. For more
@@ -42,6 +41,10 @@ docker compose up
 ```sh
 mvn spring-boot:run -Dspring-boot.run.profiles=dev
 ```
+
+### API Documentation (OpenAPI)
+
+Once the application is running locally, the API documentation can be accessed at http://localhost:8080/swagger-ui/index.html
 
 ### Running tests
 
