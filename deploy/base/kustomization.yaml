@@ -8,3 +8,6 @@ images:
   - name: service-catalog
     newName: ghcr.io/informasjonsforvaltning/service-catalog
     newTag: $(GIT_COMMIT_SHA)
+
+patches:
+  - path: env.yaml
