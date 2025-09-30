@@ -118,7 +118,7 @@ class RDFService(
                     .addLocalizedStringsAsProperty(VCARD4.category, contactPoint.category)
                     .addStringsAsResources(VCARD4.language, contactPoint.language)
                     .addPropertyIfExists(CV.contactPage, contactPoint.contactPage)
-                    .addPropertyIfExists(CV.telephone, contactPoint.telephone)
+                    .addPropertyIfExists(CV.telephone, contactPoint.telephone?.replace(Regex("\\s"), ""))
                     .addPropertyIfExists(CV.email, contactPoint.email)
                 addProperty(CV.contactPoint, contactResource)
             }
