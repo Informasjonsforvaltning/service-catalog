@@ -26,7 +26,7 @@ val SERVICE_0 = Service("00", "910244132",
     contactPoints = listOf(ContactPoint(
         category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
         email = "email@digdir.no",
-        telephone = "+4712345678",
+        telephone = "+47 12 34 56 78",
         contactPage = "digdir.no",
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
     )),
@@ -59,7 +59,7 @@ val PUBLIC_SERVICE_0 =
         contactPoints = listOf(ContactPoint(
             category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
             email = "email@digdir.no",
-            telephone = "+4712345678",
+            telephone = "+47 12 34 56 78",
             contactPage = "digdir.no",
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
         )),
