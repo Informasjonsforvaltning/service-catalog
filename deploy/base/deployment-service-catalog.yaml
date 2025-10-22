@@ -49,11 +49,11 @@ spec:
                 secretKeyRef:
                   name: mongodb
                   key: MONGODB_REPLICASET
-            - name: SSO_HOST
+            - name: KEYCLOAK_OIDC_ISSUER
               valueFrom:
                 secretKeyRef:
-                  name: commonurl
-                  key: SSO_BASE_URI
+                  name: keycloak
+                  key: KEYCLOAK_OIDC_ISSUER
             - name: SERVICE_CATALOG_URI
               valueFrom:
                 secretKeyRef:
