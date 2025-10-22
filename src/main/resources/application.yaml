@@ -24,8 +24,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: ${SSO_HOST}/auth/realms/fdk
-          jwk-set-uri: ${SSO_HOST}/auth/realms/fdk/protocol/openid-connect/certs
+          issuer-uri: ${KEYCLOAK_OIDC_ISSUER}
+          jwk-set-uri: ${KEYCLOAK_OIDC_ISSUER}/protocol/openid-connect/certs
 application:
   serviceCatalogUri: ${SERVICE_CATALOG_URI}
   cors.originPatterns: "${CORS_ORIGIN_PATTERNS}"
@@ -62,8 +62,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk
-          jwk-set-uri: https://sso.staging.fellesdatakatalog.digdir.no/auth/realms/fdk/protocol/openid-connect/certs
+          issuer-uri: https://keycloak.staging.fellesdatakatalog.digdir.no/realms/fdk
+          jwk-set-uri: https://keycloak.staging.fellesdatakatalog.digdir.no/realms/fdk/protocol/openid-connect/certs
 application:
   serviceCatalogUri: http://localhost:8080
   cors.originPatterns: "*"
