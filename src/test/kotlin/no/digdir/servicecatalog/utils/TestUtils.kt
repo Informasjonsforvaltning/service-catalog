@@ -1,5 +1,11 @@
 package no.digdir.servicecatalog.utils
 
+import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.digdir.servicecatalog.model.PublicServiceDTO
+import no.digdir.servicecatalog.model.ServiceEntity
+import no.digdir.servicecatalog.model.ServiceDTO
+import no.digdir.servicecatalog.model.ServiceType
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
@@ -11,6 +17,24 @@ import org.springframework.web.client.RestTemplate
 import java.io.BufferedReader
 import java.net.HttpURLConnection
 import java.net.URL
+
+fun ServiceDTO.toDBO(): ServiceEntity =
+    ServiceEntity(
+        id = id,
+        catalogId = catalogId,
+        published = published,
+        serviceType = ServiceType.SERVICE.name,
+        data = jacksonObjectMapper().convertValue(this)
+    )
+
+fun PublicServiceDTO.toDBO(): ServiceEntity =
+    ServiceEntity(
+        id = id,
+        catalogId = catalogId,
+        published = published,
+        serviceType = ServiceType.PUBLIC_SERVICE.name,
+        data = jacksonObjectMapper().convertValue(this)
+    )
 
 fun apiGet(port: Int, endpoint: String, acceptHeader: String?): Map<String,Any> {
 

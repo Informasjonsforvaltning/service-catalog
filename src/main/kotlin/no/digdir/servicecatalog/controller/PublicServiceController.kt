@@ -9,7 +9,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -26,7 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 class PublicServiceController(private val publicServiceService: PublicServiceService, private val endpointPermissions: EndpointPermissions) {
 
     @GetMapping
-    fun getAllPublicServices(@AuthenticationPrincipal jwt: Jwt, @PathVariable catalogId: String): ResponseEntity<List<PublicService>> =
+    fun getAllPublicServices(@AuthenticationPrincipal jwt: Jwt, @PathVariable catalogId: String): ResponseEntity<List<PublicServiceDTO>> =
         if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
             ResponseEntity(publicServiceService.findPublicServicesByCatalogId(catalogId), HttpStatus.OK)
         } else {
@@ -37,7 +36,7 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
     fun getPublicServiceById(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @PathVariable id: String): ResponseEntity<PublicService> =
+        @PathVariable id: String): ResponseEntity<PublicServiceDTO> =
             if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
                 publicServiceService.findPublicServiceById(id, catalogId)
                     ?.let { ResponseEntity(it, HttpStatus.OK) }
@@ -52,7 +51,7 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         @PathVariable catalogId: String,
         @PathVariable id: String,
         @RequestBody patchOperations: List<JsonPatchOperation>
-    ): ResponseEntity<PublicService> =
+    ): ResponseEntity<PublicServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             publicServiceService.patchPublicService(id, catalogId, patchOperations)
                 ?.let { ResponseEntity(it, HttpStatus.OK) }
@@ -78,7 +77,7 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
     fun createPublicService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @RequestBody publicServiceToBeCreated: PublicServiceToBeCreated
+        @RequestBody publicServiceToBeCreated: PublicServiceValues
     ): ResponseEntity<HttpStatus> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             val created = publicServiceService.createPublicService(catalogId, publicServiceToBeCreated)
@@ -93,7 +92,7 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<PublicService> =
+    ): ResponseEntity<PublicServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             ResponseEntity(publicServiceService.publishPublicService(id, catalogId), HttpStatus.OK)
         } else {
@@ -105,7 +104,7 @@ class PublicServiceController(private val publicServiceService: PublicServiceSer
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<PublicService> =
+    ): ResponseEntity<PublicServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             ResponseEntity(publicServiceService.unpublishPublicService(id, catalogId), HttpStatus.OK)
         } else {

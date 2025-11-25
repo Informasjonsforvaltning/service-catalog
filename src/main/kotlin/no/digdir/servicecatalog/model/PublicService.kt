@@ -2,18 +2,10 @@ package no.digdir.servicecatalog.model
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
-import org.springframework.data.mongodb.core.index.CompoundIndex
-import org.springframework.data.mongodb.core.index.CompoundIndexes
-import org.springframework.data.mongodb.core.mapping.Document
 
-@Document(collection = "publicServices")
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-@CompoundIndexes(value = [
-    CompoundIndex(name = "catalog_id", def = "{'catalogId' : 1}"),
-    CompoundIndex(name = "catalog_id_published", def = "{'catalogId' : 1, 'published': 1}")
-])
-data class PublicService (
+data class PublicServiceDTO (
     val id: String,
     val catalogId: String,
     val title: LocalizedStrings?,
@@ -26,8 +18,9 @@ data class PublicService (
     val spatial: List<String>?
 )
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class PublicServiceToBeCreated(
+data class PublicServiceValues (
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val produces: List<Output>?,

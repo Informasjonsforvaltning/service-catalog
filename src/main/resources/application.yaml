@@ -11,15 +11,22 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
-  data.mongodb:
-      host: ${MONGODB_HOST}
-      username: ${MONGO_USERNAME}
-      password: ${MONGO_PASSWORD}
-      authentication-database: ${MONGODB_AUTH}
-      replica-set-name: ${MONGODB_REPLICASET}
-      port: 27017
-      database: serviceCatalog
-      auto-index-creation: true
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:service_catalog}
+    username: ${POSTGRES_USERNAME:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        type:
+          json_format_mapper: no.digdir.servicecatalog.configuration.CustomJacksonJsonFormatMapper
   security:
     oauth2:
       resourceserver:
@@ -32,13 +39,17 @@ application:
 ---
 spring:
   config.activate.on-profile: test
-  data:
-    mongodb:
-      host: localhost
-      username: testuser
-      password: testpassword
-      authentication-database: admin
-      replica-set-name: null
+  datasource:
+    url: jdbc:postgresql://localhost:5432/service_catalog
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
   security:
     oauth2:
       resourceserver:
@@ -51,13 +62,6 @@ application:
 ---
 spring:
   config.activate.on-profile: dev
-  data:
-    mongodb:
-      host: localhost
-      username: root
-      password: adm?i=n
-      authentication-database: admin
-      replica-set-name: null
   security:
     oauth2:
       resourceserver:
