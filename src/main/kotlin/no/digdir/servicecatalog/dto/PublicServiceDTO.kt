@@ -1,11 +1,14 @@
-package no.digdir.servicecatalog.model
+package no.digdir.servicecatalog.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
+import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.domain.Output
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ServiceDTO (
+data class PublicServiceDTO (
     val id: String,
     val catalogId: String,
     val title: LocalizedStrings?,
@@ -14,16 +17,6 @@ data class ServiceDTO (
     val produces: List<Output>?,
     val contactPoints: List<ContactPoint>?,
     val homepage: String?,
-    val status: String?
-)
-
-@JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonIgnoreProperties(ignoreUnknown = true)
-data class ServiceValues (
-    val title: LocalizedStrings?,
-    val description: LocalizedStrings?,
-    val produces: List<Output>?,
-    val contactPoints: List<ContactPoint>?,
-    val homepage: String?,
-    val status: String?
+    val status: String?,
+    val spatial: List<String>?
 )

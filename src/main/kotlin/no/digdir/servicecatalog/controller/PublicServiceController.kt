@@ -1,6 +1,8 @@
 package no.digdir.servicecatalog.controller
 
-import no.digdir.servicecatalog.model.*
+import no.digdir.servicecatalog.domain.PublicServiceValues
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.dto.PublicServiceDTO
 import no.digdir.servicecatalog.security.EndpointPermissions
 import no.digdir.servicecatalog.service.PublicServiceService
 import org.springframework.http.HttpHeaders

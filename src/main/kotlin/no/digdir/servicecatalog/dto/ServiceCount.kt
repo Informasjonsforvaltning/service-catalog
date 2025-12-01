@@ -1,4 +1,4 @@
-package no.digdir.servicecatalog.model
+package no.digdir.servicecatalog.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude

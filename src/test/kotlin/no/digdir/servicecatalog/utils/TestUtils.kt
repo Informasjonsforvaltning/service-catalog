@@ -2,10 +2,10 @@ package no.digdir.servicecatalog.utils
 
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.digdir.servicecatalog.model.PublicServiceDTO
-import no.digdir.servicecatalog.model.ServiceEntity
-import no.digdir.servicecatalog.model.ServiceDTO
-import no.digdir.servicecatalog.model.ServiceType
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.entity.ServiceEntity
+import no.digdir.servicecatalog.dto.ServiceDTO
+import no.digdir.servicecatalog.entity.ServiceType
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod

@@ -1,4 +1,4 @@
-package no.digdir.servicecatalog.model
+package no.digdir.servicecatalog.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -29,7 +29,3 @@ data class ServiceEntity (
     @Column(name = "data", columnDefinition = "jsonb")
     val data: Map<String, Any>? = null,
 )
-
-enum class ServiceType {
-    PUBLIC_SERVICE, SERVICE
-}

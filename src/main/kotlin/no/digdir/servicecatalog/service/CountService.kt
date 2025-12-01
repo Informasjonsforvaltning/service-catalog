@@ -1,7 +1,7 @@
 package no.digdir.servicecatalog.service
 
-import no.digdir.servicecatalog.model.ServiceCount
-import no.digdir.servicecatalog.model.ServiceType
+import no.digdir.servicecatalog.dto.ServiceCount
+import no.digdir.servicecatalog.entity.ServiceType
 import no.digdir.servicecatalog.repository.ServiceRepository
 import org.springframework.stereotype.Service
 

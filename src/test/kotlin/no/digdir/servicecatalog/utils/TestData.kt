@@ -1,6 +1,13 @@
 package no.digdir.servicecatalog.utils
 
-import no.digdir.servicecatalog.model.*
+import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.domain.Output
+import no.digdir.servicecatalog.domain.PublicServiceValues
+import no.digdir.servicecatalog.domain.ServiceValues
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.dto.ServiceCount
+import no.digdir.servicecatalog.dto.ServiceDTO
 import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
 
 const val MONGO_USER = "testuser"
@@ -13,23 +20,28 @@ val MONGO_ENV_VALUES: Map<String, String> = ImmutableMap.of(
     "MONGO_INITDB_ROOT_PASSWORD", MONGO_PASSWORD
 )
 
-val SERVICE_0 = ServiceDTO("00", "910244132",
+val SERVICE_0 = ServiceDTO(
+    "00", "910244132",
     title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
     description = LocalizedStrings("Beskrivelse 00", "Beskriving 00", "Description 00"),
     published = true,
-    produces = listOf(Output(
-        identifier = "321",
-        title = LocalizedStrings(en = "Output title", nb = null, nn = null),
-        description = LocalizedStrings(en = "Output description", nb = null, nn = null),
-        language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-    )),
-    contactPoints = listOf(ContactPoint(
-        category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
-        email = "email@digdir.no",
-        telephone = "+47 12 34 56 78",
-        contactPage = "digdir.no",
-        language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-    )),
+    produces = listOf(
+        Output(
+            identifier = "321",
+            title = LocalizedStrings(en = "Output title", nb = null, nn = null),
+            description = LocalizedStrings(en = "Output description", nb = null, nn = null),
+            language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
+        )
+    ),
+    contactPoints = listOf(
+        ContactPoint(
+            category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
+            email = "email@digdir.no",
+            telephone = "+47 12 34 56 78",
+            contactPage = "digdir.no",
+            language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
+        )
+    ),
     homepage = "digdir.no", status = "http://purl.org/adms/status/Completed"
 )
 val SERVICE_1 = ServiceDTO("01", "910244132",
@@ -41,28 +53,34 @@ val SERVICE_2 = ServiceDTO("02", "910244132",
     description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
     published = false, produces = null, contactPoints = null, homepage = null, status = null)
 
-val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null)
+val SERVICE_TO_BE_CREATED =
+    ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 
 val PUBLIC_SERVICE_0 =
-    PublicServiceDTO("0", "910244132",
+    PublicServiceDTO(
+        "0", "910244132",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
         published = true,
-        produces = listOf(Output(
-            identifier = "123",
-            title = LocalizedStrings(en = "Output title", nb = null, nn = null),
-            description = LocalizedStrings(en = "Output description", nb = null, nn = null),
-            language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-        )),
-        contactPoints = listOf(ContactPoint(
-            category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
-            email = "email@digdir.no",
-            telephone = "+47 12 34 56 78",
-            contactPage = "digdir.no",
-            language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-        )),
+        produces = listOf(
+            Output(
+                identifier = "123",
+                title = LocalizedStrings(en = "Output title", nb = null, nn = null),
+                description = LocalizedStrings(en = "Output description", nb = null, nn = null),
+                language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
+            )
+        ),
+        contactPoints = listOf(
+            ContactPoint(
+                category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
+                email = "email@digdir.no",
+                telephone = "+47 12 34 56 78",
+                contactPage = "digdir.no",
+                language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
+            )
+        ),
         homepage = "data.norge.no", status = "http://purl.org/adms/status/UnderDevelopment",
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163")
     )
@@ -84,8 +102,10 @@ val PUBLIC_SERVICE_DIFFERENT_CATALOG =
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 
-val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
-    null, null, null, null, null, null)
+val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(
+    title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
+    null, null, null, null, null, null
+)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 

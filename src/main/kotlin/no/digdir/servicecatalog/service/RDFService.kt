@@ -1,11 +1,11 @@
 package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
-import no.digdir.servicecatalog.model.ContactPoint
-import no.digdir.servicecatalog.model.Output
-import no.digdir.servicecatalog.model.PublicServiceDTO
-import no.digdir.servicecatalog.model.ServiceDTO
-import no.digdir.servicecatalog.model.hasData
+import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.Output
+import no.digdir.servicecatalog.domain.hasData
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.dto.ServiceDTO
 import no.digdir.servicecatalog.rdf.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory

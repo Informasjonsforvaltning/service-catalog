@@ -2,10 +2,10 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.digdir.servicecatalog.model.JsonPatchOperation
-import no.digdir.servicecatalog.model.LocalizedStrings
-import no.digdir.servicecatalog.model.OpEnum
-import no.digdir.servicecatalog.model.ServiceDTO
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.dto.OpEnum
+import no.digdir.servicecatalog.dto.ServiceDTO
 import no.digdir.servicecatalog.utils.ApiTestContext
 import no.digdir.servicecatalog.utils.SERVICES
 import no.digdir.servicecatalog.utils.SERVICE_0

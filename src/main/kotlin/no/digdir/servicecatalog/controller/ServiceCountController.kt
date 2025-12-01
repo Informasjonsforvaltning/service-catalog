@@ -1,6 +1,6 @@
 package no.digdir.servicecatalog.controller
 
-import no.digdir.servicecatalog.model.*
+import no.digdir.servicecatalog.dto.ServiceCount
 import no.digdir.servicecatalog.security.EndpointPermissions
 import no.digdir.servicecatalog.service.CountService
 import org.springframework.http.HttpStatus

@@ -2,7 +2,7 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.digdir.servicecatalog.model.ServiceCount
+import no.digdir.servicecatalog.dto.ServiceCount
 import no.digdir.servicecatalog.utils.ApiTestContext
 import no.digdir.servicecatalog.utils.LIST_OF_SERVICE_COUNTS_ROOT
 import no.digdir.servicecatalog.utils.SERVICE_COUNT_1

@@ -7,7 +7,7 @@ import jakarta.json.Json
 import jakarta.json.JsonException
 import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.exception.CustomInternalServerErrorException
-import no.digdir.servicecatalog.model.JsonPatchOperation
+import no.digdir.servicecatalog.dto.JsonPatchOperation
 import java.io.StringReader
 
 inline fun <reified T> patchOriginal(original: T, operations: List<JsonPatchOperation>): T {

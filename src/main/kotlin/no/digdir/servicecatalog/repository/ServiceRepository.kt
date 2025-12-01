@@ -1,7 +1,6 @@
 package no.digdir.servicecatalog.repository
 
-import no.digdir.servicecatalog.model.ServiceEntity
-import no.digdir.servicecatalog.model.ServiceType
+import no.digdir.servicecatalog.entity.ServiceEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

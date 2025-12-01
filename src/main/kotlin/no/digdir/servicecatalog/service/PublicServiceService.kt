@@ -4,11 +4,11 @@ import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.exception.CustomNotFoundException
-import no.digdir.servicecatalog.model.JsonPatchOperation
-import no.digdir.servicecatalog.model.PublicServiceDTO
-import no.digdir.servicecatalog.model.PublicServiceValues
-import no.digdir.servicecatalog.model.ServiceEntity
-import no.digdir.servicecatalog.model.ServiceType
+import no.digdir.servicecatalog.domain.PublicServiceValues
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.entity.ServiceEntity
+import no.digdir.servicecatalog.entity.ServiceType
 import no.digdir.servicecatalog.repository.ServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
