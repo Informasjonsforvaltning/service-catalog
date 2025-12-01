@@ -57,7 +57,17 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
             val dbo = findById(id, catalogId)
             dbo?.data
                 ?.let { patchOriginal(it, operations) }
-                ?.let { serviceRepository.save(dbo.copy(data = it)) }
+                ?.let { patchedData ->
+                    serviceRepository.save(
+                        ServiceEntity(
+                            id = dbo.id,
+                            catalogId = dbo.catalogId,
+                            published = dbo.published,
+                            serviceType = dbo.serviceType,
+                            data = patchedData
+                        )
+                    )
+                }
                 ?.toDTO()
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
@@ -95,7 +105,17 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
         try {
             findById(id, catalogId)
                 ?. also { if (it.published) throw CustomBadRequestException() }
-                ?.let { serviceRepository.save(it.copy(published = true)) }
+                ?.let { dbo ->
+                    serviceRepository.save(
+                        ServiceEntity(
+                            id = dbo.id,
+                            catalogId = dbo.catalogId,
+                            published = true,
+                            serviceType = dbo.serviceType,
+                            data = dbo.data
+                        )
+                    )
+                }
                 ?.toDTO()
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
@@ -107,7 +127,17 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
         try {
             findById(id, catalogId)
                 ?. also { if (!it.published) throw CustomBadRequestException() }
-                ?.let { serviceRepository.save(it.copy(published = false)) }
+                ?.let { dbo ->
+                    serviceRepository.save(
+                        ServiceEntity(
+                            id = dbo.id,
+                            catalogId = dbo.catalogId,
+                            published = false,
+                            serviceType = dbo.serviceType,
+                            data = dbo.data
+                        )
+                    )
+                }
                 ?.toDTO()
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {

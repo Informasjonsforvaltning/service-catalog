@@ -9,7 +9,7 @@ import org.hibernate.type.SqlTypes
 
 @Entity
 @Table(name = "services")
-data class ServiceEntity (
+class ServiceEntity (
     @Id
     @Column(name = "id", nullable = false, length = 255)
     val id: String = "",
