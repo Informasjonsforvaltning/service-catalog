@@ -12,9 +12,9 @@ management:
     readinessState.enabled: true
 spring:
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:service_catalog}
-    username: ${POSTGRES_USERNAME:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
+    url: jdbc:postgresql://${POSTGRESQL_HOST}:${POSTGRESQL_PORT}/${POSTGRESQL_DB}
+    username: ${POSTGRESQL_USER}
+    password: ${POSTGRESQL_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -62,6 +62,10 @@ application:
 ---
 spring:
   config.activate.on-profile: dev
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: postgres
   security:
     oauth2:
       resourceserver:

@@ -24,27 +24,27 @@ spec:
           env:
             - name: JAVA_TOOL_OPTIONS
               value: "-Xmx1g -XX:+UseZGC -XX:MaxRAMPercentage=80.0"
-            - name: POSTGRES_HOST
+            - name: POSTGRESQL_HOST
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: HOST
-            - name: POSTGRES_PORT
+            - name: POSTGRESQL_PORT
               valueFrom:
                 secretKeyRef:
                   name: postgres
                   key: PORT
-            - name: POSTGRES_DB
+            - name: POSTGRESQL_DB
               valueFrom:
                 secretKeyRef:
                   name: service-catalog
                   key: POSTGRESQL_DB
-            - name: POSTGRES_USERNAME
+            - name: POSTGRESQL_USER
               valueFrom:
                 secretKeyRef:
                   name: service-catalog
                   key: POSTGRESQL_USER
-            - name: POSTGRES_PASSWORD
+            - name: POSTGRESQL_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: service-catalog
