@@ -171,6 +171,7 @@ class RDFService(
             .addContactPoints(service.contactPoints)
             .addPropertyIfExists(FOAF.homepage, service.homepage)
             .addAsResourceIfValid(ADMS.status, service.status)
+            .addSpatial(service.spatial)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource
