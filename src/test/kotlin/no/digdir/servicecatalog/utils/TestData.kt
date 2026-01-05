@@ -30,18 +30,21 @@ val SERVICE_0 = Service("00", "910244132",
         contactPage = "digdir.no",
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
     )),
-    homepage = "digdir.no", status = "http://purl.org/adms/status/Completed"
+    homepage = "digdir.no", status = "http://purl.org/adms/status/Completed",
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163")
 )
 val SERVICE_1 = Service("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
     description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
-    published = false, produces = null, contactPoints = null, homepage = null, status = null)
+    published = false, produces = null, contactPoints = null, homepage = null, status = null,
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 val SERVICE_2 = Service("02", "910244132",
     title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
     description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
-    published = false, produces = null, contactPoints = null, homepage = null, status = null)
+    published = false, produces = null, contactPoints = null, homepage = null, status = null,
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 
-val SERVICE_TO_BE_CREATED = ServiceToBeCreated(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null)
+val SERVICE_TO_BE_CREATED = ServiceToBeCreated(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 
