@@ -19,7 +19,6 @@ import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
 import org.apache.jena.vocabulary.VCARD
 import org.apache.jena.vocabulary.VCARD4
-import java.net.URI
 
 @org.springframework.stereotype.Service
 class RDFService(
