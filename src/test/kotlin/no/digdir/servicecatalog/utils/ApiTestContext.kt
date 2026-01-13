@@ -11,6 +11,7 @@ import org.springframework.context.ConfigurableApplicationContext
 import org.testcontainers.containers.GenericContainer
 import org.testcontainers.containers.wait.strategy.Wait
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 
 abstract class ApiTestContext {
@@ -52,7 +53,7 @@ abstract class ApiTestContext {
             mongoContainer.start()
 
             try {
-                val con = URL("http://localhost:5050/ping").openConnection() as HttpURLConnection
+                val con = URI("http://localhost:5050/ping").toURL().openConnection() as HttpURLConnection
                 con.connect()
                 if (con.responseCode != 200) {
                     stopMockServer()
