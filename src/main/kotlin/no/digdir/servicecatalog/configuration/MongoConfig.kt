@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.MongoTemplate
 
 @Configuration
 open class MongoConfig(
-    @Value("\${spring.data.mongodb.database}")
+    @param:Value("\${spring.data.mongodb.database}")
     private val database: String
 ) {
 
