@@ -19,6 +19,7 @@ import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
 import org.apache.jena.vocabulary.VCARD
 import org.apache.jena.vocabulary.VCARD4
+import java.net.URI
 
 @org.springframework.stereotype.Service
 class RDFService(
@@ -154,6 +155,17 @@ class RDFService(
 
     private fun publicServiceURI(id: String, catalogURI: String): String =
         "${catalogURI}/public-services/$id"
+
+    fun Model.safeCreateResource(value: String? = null): Resource =
+    try {
+        value
+            ?.let(::URI)
+            ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
+            ?.let { createResource(value) }
+            ?: createResource()
+    } catch (e: Exception) {
+        createResource()
+    }
 
     private fun Model.createPublicServiceResource(publicService: PublicService, catalogUri: String): Resource {
         val publicServiceResource = createResource(publicServiceURI(publicService.id, catalogUri))
