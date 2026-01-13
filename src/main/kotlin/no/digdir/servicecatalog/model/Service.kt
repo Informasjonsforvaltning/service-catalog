@@ -23,7 +23,8 @@ data class Service (
     val contactPoints: List<ContactPoint>?,
     val homepage: String?,
     val status: String?,
-    val spatial: List<String>?
+    val spatial: List<String>?,
+    val subject: List<String>?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -34,5 +35,6 @@ data class ServiceToBeCreated(
     val contactPoints: List<ContactPoint>?,
     val homepage: String?,
     val status: String?,
-    val spatial: List<String>?
+    val spatial: List<String>?,
+    val subject: List<String>?
 )
