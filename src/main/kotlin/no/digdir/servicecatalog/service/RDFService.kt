@@ -157,15 +157,15 @@ class RDFService(
         "${catalogURI}/public-services/$id"
 
     fun Model.safeCreateResource(value: String? = null): Resource =
-    try {
-        value
-            ?.let(::URI)
-            ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
-            ?.let { createResource(value) }
-            ?: createResource()
-    } catch (e: Exception) {
-        createResource()
-    }
+        try {
+            value
+                ?.let(::URI)
+                ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
+                ?.let { createResource(value) }
+                ?: createResource()
+        } catch (e: Exception) {
+            createResource()
+        }
 
     private fun Model.createPublicServiceResource(publicService: PublicService, catalogUri: String): Resource {
         val publicServiceResource = createResource(publicServiceURI(publicService.id, catalogUri))
