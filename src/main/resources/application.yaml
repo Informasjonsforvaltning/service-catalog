@@ -34,11 +34,8 @@ spring:
   config.activate.on-profile: test
   data:
     mongodb:
-      host: localhost
-      username: testuser
-      password: testpassword
-      authentication-database: admin
-      replica-set-name: null
+      database: serviceCatalog
+      auto-index-creation: true
   security:
     oauth2:
       resourceserver:

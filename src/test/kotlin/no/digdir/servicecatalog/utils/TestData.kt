@@ -1,17 +1,6 @@
 package no.digdir.servicecatalog.utils
 
 import no.digdir.servicecatalog.model.*
-import org.testcontainers.shaded.com.google.common.collect.ImmutableMap
-
-const val MONGO_USER = "testuser"
-const val MONGO_PASSWORD = "testpassword"
-const val MONGO_PORT = 27017
-const val MONGO_DB_NAME = "serviceCatalog"
-
-val MONGO_ENV_VALUES: Map<String, String> = ImmutableMap.of(
-    "MONGO_INITDB_ROOT_USERNAME", MONGO_USER,
-    "MONGO_INITDB_ROOT_PASSWORD", MONGO_PASSWORD
-)
 
 val SERVICE_0 = Service("00", "910244132",
     title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
