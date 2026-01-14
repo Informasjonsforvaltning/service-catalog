@@ -107,8 +107,8 @@ class RDFService(
         return this
     }
 
-    private fun Resource.addSubject(subjects: Set<String>?): Resource {
-        subjects?.forEach {
+    private fun Resource.addSubject(subject: Set<String>?): Resource {
+        subject?.forEach {
             addAsResourceIfValid(DCTerms.subject, it)
         }
         return this
