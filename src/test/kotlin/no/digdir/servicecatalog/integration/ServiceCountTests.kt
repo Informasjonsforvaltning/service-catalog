@@ -14,9 +14,9 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.testcontainers.context.ImportTestcontainers
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.ContextConfiguration
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -24,7 +24,7 @@ import org.springframework.test.context.ContextConfiguration
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
     properties = ["spring.profiles.active=test"]
 )
-@ContextConfiguration(initializers = [ApiTestContext.Initializer::class])
+@ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
 class ServiceCountTests : ApiTestContext() {
     private val mapper = jacksonObjectMapper()

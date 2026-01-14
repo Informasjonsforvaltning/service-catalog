@@ -21,10 +21,10 @@ import org.junit.jupiter.api.Tag
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.testcontainers.context.ImportTestcontainers
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
-import org.springframework.test.context.ContextConfiguration
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 
@@ -32,7 +32,7 @@ import kotlin.test.assertNotNull
 @SpringBootTest(
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
         properties = ["spring.profiles.active=test"])
-@ContextConfiguration(initializers = [ApiTestContext.Initializer::class])
+@ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
 class Services: ApiTestContext() {
     private val mapper = jacksonObjectMapper()
@@ -124,7 +124,7 @@ class Services: ApiTestContext() {
             path = "/title/nb",
             value = "oppdatert tittel")
         @Test
-        fun `unauthorized when missing token`() {
+        fun `forbidden when missing token`() {
             val operations = listOf(replaceOperation)
             val response = apiAuthorizedRequest(
                 path,
@@ -132,7 +132,7 @@ class Services: ApiTestContext() {
                 mapper.writeValueAsString(operations),
                 null,
                 HttpMethod.PATCH)
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
@@ -298,7 +298,7 @@ class Services: ApiTestContext() {
         val path = "/internal/catalogs/910244132/services/02"
 
         @Test
-        fun `unauthorized when missing token` () {
+        fun `forbidden when missing token` () {
             val response = apiAuthorizedRequest(
                 path,
                 port,
@@ -306,7 +306,7 @@ class Services: ApiTestContext() {
                 null,
                 HttpMethod.DELETE)
 
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
@@ -436,7 +436,7 @@ class Services: ApiTestContext() {
     internal inner class PublishService {
         val path = "/internal/catalogs/910244132/services/01/publish"
         @Test
-        fun `unauthorized when missing token` () {
+        fun `forbidden when missing token` () {
             val response = apiAuthorizedRequest(
                 path,
                 port,
@@ -444,7 +444,7 @@ class Services: ApiTestContext() {
                 null,
                 HttpMethod.POST)
 
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
@@ -531,7 +531,7 @@ class Services: ApiTestContext() {
     internal inner class UnpublishService {
         val path = "/internal/catalogs/910244132/services/00/unpublish"
         @Test
-        fun `unauthorized when missing token` () {
+        fun `forbidden when missing token` () {
             val response = apiAuthorizedRequest(
                 path,
                 port,
@@ -539,7 +539,7 @@ class Services: ApiTestContext() {
                 null,
                 HttpMethod.POST)
 
-            Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
+            Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test

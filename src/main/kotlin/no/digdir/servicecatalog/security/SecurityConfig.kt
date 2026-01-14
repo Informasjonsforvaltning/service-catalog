@@ -1,7 +1,7 @@
 package no.digdir.servicecatalog.security
 
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties
+import org.springframework.boot.security.oauth2.server.resource.autoconfigure.OAuth2ResourceServerProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
@@ -16,7 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource
 
 @Configuration
 open class SecurityConfig(
-    @Value("\${application.cors.originPatterns}")
+    @param:Value("\${application.cors.originPatterns}")
     val corsOriginPatterns: Array<String>
 ) {
     @Bean

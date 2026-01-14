@@ -4,14 +4,12 @@ import no.digdir.servicecatalog.mongodb.PublicServiceRepository
 import no.digdir.servicecatalog.mongodb.ServiceRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.util.TestPropertyValues
 import org.springframework.boot.test.web.server.LocalServerPort
-import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ConfigurableApplicationContext
-import org.testcontainers.containers.GenericContainer
-import org.testcontainers.containers.wait.strategy.Wait
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection
+import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.utility.DockerImageName
 import java.net.HttpURLConnection
-import java.net.URL
+import java.net.URI
 
 abstract class ApiTestContext {
     @LocalServerPort
@@ -33,26 +31,17 @@ abstract class ApiTestContext {
         publicServiceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG)
     }
 
-    internal class Initializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
-        override fun initialize(configurableApplicationContext: ConfigurableApplicationContext) {
-            TestPropertyValues.of(
-                "spring.data.mongodb.port=${mongoContainer.getMappedPort(MONGO_PORT)}"
-            ).applyTo(configurableApplicationContext.environment)
-        }
-    }
-
     companion object {
-        val mongoContainer: GenericContainer<*> = GenericContainer("mongo:latest")
-            .withEnv(MONGO_ENV_VALUES)
-            .withExposedPorts(MONGO_PORT)
-            .waitingFor(Wait.forListeningPort())
+        @JvmStatic
+        @ServiceConnection
+        val mongoContainer: MongoDBContainer = MongoDBContainer(DockerImageName.parse("mongo:7"))
 
         init {
             startMockServer()
             mongoContainer.start()
 
             try {
-                val con = URL("http://localhost:5050/ping").openConnection() as HttpURLConnection
+                val con = URI("http://localhost:5050/ping").toURL().openConnection() as HttpURLConnection
                 con.connect()
                 if (con.responseCode != 200) {
                     stopMockServer()

@@ -10,12 +10,13 @@ import org.springframework.web.client.HttpClientErrorException
 import org.springframework.web.client.RestTemplate
 import java.io.BufferedReader
 import java.net.HttpURLConnection
+import java.net.URI
 import java.net.URL
 
 fun apiGet(port: Int, endpoint: String, acceptHeader: String?): Map<String,Any> {
 
     return try {
-        val connection = URL("http://localhost:$port$endpoint").openConnection() as HttpURLConnection
+        val connection = URI("http://localhost:$port$endpoint").toURL().openConnection() as HttpURLConnection
         if(acceptHeader != null) connection.setRequestProperty("Accept", acceptHeader)
         connection.connect()
 
@@ -60,7 +61,7 @@ fun apiAuthorizedRequest(
     return try {
         val response = request.exchange(url, httpMethod, entity, String::class.java)
         mapOf(
-            "body" to response.body,
+            "body" to (response.body ?: ""),
             "header" to response.headers,
             "status" to response.statusCode.value()
         )
