@@ -11,7 +11,7 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
-  mongodb:
+  data.mongodb:
       host: ${MONGODB_HOST}
       username: ${MONGO_USERNAME}
       password: ${MONGO_PASSWORD}
