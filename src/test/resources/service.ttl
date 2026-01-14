@@ -22,7 +22,8 @@
                          ];
         foaf:homepage    "digdir.no";
         cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321> ;
-        dct:spatial      <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163> .
+        dct:spatial      <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163> ;
+        dct:subject      <https://data-david.github.io/Begrep/begrep/Enhet> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;

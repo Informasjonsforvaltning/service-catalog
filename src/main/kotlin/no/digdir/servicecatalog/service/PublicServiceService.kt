@@ -54,7 +54,8 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
                 contactPoints = publicServiceToBeCreated.contactPoints,
                 homepage = publicServiceToBeCreated.homepage,
                 status = publicServiceToBeCreated.status,
-                spatial = publicServiceToBeCreated.spatial
+                spatial = publicServiceToBeCreated.spatial,
+                subject = publicServiceToBeCreated.subject
             ).let { publicServiceRepository.insert(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create public service for $catalogId", ex)

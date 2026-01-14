@@ -107,6 +107,13 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addSubject(subject: Set<String>?): Resource {
+        subject?.forEach {
+            addAsResourceIfValid(DCTerms.subject, it)
+        }
+        return this
+    }
+
     private fun Output.isValid(): Boolean =
         title != null && title.hasData()
 
@@ -156,6 +163,7 @@ class RDFService(
             .addPropertyIfExists(FOAF.homepage, publicService.homepage)
             .addAsResourceIfValid(ADMS.status, publicService.status)
             .addSpatial(publicService.spatial)
+            .addSubject(publicService.subject)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -172,6 +180,7 @@ class RDFService(
             .addPropertyIfExists(FOAF.homepage, service.homepage)
             .addAsResourceIfValid(ADMS.status, service.status)
             .addSpatial(service.spatial)
+            .addSubject(service.subject)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource

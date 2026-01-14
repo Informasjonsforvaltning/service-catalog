@@ -53,7 +53,8 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
                 contactPoints = serviceToBeCreated.contactPoints,
                 homepage = serviceToBeCreated.homepage,
                 status = serviceToBeCreated.status,
-                spatial = serviceToBeCreated.spatial
+                spatial = serviceToBeCreated.spatial,
+                subject = serviceToBeCreated.subject
             ).let { serviceRepository.insert(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create service for $catalogId", ex)
