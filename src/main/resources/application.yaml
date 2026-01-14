@@ -11,14 +11,16 @@ management:
     livenessState.enabled: true
     readinessState.enabled: true
 spring:
-  data.mongodb:
-      host: ${MONGODB_HOST}
-      username: ${MONGO_USERNAME}
-      password: ${MONGO_PASSWORD}
-      authentication-database: ${MONGODB_AUTH}
-      replica-set-name: ${MONGODB_REPLICASET}
-      port: 27017
-      database: serviceCatalog
+  mongodb:
+    host: ${MONGODB_HOST}
+    username: ${MONGO_USERNAME}
+    password: ${MONGO_PASSWORD}
+    authentication-database: ${MONGODB_AUTH}
+    replica-set-name: ${MONGODB_REPLICASET}
+    port: 27017
+    database: serviceCatalog
+  data:
+    mongodb:
       auto-index-creation: true
   security:
     oauth2:
@@ -32,9 +34,10 @@ application:
 ---
 spring:
   config.activate.on-profile: test
+  mongodb:
+    database: serviceCatalog
   data:
     mongodb:
-      database: serviceCatalog
       auto-index-creation: true
   security:
     oauth2:
@@ -48,13 +51,12 @@ application:
 ---
 spring:
   config.activate.on-profile: dev
-  data:
-    mongodb:
-      host: localhost
-      username: root
-      password: adm?i=n
-      authentication-database: admin
-      replica-set-name: null
+  mongodb:
+    host: localhost
+    username: root
+    password: adm?i=n
+    authentication-database: admin
+    replica-set-name: null
   security:
     oauth2:
       resourceserver:
