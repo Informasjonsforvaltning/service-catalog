@@ -7,7 +7,7 @@ import java.util.UUID
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Output(
-    val identifier: String = UUID.randomUUID().toString(),
+    val identifier: String? = UUID.randomUUID().toString(),
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val language: List<String>?
