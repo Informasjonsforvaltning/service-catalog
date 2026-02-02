@@ -114,6 +114,13 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addDctType(resources: Set<String>?): Resource {
+        resources?.forEach {
+            addAsResourceIfValid(DCTerms.type, it)
+        }
+        return this
+    }
+
     private fun Output.isValid(): Boolean =
         title != null && title.hasData()
 
@@ -164,6 +171,7 @@ class RDFService(
             .addAsResourceIfValid(ADMS.status, publicService.status)
             .addSpatial(publicService.spatial)
             .addSubject(publicService.subject)
+            .addDctType(publicService.dctType)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource

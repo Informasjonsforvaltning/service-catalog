@@ -50,6 +50,7 @@ class PublicServiceService(private val publicServiceRepository: PublicServiceRep
                 catalogId = catalogId,
                 title = publicServiceToBeCreated.title,
                 description = publicServiceToBeCreated.description,
+                dctType = publicServiceToBeCreated.dctType,
                 produces = publicServiceToBeCreated.produces,
                 contactPoints = publicServiceToBeCreated.contactPoints,
                 homepage = publicServiceToBeCreated.homepage,
