@@ -4,5 +4,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 
 @ConfigurationProperties("application")
 data class ApplicationProperties(
-    val serviceCatalogUri: String
+    val serviceCatalogUri: String,
+    val harvestAdminUri: String
 )

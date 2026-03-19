@@ -1,17 +1,23 @@
 package no.digdir.servicecatalog.service
 
+import no.digdir.servicecatalog.adapter.HarvestAdminClient
 import no.digdir.servicecatalog.exception.CustomBadRequestException
 import no.digdir.servicecatalog.exception.CustomNotFoundException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.Service
 import no.digdir.servicecatalog.model.ServiceToBeCreated
+import no.digdir.servicecatalog.mongodb.PublicServiceRepository
 import no.digdir.servicecatalog.mongodb.ServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import java.util.*
 
 @org.springframework.stereotype.Service
-class ServiceService(private val serviceRepository: ServiceRepository) {
+class ServiceService(
+    private val serviceRepository: ServiceRepository,
+    private val publicServiceRepository: PublicServiceRepository,
+    private val harvestAdminClient: HarvestAdminClient
+) {
     private val logger = LoggerFactory.getLogger(ServiceService::class.java)
 
     fun findServicesByCatalogId(catalogId: String) =
@@ -27,6 +33,7 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
             findServiceById(id, catalogId)
                 ?.let { patchOriginal(it, operations)}
                 ?.let { serviceRepository.save(it) }
+                ?.also { if (it.published) harvestAdminClient.triggerHarvest(catalogId) }
         } catch (ex: Exception) {
             logger.error("Failed to update service with id $id in catalog $catalogId", ex)
             throw ex
@@ -64,8 +71,10 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
     fun publishService(id: String, catalogId: String): Service?  =
         try {
             findServiceById(id, catalogId)
-                ?. also { if (it.published) throw CustomBadRequestException() }
+                ?.also { if (it.published) throw CustomBadRequestException() }
                 ?.let { serviceRepository.save(it.copy(published = true)) }
+                ?.also { if (catalogHasAnyPublishedServices(catalogId)) harvestAdminClient.createNewDataSource(catalogId) }
+                ?.also { harvestAdminClient.triggerHarvest(catalogId) }
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
             logger.error("Failed to publish service with id $id in catalog $catalogId", ex)
@@ -75,8 +84,9 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
     fun unpublishService(id: String, catalogId: String): Service?  =
         try {
             findServiceById(id, catalogId)
-                ?. also { if (!it.published) throw CustomBadRequestException() }
+                ?.also { if (!it.published) throw CustomBadRequestException() }
                 ?.let { serviceRepository.save(it.copy(published = false)) }
+                ?.also { harvestAdminClient.triggerHarvest(catalogId) }
                 ?: throw CustomNotFoundException()
         } catch (ex: Exception) {
             logger.error("Failed to unpublish service with id $id in catalog $catalogId", ex)
@@ -85,6 +95,10 @@ class ServiceService(private val serviceRepository: ServiceRepository) {
 
     fun publishedServicesInCatalog(catalogId: String): List<Service> =
         serviceRepository.getByCatalogIdAndPublished(catalogId, true)
+
+    fun catalogHasAnyPublishedServices(catalogId: String): Boolean =
+        publicServiceRepository.getByCatalogIdAndPublished(catalogId, true).isNotEmpty()
+            || serviceRepository.getByCatalogIdAndPublished(catalogId, true).isNotEmpty()
 
     fun getPublishedServiceInCatalog(id: String, catalogId: String): Service =
         findServiceById(id, catalogId)

@@ -59,6 +59,11 @@ spec:
                 secretKeyRef:
                   name: commonurl
                   key: SERVICE_CATALOG_BASE_URI
+            - name: ADMIN_API_BASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: commonurl
+                  key: ADMIN_API_BASE_URI
             - name: CORS_ORIGIN_PATTERNS
               valueFrom:
                 secretKeyRef:

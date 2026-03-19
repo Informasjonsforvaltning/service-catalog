@@ -30,6 +30,7 @@ spring:
           jwk-set-uri: ${KEYCLOAK_OIDC_ISSUER}/protocol/openid-connect/certs
 application:
   serviceCatalogUri: ${SERVICE_CATALOG_URI}
+  harvestAdminUri: ${ADMIN_API_BASE_URI}
   cors.originPatterns: "${CORS_ORIGIN_PATTERNS}"
 ---
 spring:
@@ -47,6 +48,7 @@ spring:
           jwk-set-uri: http://localhost:5050/auth/realms/fdk/protocol/openid-connect/certs
 application:
   serviceCatalogUri: http://localhost:5050
+  harvestAdminUri: http://localhost:5050/harvest-admin
   cors.originPatterns: "*"
 ---
 spring:
@@ -65,4 +67,5 @@ spring:
           jwk-set-uri: https://auth.staging.fellesdatakatalog.digdir.no/realms/fdk/protocol/openid-connect/certs
 application:
   serviceCatalogUri: http://localhost:8080
+  harvestAdminUri: http://localhost:8081/harvest-admin
   cors.originPatterns: "*"
