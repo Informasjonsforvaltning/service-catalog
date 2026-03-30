@@ -1,8 +1,8 @@
 package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.model.ServiceCount
-import no.digdir.servicecatalog.mongodb.PublicServiceRepository
-import no.digdir.servicecatalog.mongodb.ServiceRepository
+import no.digdir.servicecatalog.repository.PublicServiceRepository
+import no.digdir.servicecatalog.repository.ServiceRepository
 import org.springframework.stereotype.Service
 
 @Service

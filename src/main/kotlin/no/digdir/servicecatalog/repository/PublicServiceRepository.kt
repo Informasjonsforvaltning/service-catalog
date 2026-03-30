@@ -1,11 +1,11 @@
-package no.digdir.servicecatalog.mongodb
+package no.digdir.servicecatalog.repository
 
 import no.digdir.servicecatalog.model.PublicService
-import org.springframework.data.mongodb.repository.MongoRepository
+import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PublicServiceRepository : MongoRepository<PublicService, String> {
+interface PublicServiceRepository : JpaRepository<PublicService, String> {
     fun getByCatalogId(catalogId: String): List<PublicService>
     fun getByCatalogIdAndPublished(catalogId: String, published: Boolean): List<PublicService>
 }

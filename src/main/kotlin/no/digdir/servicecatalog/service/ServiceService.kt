@@ -6,8 +6,8 @@ import no.digdir.servicecatalog.exception.CustomNotFoundException
 import no.digdir.servicecatalog.model.JsonPatchOperation
 import no.digdir.servicecatalog.model.Service
 import no.digdir.servicecatalog.model.ServiceToBeCreated
-import no.digdir.servicecatalog.mongodb.PublicServiceRepository
-import no.digdir.servicecatalog.mongodb.ServiceRepository
+import no.digdir.servicecatalog.repository.PublicServiceRepository
+import no.digdir.servicecatalog.repository.ServiceRepository
 import org.slf4j.LoggerFactory
 import org.springframework.data.repository.findByIdOrNull
 import java.util.*
@@ -62,7 +62,7 @@ class ServiceService(
                 status = serviceToBeCreated.status,
                 spatial = serviceToBeCreated.spatial,
                 subject = serviceToBeCreated.subject
-            ).let { serviceRepository.insert(it) }
+            ).let { serviceRepository.save(it) }
         } catch (ex: Exception) {
             logger.error("Failed to create service for $catalogId", ex)
             throw ex
