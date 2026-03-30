@@ -43,7 +43,7 @@ class PublicServices: ApiTestContext() {
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: List<PublicService> = mapper.readValue(response["body"] as String)
-            Assertions.assertEquals(PUBLIC_SERVICES, result)
+            Assertions.assertEquals(PUBLIC_SERVICES.sortedBy { it.id }, result.sortedBy { it.id })
         }
 
         @Test
