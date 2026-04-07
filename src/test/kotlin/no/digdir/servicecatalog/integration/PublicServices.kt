@@ -2,11 +2,10 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.digdir.servicecatalog.exception.CustomBadRequestException
-import no.digdir.servicecatalog.model.JsonPatchOperation
-import no.digdir.servicecatalog.model.LocalizedStrings
-import no.digdir.servicecatalog.model.OpEnum
-import no.digdir.servicecatalog.model.PublicService
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.dto.OpEnum
+import no.digdir.servicecatalog.dto.PublicServiceDTO
 import no.digdir.servicecatalog.utils.*
 import no.digdir.servicecatalog.utils.jwt.Access
 import no.digdir.servicecatalog.utils.jwt.JwtToken
@@ -42,7 +41,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.GET)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: List<PublicService> = mapper.readValue(response["body"] as String)
+            val result: List<PublicServiceDTO> = mapper.readValue(response["body"] as String)
             Assertions.assertEquals(PUBLIC_SERVICES.sortedBy { it.id }, result.sortedBy { it.id })
         }
 
@@ -80,7 +79,7 @@ class PublicServices: ApiTestContext() {
                 JwtToken(Access.ORG_READ).toString(),
                 HttpMethod.GET)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             Assertions.assertEquals(PUBLIC_SERVICE_1, result)
         }
 
@@ -151,7 +150,7 @@ class PublicServices: ApiTestContext() {
 
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_1.copy(title = PUBLIC_SERVICE_1.title!!.copy(nb = "oppdater tittel"))
 
             Assertions.assertEquals(expected, result)
@@ -170,7 +169,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_1.copy(title = PUBLIC_SERVICE_1.title!!.copy(nb = null))
 
             Assertions.assertEquals(expected, result)
@@ -190,7 +189,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_2
                 .copy(description = LocalizedStrings(nb = "added nb description", null, null))
 
@@ -211,7 +210,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_1
                 .copy(title = PUBLIC_SERVICE_1.title!!.copy(null, nn = "NB Tittel 1"))
 
@@ -232,7 +231,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_1
                 .copy(title = PUBLIC_SERVICE_1.title!!.copy(nb = "NB Tittel 1", nn = "NB Tittel 1"))
 
@@ -367,8 +366,8 @@ class PublicServices: ApiTestContext() {
             )
             assertEquals(HttpStatus.OK.value(), after["status"])
 
-            val allPublicServicesBefore: List<PublicService> = mapper.readValue(before["body"] as String)
-            val allPublicServicesAfter: List<PublicService> = mapper.readValue(after["body"] as String)
+            val allPublicServicesBefore: List<PublicServiceDTO> = mapper.readValue(before["body"] as String)
+            val allPublicServicesAfter: List<PublicServiceDTO> = mapper.readValue(after["body"] as String)
             assertEquals(allPublicServicesBefore.size + 1, allPublicServicesAfter.size)
         }
 
@@ -468,7 +467,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.POST)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_1.copy(published = true)
             Assertions.assertEquals(expected, result)
         }
@@ -561,7 +560,7 @@ class PublicServices: ApiTestContext() {
                 HttpMethod.POST)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: PublicService = mapper.readValue(response["body"] as String)
+            val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             val expected = PUBLIC_SERVICE_0.copy(published = false)
             Assertions.assertEquals(expected, result)
         }

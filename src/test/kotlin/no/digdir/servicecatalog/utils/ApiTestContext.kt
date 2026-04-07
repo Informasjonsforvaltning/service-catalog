@@ -1,6 +1,5 @@
 package no.digdir.servicecatalog.utils
 
-import no.digdir.servicecatalog.repository.PublicServiceRepository
 import no.digdir.servicecatalog.repository.ServiceRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,17 +16,13 @@ abstract class ApiTestContext {
     @Autowired
     private lateinit var serviceRepository: ServiceRepository
 
-    @Autowired
-    private lateinit var publicServiceRepository: PublicServiceRepository
-
     @BeforeEach
     fun resetDatabase() {
         serviceRepository.deleteAll()
-        serviceRepository.saveAll(SERVICES)
 
-        publicServiceRepository.deleteAll()
-        publicServiceRepository.saveAll(PUBLIC_SERVICES)
-        publicServiceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG)
+        SERVICES.forEach { serviceRepository.save(it.toEntity()) }
+        PUBLIC_SERVICES.forEach { serviceRepository.save(it.toEntity()) }
+        serviceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG.toEntity())
     }
 
     companion object {

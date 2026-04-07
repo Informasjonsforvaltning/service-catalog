@@ -1,10 +1,10 @@
-package no.digdir.servicecatalog.model
+package no.digdir.servicecatalog.dto
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonValue
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class JsonPatchOperation (
+data class JsonPatchOperation(
     val op: OpEnum,
     val path: String,
     val value: Any? = null,

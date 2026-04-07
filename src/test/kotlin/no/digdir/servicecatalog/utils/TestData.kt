@@ -1,8 +1,15 @@
 package no.digdir.servicecatalog.utils
 
-import no.digdir.servicecatalog.model.*
+import com.fasterxml.jackson.module.kotlin.convertValue
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import no.digdir.servicecatalog.domain.*
+import no.digdir.servicecatalog.dto.*
+import no.digdir.servicecatalog.entity.ServiceEntity
+import no.digdir.servicecatalog.entity.ServiceType
 
-val SERVICE_0 = Service("00", "910244132",
+private val mapper = jacksonObjectMapper()
+
+val SERVICE_0 = ServiceDTO("00", "910244132",
     title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
     description = LocalizedStrings("Beskrivelse 00", "Beskriving 00", "Description 00"),
     published = true,
@@ -23,23 +30,23 @@ val SERVICE_0 = Service("00", "910244132",
     spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
     subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet")
 )
-val SERVICE_1 = Service("01", "910244132",
+val SERVICE_1 = ServiceDTO("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
     description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
     published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
     spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
-val SERVICE_2 = Service("02", "910244132",
+val SERVICE_2 = ServiceDTO("02", "910244132",
     title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
     description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
     published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
     spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 
-val SERVICE_TO_BE_CREATED = ServiceToBeCreated(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null)
+val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 
 val PUBLIC_SERVICE_0 =
-    PublicService("0", "910244132",
+    PublicServiceDTO("0", "910244132",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
         published = true,
@@ -62,31 +69,59 @@ val PUBLIC_SERVICE_0 =
         dctType = setOf("https://publications.europa.eu/resource/authority/main-activity/airport")
     )
 val PUBLIC_SERVICE_1 =
-    PublicService("1", "910244132",
+    PublicServiceDTO("1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
         published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 val PUBLIC_SERVICE_2 =
-    PublicService("2", "910244132",
+    PublicServiceDTO("2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 val PUBLIC_SERVICE_DIFFERENT_CATALOG =
-    PublicService("123", "123456789",
+    PublicServiceDTO("123", "123456789",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"))
 
-val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceToBeCreated(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
+val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
     null, null, null, null, null, null, null, null)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 
 val SERVICE_COUNT_1 = ServiceCount(catalogId = "910244132", serviceCount = 3, publicServiceCount = 3)
 
-val SERVICE_COUNT_2 = ServiceCount(catalogId = "123456789", serviceCount = 0, publicServiceCount = 1 )
+val SERVICE_COUNT_2 = ServiceCount(catalogId = "123456789", serviceCount = 0, publicServiceCount = 1)
 
 val LIST_OF_SERVICE_COUNTS_ROOT = listOf(SERVICE_COUNT_1, SERVICE_COUNT_2)
+
+fun ServiceDTO.toEntity() = ServiceEntity(
+    id = id,
+    catalogId = catalogId,
+    published = published,
+    serviceType = ServiceType.SERVICE.name,
+    data = mapper.convertValue<Map<String, Any?>>(
+        ServiceValues(
+            title = title, description = description, produces = produces,
+            contactPoints = contactPoints, homepage = homepage, status = status,
+            spatial = spatial, subject = subject
+        )
+    )
+)
+
+fun PublicServiceDTO.toEntity() = ServiceEntity(
+    id = id,
+    catalogId = catalogId,
+    published = published,
+    serviceType = ServiceType.PUBLIC_SERVICE.name,
+    data = mapper.convertValue<Map<String, Any?>>(
+        PublicServiceValues(
+            title = title, description = description, dctType = dctType,
+            produces = produces, contactPoints = contactPoints, homepage = homepage,
+            status = status, spatial = spatial, subject = subject
+        )
+    )
+)

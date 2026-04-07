@@ -1,26 +1,24 @@
 package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
-import no.digdir.servicecatalog.model.ContactPoint
-import no.digdir.servicecatalog.model.LocalizedStrings
-import no.digdir.servicecatalog.model.Output
-import no.digdir.servicecatalog.model.PublicService
-import no.digdir.servicecatalog.model.Service
-import no.digdir.servicecatalog.model.hasData
+import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.Output
+import no.digdir.servicecatalog.domain.hasData
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.dto.ServiceDTO
 import no.digdir.servicecatalog.rdf.*
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
-import org.apache.jena.rdf.model.RDFNode
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.riot.Lang
 import org.apache.jena.sparql.vocabulary.FOAF
 import org.apache.jena.vocabulary.DCAT
 import org.apache.jena.vocabulary.DCTerms
 import org.apache.jena.vocabulary.RDF
-import org.apache.jena.vocabulary.VCARD
 import org.apache.jena.vocabulary.VCARD4
+import org.springframework.stereotype.Service
 
-@org.springframework.stereotype.Service
+@Service
 class RDFService(
     private val applicationProperties: ApplicationProperties,
     private val publicServiceService: PublicServiceService,
@@ -46,7 +44,7 @@ class RDFService(
         return model.serialize(lang)
     }
 
-    fun serializeService(catalogId: String, id: String, lang: Lang): String? =
+    fun serializeService(catalogId: String, id: String, lang: Lang): String =
         with(serviceService.getPublishedServiceInCatalog(id, catalogId)) {
             val model = ModelFactory.createDefaultModel()
             model.setDefaultPrefixes()
@@ -54,7 +52,7 @@ class RDFService(
             model.serialize(lang)
         }
 
-    fun serializePublicService(catalogId: String, id: String, lang: Lang): String? =
+    fun serializePublicService(catalogId: String, id: String, lang: Lang): String =
         with(publicServiceService.getPublishedPublicServiceInCatalog(id, catalogId)) {
             val model = ModelFactory.createDefaultModel()
             model.setDefaultPrefixes()
@@ -73,13 +71,13 @@ class RDFService(
         setNsPrefix("adms", ADMS.uri)
     }
 
-    private fun Resource.addServiceToCatalog(service: Service): Resource {
+    private fun Resource.addServiceToCatalog(service: ServiceDTO): Resource {
         val serviceResource = model.createServiceResource(service, uri)
         addProperty(DCATNO.containsService, serviceResource)
         return this
     }
 
-    private fun Resource.addPublicServiceToCatalog(publicService: PublicService): Resource {
+    private fun Resource.addPublicServiceToCatalog(publicService: PublicServiceDTO): Resource {
         val publicServiceResource = model.createPublicServiceResource(publicService, uri)
         addProperty(DCATNO.containsService, publicServiceResource)
         return this
@@ -159,7 +157,7 @@ class RDFService(
     private fun publicServiceURI(id: String, catalogURI: String): String =
         "${catalogURI}/public-services/$id"
 
-    private fun Model.createPublicServiceResource(publicService: PublicService, catalogUri: String): Resource {
+    private fun Model.createPublicServiceResource(publicService: PublicServiceDTO, catalogUri: String): Resource {
         val publicServiceResource = createResource(publicServiceURI(publicService.id, catalogUri))
             .addProperty(RDF.type, CPSV.PublicService)
             .addProperty(CV.hasCompetentAuthority, createResource(publisherURI(publicService.catalogId)))
@@ -177,7 +175,7 @@ class RDFService(
         return publicServiceResource
     }
 
-    private fun Model.createServiceResource(service: Service, catalogUri: String): Resource {
+    private fun Model.createServiceResource(service: ServiceDTO, catalogUri: String): Resource {
         val serviceResource = createResource(serviceURI(service.id, catalogUri))
             .addProperty(RDF.type, CPSVNO.Service)
             .addProperty(CV.ownedBy, createResource(publisherURI(service.catalogId)))

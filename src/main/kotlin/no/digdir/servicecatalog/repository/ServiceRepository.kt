@@ -1,11 +1,12 @@
 package no.digdir.servicecatalog.repository
 
-import no.digdir.servicecatalog.model.Service
+import no.digdir.servicecatalog.entity.ServiceEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ServiceRepository : JpaRepository<Service, String> {
-    fun getByCatalogId(catalogId: String): List<Service>
-    fun getByCatalogIdAndPublished(catalogId: String, published: Boolean): List<Service>
+interface ServiceRepository : JpaRepository<ServiceEntity, String> {
+    fun findByCatalogId(catalogId: String): List<ServiceEntity>
+    fun findByCatalogIdAndServiceType(catalogId: String, serviceType: String): List<ServiceEntity>
+    fun findByCatalogIdAndPublished(catalogId: String, published: Boolean): List<ServiceEntity>
 }

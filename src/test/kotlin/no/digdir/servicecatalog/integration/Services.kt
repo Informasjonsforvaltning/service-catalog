@@ -2,10 +2,10 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.digdir.servicecatalog.model.JsonPatchOperation
-import no.digdir.servicecatalog.model.LocalizedStrings
-import no.digdir.servicecatalog.model.OpEnum
-import no.digdir.servicecatalog.model.Service
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.dto.OpEnum
+import no.digdir.servicecatalog.dto.ServiceDTO
 import no.digdir.servicecatalog.utils.ApiTestContext
 import no.digdir.servicecatalog.utils.SERVICES
 import no.digdir.servicecatalog.utils.SERVICE_0
@@ -50,7 +50,7 @@ class Services: ApiTestContext() {
                 HttpMethod.GET)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: List<Service> = mapper.readValue(response["body"] as String)
+            val result: List<ServiceDTO> = mapper.readValue(response["body"] as String)
             Assertions.assertEquals(SERVICES.sortedBy { it.id }, result.sortedBy { it.id })
         }
 
@@ -89,7 +89,7 @@ class Services: ApiTestContext() {
                 JwtToken(Access.ORG_READ).toString(),
                 HttpMethod.GET)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             Assertions.assertEquals(SERVICE_1, result)
         }
 
@@ -171,7 +171,7 @@ class Services: ApiTestContext() {
 
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_2.copy(title = SERVICE_2.title!!.copy(nb = "oppdatert tittel"))
 
             Assertions.assertEquals(expected, result)
@@ -192,7 +192,7 @@ class Services: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_2.copy(title = SERVICE_2.title!!.copy(nb = null))
 
             Assertions.assertEquals(expected, result)
@@ -215,7 +215,7 @@ class Services: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_2
                 .copy(description = LocalizedStrings(nb = "added nb description", null, null))
 
@@ -238,7 +238,7 @@ class Services: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_2
                 .copy(title = SERVICE_2.title!!.copy(nb = null, nn = "NB Tittel 02"))
 
@@ -261,7 +261,7 @@ class Services: ApiTestContext() {
                 HttpMethod.PATCH)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_2
                 .copy(title = SERVICE_2.title!!.copy(nb = "NB Tittel 02", nn = "NB Tittel 02"))
 
@@ -390,7 +390,7 @@ class Services: ApiTestContext() {
             )
             assertEquals(HttpStatus.OK.value(), after["status"])
 
-            val created: Service = mapper.readValue(after["body"] as String)
+            val created: ServiceDTO = mapper.readValue(after["body"] as String)
             assertEquals(SERVICE_TO_BE_CREATED.title, created.title)
         }
 
@@ -491,7 +491,7 @@ class Services: ApiTestContext() {
                 HttpMethod.POST)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_1.copy(published = true)
             Assertions.assertEquals(expected, result)
         }
@@ -586,7 +586,7 @@ class Services: ApiTestContext() {
                 HttpMethod.POST)
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
-            val result: Service = mapper.readValue(response["body"] as String)
+            val result: ServiceDTO = mapper.readValue(response["body"] as String)
             val expected = SERVICE_0.copy(published = false)
             Assertions.assertEquals(expected, result)
         }
