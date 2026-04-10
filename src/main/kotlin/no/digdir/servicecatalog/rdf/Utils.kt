@@ -1,7 +1,7 @@
 package no.digdir.servicecatalog.rdf
 
 import no.digdir.servicecatalog.MAIN_LOGGER
-import no.digdir.servicecatalog.model.LocalizedStrings
+import no.digdir.servicecatalog.domain.LocalizedStrings
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.Property
 import org.apache.jena.rdf.model.Resource

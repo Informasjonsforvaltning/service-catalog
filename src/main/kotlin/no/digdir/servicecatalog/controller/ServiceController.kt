@@ -1,8 +1,8 @@
 package no.digdir.servicecatalog.controller
 
-import no.digdir.servicecatalog.model.JsonPatchOperation
-import no.digdir.servicecatalog.model.Service
-import no.digdir.servicecatalog.model.ServiceToBeCreated
+import no.digdir.servicecatalog.dto.JsonPatchOperation
+import no.digdir.servicecatalog.dto.ServiceDTO
+import no.digdir.servicecatalog.domain.ServiceValues
 import no.digdir.servicecatalog.security.EndpointPermissions
 import no.digdir.servicecatalog.service.ServiceService
 import org.springframework.http.HttpHeaders
@@ -11,7 +11,6 @@ import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.security.oauth2.jwt.Jwt
-import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -28,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController
 class ServiceController(private val serviceService: ServiceService, private val endpointPermissions: EndpointPermissions) {
 
     @GetMapping
-    fun getAllServices(@AuthenticationPrincipal jwt: Jwt, @PathVariable catalogId: String): ResponseEntity<List<Service>> =
+    fun getAllServices(@AuthenticationPrincipal jwt: Jwt, @PathVariable catalogId: String): ResponseEntity<List<ServiceDTO>> =
         if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
             ResponseEntity(serviceService.findServicesByCatalogId(catalogId), HttpStatus.OK)
         } else {
@@ -39,7 +38,7 @@ class ServiceController(private val serviceService: ServiceService, private val 
     fun getServiceById(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @PathVariable id: String): ResponseEntity<Service> =
+        @PathVariable id: String): ResponseEntity<ServiceDTO> =
         if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
             serviceService.findServiceById(id, catalogId)
                 ?.let { ResponseEntity(it, HttpStatus.OK) }
@@ -54,7 +53,7 @@ class ServiceController(private val serviceService: ServiceService, private val 
         @PathVariable catalogId: String,
         @PathVariable id: String,
         @RequestBody patchOperations: List<JsonPatchOperation>
-    ): ResponseEntity<Service> =
+    ): ResponseEntity<ServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             serviceService.patchService(id, catalogId, patchOperations)
                 ?.let { ResponseEntity(it, HttpStatus.OK) }
@@ -80,7 +79,7 @@ class ServiceController(private val serviceService: ServiceService, private val 
     fun createService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @RequestBody serviceToBeCreated: ServiceToBeCreated
+        @RequestBody serviceToBeCreated: ServiceValues
     ): ResponseEntity<HttpStatus> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             val created = serviceService.createService(catalogId, serviceToBeCreated)
@@ -95,7 +94,7 @@ class ServiceController(private val serviceService: ServiceService, private val 
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<Service> =
+    ): ResponseEntity<ServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             ResponseEntity(serviceService.publishService(id, catalogId), HttpStatus.OK)
         } else {
@@ -107,7 +106,7 @@ class ServiceController(private val serviceService: ServiceService, private val 
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<Service> =
+    ): ResponseEntity<ServiceDTO> =
         if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
             ResponseEntity(serviceService.unpublishService(id, catalogId), HttpStatus.OK)
         } else {

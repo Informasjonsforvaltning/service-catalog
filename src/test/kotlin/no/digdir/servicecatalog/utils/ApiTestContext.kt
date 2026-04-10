@@ -1,13 +1,11 @@
 package no.digdir.servicecatalog.utils
 
-import no.digdir.servicecatalog.mongodb.PublicServiceRepository
-import no.digdir.servicecatalog.mongodb.ServiceRepository
+import no.digdir.servicecatalog.repository.ServiceRepository
 import org.junit.jupiter.api.BeforeEach
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection
-import org.testcontainers.containers.MongoDBContainer
-import org.testcontainers.utility.DockerImageName
+import org.testcontainers.containers.PostgreSQLContainer
 import java.net.HttpURLConnection
 import java.net.URI
 
@@ -18,27 +16,23 @@ abstract class ApiTestContext {
     @Autowired
     private lateinit var serviceRepository: ServiceRepository
 
-    @Autowired
-    private lateinit var publicServiceRepository: PublicServiceRepository
-
     @BeforeEach
     fun resetDatabase() {
         serviceRepository.deleteAll()
-        serviceRepository.saveAll(SERVICES)
 
-        publicServiceRepository.deleteAll()
-        publicServiceRepository.saveAll(PUBLIC_SERVICES)
-        publicServiceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG)
+        SERVICES.forEach { serviceRepository.save(it.toEntity()) }
+        PUBLIC_SERVICES.forEach { serviceRepository.save(it.toEntity()) }
+        serviceRepository.save(PUBLIC_SERVICE_DIFFERENT_CATALOG.toEntity())
     }
 
     companion object {
         @JvmStatic
         @ServiceConnection
-        val mongoContainer: MongoDBContainer = MongoDBContainer(DockerImageName.parse("mongo:7"))
+        val postgresContainer: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:16")
 
         init {
             startMockServer()
-            mongoContainer.start()
+            postgresContainer.start()
 
             try {
                 val con = URI("http://localhost:5050/ping").toURL().openConnection() as HttpURLConnection
