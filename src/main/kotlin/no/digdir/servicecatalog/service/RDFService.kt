@@ -119,6 +119,13 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addThematicArea(thematicArea: Set<String>?): Resource {
+        thematicArea?.forEach {
+            addAsResourceIfValid(CV.thematicArea, it)
+        }
+        return this
+    }
+
     private fun Output.isValid(): Boolean =
         title != null && title.hasData()
 
@@ -170,6 +177,7 @@ class RDFService(
             .addSpatial(publicService.spatial)
             .addSubject(publicService.subject)
             .addDctType(publicService.dctType)
+            .addThematicArea(publicService.thematicArea)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -187,6 +195,7 @@ class RDFService(
             .addAsResourceIfValid(ADMS.status, service.status)
             .addSpatial(service.spatial)
             .addSubject(service.subject)
+            .addThematicArea(service.thematicArea)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource

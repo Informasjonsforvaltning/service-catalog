@@ -26,7 +26,8 @@
         cpsv:produces             <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>;
         dct:spatial               <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163>;
         dct:subject               <https://data-david.github.io/Begrep/begrep/Enhet>;
-        dct:type                  <https://publications.europa.eu/resource/authority/main-activity/airport> .
+        dct:type                  <https://publications.europa.eu/resource/authority/main-activity/airport>;
+        cv:thematicArea           <https://psi.norge.no/los/tema/varslingstjenester> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
         a                cv:Output;
@@ -66,7 +67,8 @@
         foaf:homepage    "digdir.no";
         cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>;
         dct:spatial      <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163> ;
-        dct:subject      <https://data-david.github.io/Begrep/begrep/Enhet> .
+        dct:subject      <https://data-david.github.io/Begrep/begrep/Enhet>;
+        cv:thematicArea  <https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;

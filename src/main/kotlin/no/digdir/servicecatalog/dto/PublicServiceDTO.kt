@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import no.digdir.servicecatalog.domain.ContactPoint
 import no.digdir.servicecatalog.domain.LocalizedStrings
 import no.digdir.servicecatalog.domain.Output
+import no.digdir.servicecatalog.domain.PublicServiceValues
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -20,5 +21,6 @@ data class PublicServiceDTO(
     val homepage: String?,
     val status: String?,
     val spatial: List<String>?,
-    val subject: Set<String>?
+    val subject: Set<String>?,
+    val thematicArea: Set<String>?
 )
