@@ -19,5 +19,6 @@ data class ServiceDTO(
     val homepage: String?,
     val status: String?,
     val spatial: List<String>?,
-    val subject: Set<String>?
+    val subject: Set<String>?,
+    val thematicArea: Set<String>?
 )

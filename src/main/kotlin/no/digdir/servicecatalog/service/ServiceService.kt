@@ -38,7 +38,8 @@ class ServiceService(
                 homepage = values.homepage,
                 status = values.status,
                 spatial = values.spatial,
-                subject = values.subject
+                subject = values.subject,
+                thematicArea = values.thematicArea
             )
         } else null
 
