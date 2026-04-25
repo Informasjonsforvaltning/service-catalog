@@ -29,20 +29,28 @@ val SERVICE_0 = ServiceDTO("00", "910244132",
     homepage = "digdir.no", status = "http://purl.org/adms/status/Completed",
     spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
     subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
-    thematicArea = setOf("https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning")
+    losTheme = setOf("https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning"),
+    evidence = listOf(Evidence(
+        identifier = "342549912",
+        title = LocalizedStrings(en = "Evidence title", nb = null, nn = null),
+        description = LocalizedStrings(en = "Evidence description", nb = null, nn = null),
+        language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+        relatedDocumentation = listOf("http://related.documentation.eu"),
+        dataset = listOf("http://test.eu/dataset/123")
+    ))
 )
 val SERVICE_1 = ServiceDTO("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
     description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
     published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
-    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), thematicArea = emptySet())
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 val SERVICE_2 = ServiceDTO("02", "910244132",
     title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
     description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
     published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
-    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), thematicArea = emptySet())
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 
-val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null, null)
+val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null, null, null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 
@@ -68,29 +76,37 @@ val PUBLIC_SERVICE_0 =
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
         subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
         dctType = setOf("https://publications.europa.eu/resource/authority/main-activity/airport"),
-        thematicArea = setOf("https://psi.norge.no/los/tema/varslingstjenester")
+        losTheme = setOf("https://psi.norge.no/los/tema/varslingstjenester"),
+        evidence = listOf(Evidence(
+            identifier = "342549912",
+            title = LocalizedStrings(en = "Evidence title", nb = null, nn = null),
+            description = LocalizedStrings(en = "Evidence description", nb = null, nn = null),
+            language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+            relatedDocumentation = listOf("http://related.documentation.eu"),
+            dataset = listOf("http://test.eu/dataset/123")
+        ))
     )
 val PUBLIC_SERVICE_1 =
     PublicServiceDTO("1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
         published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), thematicArea = emptySet())
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 val PUBLIC_SERVICE_2 =
     PublicServiceDTO("2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), thematicArea = emptySet())
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 val PUBLIC_SERVICE_DIFFERENT_CATALOG =
     PublicServiceDTO("123", "123456789",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), thematicArea = emptySet())
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 
 val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
-    null, null, null, null, null, null, null, null, null)
+    null, null, null, null, null, null, null, null, null, null)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 
@@ -109,7 +125,8 @@ fun ServiceDTO.toEntity() = ServiceEntity(
         ServiceValues(
             title = title, description = description, produces = produces,
             contactPoints = contactPoints, homepage = homepage, status = status,
-            spatial = spatial, subject = subject, thematicArea = thematicArea
+            spatial = spatial, subject = subject, losTheme = losTheme,
+            evidence = evidence
         )
     )
 )
@@ -123,7 +140,8 @@ fun PublicServiceDTO.toEntity() = ServiceEntity(
         PublicServiceValues(
             title = title, description = description, dctType = dctType,
             produces = produces, contactPoints = contactPoints, homepage = homepage,
-            status = status, spatial = spatial, subject = subject, thematicArea = thematicArea
+            status = status, spatial = spatial, subject = subject, losTheme = losTheme,
+            evidence = evidence
         )
     )
 )

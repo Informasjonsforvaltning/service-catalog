@@ -39,7 +39,8 @@ class ServiceService(
                 status = values.status,
                 spatial = values.spatial,
                 subject = values.subject,
-                thematicArea = values.thematicArea
+                losTheme = values.losTheme,
+                evidence = values.evidence
             )
         } else null
 

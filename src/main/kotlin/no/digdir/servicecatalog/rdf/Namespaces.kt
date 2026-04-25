@@ -26,7 +26,10 @@ class CPSVNO {
     companion object {
         const val uri = "https://data.norge.no/vocabulary/cpsvno#"
 
+        val hasRequiredEvidence: Property = ResourceFactory.createProperty("${uri}hasRequiredEvidence")
+
         val Service: Resource = ResourceFactory.createResource("${uri}Service")
+        val RequiredEvidence: Resource = ResourceFactory.createResource("${uri}RequiredEvidence")
     }
 }
 
