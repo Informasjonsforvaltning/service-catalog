@@ -2,6 +2,7 @@ package no.digdir.servicecatalog.service
 
 import no.digdir.servicecatalog.configuration.ApplicationProperties
 import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.Evidence
 import no.digdir.servicecatalog.domain.Output
 import no.digdir.servicecatalog.domain.hasData
 import no.digdir.servicecatalog.dto.PublicServiceDTO
@@ -126,7 +127,28 @@ class RDFService(
         return this
     }
 
+    private fun Resource.addRequiredEvidence(evidenceList: List<Evidence>?): Resource {
+        evidenceList?.filter { it.isValid() }
+            ?.forEach { evidence ->
+                val evidenceURI = "$uri/evidence/${evidence.identifier}"
+                val evidenceResource = model.createResource(evidenceURI)
+                    .addProperty(RDF.type, CPSVNO.RequiredEvidence)
+                    .addProperty(DCTerms.identifier, model.createResource(evidenceURI))
+                    .addLocalizedStringsAsProperty(DCTerms.title, evidence.title)
+                    .addLocalizedStringsAsProperty(DCTerms.description, evidence.description)
+                    .addStringsAsResources(DCTerms.language, evidence.language)
+                    .addStringsAsResources(FOAF.page, evidence.relatedDocumentation)
+                    .addStringsAsResources(DCTerms.isPartOf, evidence.dataset)
+
+                addProperty(CPSVNO.hasRequiredEvidence, evidenceResource)
+            }
+        return this
+    }
+
     private fun Output.isValid(): Boolean =
+        title != null && title.hasData()
+
+    private fun Evidence.isValid(): Boolean =
         title != null && title.hasData()
 
     private fun Resource.addContactPoints(contactPoints: List<ContactPoint>?): Resource {
@@ -177,7 +199,8 @@ class RDFService(
             .addSpatial(publicService.spatial)
             .addSubject(publicService.subject)
             .addDctType(publicService.dctType)
-            .addThematicArea(publicService.thematicArea)
+            .addThematicArea(publicService.losTheme)
+            .addRequiredEvidence(publicService.evidence)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -195,7 +218,8 @@ class RDFService(
             .addAsResourceIfValid(ADMS.status, service.status)
             .addSpatial(service.spatial)
             .addSubject(service.subject)
-            .addThematicArea(service.thematicArea)
+            .addThematicArea(service.losTheme)
+            .addRequiredEvidence(service.evidence)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource

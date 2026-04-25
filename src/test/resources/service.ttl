@@ -24,10 +24,20 @@
         cpsv:produces    <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321> ;
         dct:spatial      <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163> ;
         dct:subject      <https://data-david.github.io/Begrep/begrep/Enhet>;
-        cv:thematicArea  <https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning> .
+        cv:thematicArea  <https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning> ;
+        cpsvno:hasRequiredEvidence  <http://localhost:5050/rdf/catalogs/910244132/services/00/evidence/342549912> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;
         dct:description  "Output description"@en;
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
         dct:title        "Output title"@en .
+
+<http://localhost:5050/rdf/catalogs/910244132/services/00/evidence/342549912>
+        a                cpsvno:RequiredEvidence;
+        dct:identifier   <http://localhost:5050/rdf/catalogs/910244132/services/00/evidence/342549912>;
+        dct:description  "Evidence description"@en;
+        dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
+        dct:title        "Evidence title"@en;
+        foaf:page        <http://related.documentation.eu>;
+        dct:isPartOf     <http://test.eu/dataset/123> .
