@@ -87,8 +87,14 @@ class RDFService(
     private fun Resource.addProducesOutput(outputs: List<Output>?): Resource {
         outputs?.filter { it.isValid() }
             ?.forEach { output ->
-                val identifierURI = "$uri/output/${output.identifier}"
-                val outputResource = model.createResource(identifierURI)
+                val outputResource = if (output.identifier != null) {
+                    val identifierURI = "$uri/output/${output.identifier}"
+                    model.createResource(identifierURI)
+                } else {
+                    model.createResource()
+                }
+
+                outputResource
                     .addProperty(RDF.type, CV.Output)
                     .addLocalizedStringsAsProperty(DCTerms.title, output.title)
                     .addLocalizedStringsAsProperty(DCTerms.description, output.description)
@@ -130,10 +136,16 @@ class RDFService(
     private fun Resource.addRequiredEvidence(evidenceList: List<Evidence>?): Resource {
         evidenceList?.filter { it.isValid() }
             ?.forEach { evidence ->
-                val evidenceURI = "$uri/evidence/${evidence.identifier}"
-                val evidenceResource = model.createResource(evidenceURI)
+                val evidenceResource = if ( evidence.identifier != null) {
+                    val evidenceURI = "$uri/evidence/${evidence.identifier}"
+                    model.createResource(evidenceURI)
+                        .addProperty(DCTerms.identifier, model.createResource(evidenceURI))
+                } else {
+                    model.createResource()
+                }
+
+                evidenceResource
                     .addProperty(RDF.type, CPSVNO.RequiredEvidence)
-                    .addProperty(DCTerms.identifier, model.createResource(evidenceURI))
                     .addLocalizedStringsAsProperty(DCTerms.title, evidence.title)
                     .addLocalizedStringsAsProperty(DCTerms.description, evidence.description)
                     .addStringsAsResources(DCTerms.language, evidence.language)

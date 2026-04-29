@@ -7,7 +7,7 @@ import java.util.UUID
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 data class Evidence(
-    val identifier: String? = UUID.randomUUID().toString(),
+    val identifier: String?,
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
     val language: List<String>?,
