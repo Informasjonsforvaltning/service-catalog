@@ -3,6 +3,7 @@ package no.digdir.servicecatalog.dto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonInclude
 import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.Cost
 import no.digdir.servicecatalog.domain.Evidence
 import no.digdir.servicecatalog.domain.LocalizedStrings
 import no.digdir.servicecatalog.domain.Output
@@ -22,5 +23,6 @@ data class ServiceDTO(
     val spatial: List<String>?,
     val subject: Set<String>?,
     val losTheme: Set<String>?,
-    val evidence: List<Evidence>?
+    val evidence: List<Evidence>?,
+    val costs: List<Cost>? = null
 )

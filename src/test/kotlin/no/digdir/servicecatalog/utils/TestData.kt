@@ -37,7 +37,15 @@ val SERVICE_0 = ServiceDTO("00", "910244132",
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
         relatedDocumentation = listOf("http://related.documentation.eu"),
         dataset = listOf("http://test.eu/dataset/123")
-    ))
+    )),
+    costs = listOf(
+        Cost(
+            value = 125.57,
+            description = LocalizedStrings(nb = "med doc", nn = null, en = "with doc"),
+            documentation = listOf("https://gebyr-doc.no"),
+            currency = "http://publications.europa.eu/resource/authority/currency/EUR"
+        )
+    )
 )
 val SERVICE_1 = ServiceDTO("01", "910244132",
     title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
@@ -50,7 +58,7 @@ val SERVICE_2 = ServiceDTO("02", "910244132",
     published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
     spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 
-val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null, null, null)
+val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null, null, null, null)
 
 val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
 
@@ -84,7 +92,17 @@ val PUBLIC_SERVICE_0 =
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
             relatedDocumentation = listOf("http://related.documentation.eu"),
             dataset = listOf("http://test.eu/dataset/123")
-        ))
+        )),
+        costs = listOf(
+            Cost(
+                value = 125.57,
+                currency = "http://publications.europa.eu/resource/authority/currency/EUR"
+            ),
+            Cost(
+                description = LocalizedStrings(nb = "med doc", nn = null, en = null),
+                documentation = listOf("https://gebyr-doc.no")
+            )
+        )
     )
 val PUBLIC_SERVICE_1 =
     PublicServiceDTO("1", "910244132",
@@ -106,7 +124,7 @@ val PUBLIC_SERVICE_DIFFERENT_CATALOG =
         spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
 
 val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
-    null, null, null, null, null, null, null, null, null, null)
+    null, null, null, null, null, null, null, null, null, null, null)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 
@@ -126,7 +144,7 @@ fun ServiceDTO.toEntity() = ServiceEntity(
             title = title, description = description, produces = produces,
             contactPoints = contactPoints, homepage = homepage, status = status,
             spatial = spatial, subject = subject, losTheme = losTheme,
-            evidence = evidence
+            evidence = evidence, costs = costs
         )
     )
 )
@@ -141,7 +159,7 @@ fun PublicServiceDTO.toEntity() = ServiceEntity(
             title = title, description = description, dctType = dctType,
             produces = produces, contactPoints = contactPoints, homepage = homepage,
             status = status, spatial = spatial, subject = subject, losTheme = losTheme,
-            evidence = evidence
+            evidence = evidence, costs = costs
         )
     )
 )

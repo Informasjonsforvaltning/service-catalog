@@ -16,5 +16,6 @@ data class PublicServiceValues(
     val spatial: List<String>?,
     val subject: Set<String>?,
     val losTheme: Set<String>?,
-    val evidence: List<Evidence>?
+    val evidence: List<Evidence>?,
+    val costs: List<Cost>? = null
 )
