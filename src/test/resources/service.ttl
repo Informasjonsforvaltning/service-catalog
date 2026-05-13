@@ -5,6 +5,7 @@
 @prefix vcard:  <http://www.w3.org/2006/vcard/ns#> .
 @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
 @prefix adms:   <http://www.w3.org/ns/adms#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00>
         a                cpsvno:Service;
@@ -25,7 +26,13 @@
         dct:spatial      <https://data.geonorge.no/administrativeEnheter/nasjon/id/173163> ;
         dct:subject      <https://data-david.github.io/Begrep/begrep/Enhet>;
         cv:thematicArea  <https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning> ;
-        cpsvno:hasRequiredEvidence  <http://localhost:5050/rdf/catalogs/910244132/services/00/evidence/342549912> .
+        cpsvno:hasRequiredEvidence  <http://localhost:5050/rdf/catalogs/910244132/services/00/evidence/342549912> ;
+        cv:hasCost       [ a                cv:Cost;
+                           cv:hasValue      "125.57"^^xsd:double;
+                           cv:currency      <http://publications.europa.eu/resource/authority/currency/EUR>;
+                           dct:description  "with doc"@en , "med doc"@nb;
+                           foaf:page        <https://gebyr-doc.no>
+                         ] .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;

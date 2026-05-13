@@ -44,9 +44,13 @@ class CV {
         val email: Property = ResourceFactory.createProperty("${uri}email")
         val contactPoint: Property = ResourceFactory.createProperty("${uri}contactPoint")
         val thematicArea: Property = ResourceFactory.createProperty("${uri}thematicArea")
+        val currency: Property = ResourceFactory.createProperty("${uri}currency")
+        val hasCost: Property = ResourceFactory.createProperty("${uri}hasCost")
+        val hasValue: Property = ResourceFactory.createProperty("${uri}hasValue")
 
         val Output: Resource = ResourceFactory.createResource("${uri}Output")
         val ContactPoint: Resource = ResourceFactory.createResource("${uri}ContactPoint")
+        val Cost: Resource = ResourceFactory.createResource("${uri}Cost")
     }
 }
 

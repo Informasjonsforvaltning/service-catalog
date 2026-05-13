@@ -213,6 +213,7 @@ class RDFService(
             .addDctType(publicService.dctType)
             .addThematicArea(publicService.losTheme)
             .addRequiredEvidence(publicService.evidence)
+            .addCosts(publicService.costs)
 
         publicServiceResource.addProperty(DCTerms.identifier, publicServiceResource)
         return publicServiceResource
@@ -232,6 +233,7 @@ class RDFService(
             .addSubject(service.subject)
             .addThematicArea(service.losTheme)
             .addRequiredEvidence(service.evidence)
+            .addCosts(service.costs)
 
         serviceResource.addProperty(DCTerms.identifier, serviceResource)
         return serviceResource

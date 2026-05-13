@@ -1,11 +1,15 @@
 package no.digdir.servicecatalog.rdf
 
 import no.digdir.servicecatalog.MAIN_LOGGER
+import no.digdir.servicecatalog.domain.Cost
 import no.digdir.servicecatalog.domain.LocalizedStrings
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.Property
 import org.apache.jena.rdf.model.Resource
 import org.apache.jena.riot.Lang
+import org.apache.jena.sparql.vocabulary.FOAF
+import org.apache.jena.vocabulary.DCTerms
+import org.apache.jena.vocabulary.RDF
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import java.io.ByteArrayOutputStream
@@ -73,5 +77,23 @@ fun Resource.addAsResourceIfValid(predicate: Property, value: String?): Resource
 
 fun Resource.addPropertyIfExists(predicate: Property, value: String?): Resource {
     value?.let { addProperty(predicate, value) }
+    return this
+}
+
+fun Resource.addCosts(costs: Collection<Cost>?): Resource {
+    costs?.forEach { cost ->
+        val costResource = model.createResource()
+            .addProperty(RDF.type, CV.Cost)
+            .addLocalizedStringsAsProperty(DCTerms.description, cost.description)
+            .addStringsAsResources(FOAF.page, cost.documentation)
+
+        cost.value?.let {
+            costResource.addLiteral(CV.hasValue, model.createTypedLiteral(it))
+        }
+
+        cost.currency?.let { costResource.addAsResourceIfValid(CV.currency, it) }
+
+        addProperty(CV.hasCost, costResource)
+    }
     return this
 }

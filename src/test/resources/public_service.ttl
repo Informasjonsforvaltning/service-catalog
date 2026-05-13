@@ -5,6 +5,7 @@
 @prefix foaf:   <http://xmlns.com/foaf/0.1/> .
 @prefix adms:   <http://www.w3.org/ns/adms#> .
 @prefix cpsvno: <https://data.norge.no/vocabulary/cpsvno#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0>
         a                         cpsv:PublicService;
@@ -26,7 +27,15 @@
         dct:subject               <https://data-david.github.io/Begrep/begrep/Enhet>;
         dct:type                  <https://publications.europa.eu/resource/authority/main-activity/airport>;
         cv:thematicArea           <https://psi.norge.no/los/tema/varslingstjenester> ;
-        cpsvno:hasRequiredEvidence  <http://localhost:5050/rdf/catalogs/910244132/public-services/0/evidence/342549912> .
+        cpsvno:hasRequiredEvidence  <http://localhost:5050/rdf/catalogs/910244132/public-services/0/evidence/342549912> ;
+        cv:hasCost                [ a            cv:Cost;
+                                    cv:hasValue  "125.57"^^xsd:double;
+                                    cv:currency  <http://publications.europa.eu/resource/authority/currency/EUR>
+                                  ] ,
+                                  [ a                cv:Cost;
+                                    dct:description  "med doc"@nb;
+                                    foaf:page        <https://gebyr-doc.no>
+                                  ] .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
         a                cv:Output;

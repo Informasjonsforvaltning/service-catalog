@@ -40,7 +40,8 @@ class ServiceService(
                 spatial = values.spatial,
                 subject = values.subject,
                 losTheme = values.losTheme,
-                evidence = values.evidence
+                evidence = values.evidence,
+                costs = values.costs
             )
         } else null
 
