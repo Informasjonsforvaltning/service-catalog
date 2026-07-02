@@ -10,5 +10,6 @@ data class Output(
     val identifier: String?,
     val title: LocalizedStrings?,
     val description: LocalizedStrings?,
-    val language: List<String>?
+    val language: List<String>?,
+    val isPartOf: List<String>?
 )
