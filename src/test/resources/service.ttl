@@ -37,6 +37,7 @@
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;
         dct:description  "Output description"@en;
+        dct:isPartOf     <http://test.eu/dataset/123>;
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
         dct:title        "Output title"@en .
 
