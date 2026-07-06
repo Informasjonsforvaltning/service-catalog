@@ -42,7 +42,8 @@
         dct:description  "Output description"@en;
         dct:isPartOf     <http://test.eu/dataset/123>;
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
-        dct:title        "Output title"@en .
+        dct:title        "Output title"@en ;
+        dct:type         <https://data.norge.no/vocabulary/service-output-type#declaration> .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/evidence/342549912>
         a                cpsvno:RequiredEvidence;

@@ -14,5 +14,6 @@ data class Output(
     val language: List<String>?,
     @get:JsonProperty("isPartOf")
     @param:JsonProperty("isPartOf")
-    val isPartOf: List<String>?
+    val isPartOf: List<String>?,
+    val type: List<String>?
 )
