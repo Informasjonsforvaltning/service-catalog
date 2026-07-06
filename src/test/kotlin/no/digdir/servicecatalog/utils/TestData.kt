@@ -18,7 +18,8 @@ val SERVICE_0 = ServiceDTO("00", "910244132",
         title = LocalizedStrings(en = "Output title", nb = null, nn = null),
         description = LocalizedStrings(en = "Output description", nb = null, nn = null),
         language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
-        isPartOf = listOf("http://test.eu/dataset/123")
+        isPartOf = listOf("http://test.eu/dataset/123"),
+        type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration")
     )),
     contactPoints = listOf(ContactPoint(
         category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
@@ -73,7 +74,8 @@ val PUBLIC_SERVICE_0 =
             title = LocalizedStrings(en = "Output title", nb = null, nn = null),
             description = LocalizedStrings(en = "Output description", nb = null, nn = null),
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
-            isPartOf = listOf("http://test.eu/dataset/123")
+            isPartOf = listOf("http://test.eu/dataset/123"),
+            type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration")
         )),
         contactPoints = listOf(ContactPoint(
             category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),

@@ -100,6 +100,7 @@ class RDFService(
                     .addLocalizedStringsAsProperty(DCTerms.description, output.description)
                     .addStringsAsResources(DCTerms.language, output.language)
                     .addStringsAsResources(DCTerms.isPartOf, output.isPartOf)
+                    .addStringsAsResources(DCTerms.type, output.type)
 
                 addProperty(CPSV.produces, outputResource)
             }
