@@ -67,7 +67,7 @@ class HarvestAdminClientTest {
 
         assertEquals(
             URI("$harvestAdminUri/organizations/$catalogId/datasources"),
-            uriCaptor.value
+            uriCaptor.value,
         )
     }
 
@@ -151,7 +151,7 @@ class HarvestAdminClientTest {
 
         assertEquals(
             URI("$harvestAdminUri/organizations/$catalogId/datasources/start-harvesting"),
-            uriCaptor.value
+            uriCaptor.value,
         )
     }
 
@@ -237,6 +237,5 @@ class HarvestAdminClientTest {
         SecurityContextHolder.getContext().authentication = JwtAuthenticationToken(jwt)
     }
 
-    private inline fun <reified T : Any> captor(): ArgumentCaptor<T> =
-        ArgumentCaptor.forClass(T::class.java)
+    private inline fun <reified T : Any> captor(): ArgumentCaptor<T> = ArgumentCaptor.forClass(T::class.java)
 }

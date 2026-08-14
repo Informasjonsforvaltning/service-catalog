@@ -13,41 +13,46 @@ import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URL
 
-fun apiGet(port: Int, endpoint: String, acceptHeader: String?): Map<String,Any> {
+fun apiGet(port: Int, endpoint: String, acceptHeader: String?): Map<String, Any> = try {
+    val connection = URI("http://localhost:$port$endpoint").toURL().openConnection() as HttpURLConnection
+    if (acceptHeader != null) connection.setRequestProperty("Accept", acceptHeader)
+    connection.connect()
 
-    return try {
-        val connection = URI("http://localhost:$port$endpoint").toURL().openConnection() as HttpURLConnection
-        if(acceptHeader != null) connection.setRequestProperty("Accept", acceptHeader)
-        connection.connect()
-
-        if(isOK(connection.responseCode)) {
-            val responseBody = connection.inputStream.bufferedReader().use(BufferedReader::readText)
-            mapOf(
-                "body"   to responseBody,
-                "header" to connection.headerFields.toString(),
-                "status" to connection.responseCode)
-        } else {
-            mapOf(
-                "status" to connection.responseCode,
-                "header" to " ",
-                "body"   to " "
-            )
-        }
-    } catch (e: Exception) {
+    if (isOK(connection.responseCode)) {
+        val responseBody = connection.inputStream.bufferedReader().use(BufferedReader::readText)
         mapOf(
-            "status" to e.toString(),
-            "header" to " ",
-            "body"   to " "
+            "body" to responseBody,
+            "header" to connection.headerFields.toString(),
+            "status" to connection.responseCode,
         )
-    }}
+    } else {
+        mapOf(
+            "status" to connection.responseCode,
+            "header" to " ",
+            "body" to " ",
+        )
+    }
+} catch (e: Exception) {
+    mapOf(
+        "status" to e.toString(),
+        "header" to " ",
+        "body" to " ",
+    )
+}
 
-private fun isOK(response: Int?): Boolean =
-        if(response == null) false
-        else HttpStatus.resolve(response)?.is2xxSuccessful == true
+private fun isOK(response: Int?): Boolean = if (response == null) {
+    false
+} else {
+    HttpStatus.resolve(response)?.is2xxSuccessful == true
+}
 
 fun apiAuthorizedRequest(
-    path: String, port: Int, body: String?, token: String?, httpMethod: HttpMethod,
-    accept: MediaType = MediaType.APPLICATION_JSON
+    path: String,
+    port: Int,
+    body: String?,
+    token: String?,
+    httpMethod: HttpMethod,
+    accept: MediaType = MediaType.APPLICATION_JSON,
 ): Map<String, Any> {
     val request = RestTemplate()
     request.requestFactory = HttpComponentsClientHttpRequestFactory()
@@ -63,19 +68,19 @@ fun apiAuthorizedRequest(
         mapOf(
             "body" to (response.body ?: ""),
             "header" to response.headers,
-            "status" to response.statusCode.value()
+            "status" to response.statusCode.value(),
         )
     } catch (e: HttpClientErrorException) {
         mapOf(
             "status" to e.statusCode.value(),
             "header" to " ",
-            "body" to e.toString()
+            "body" to e.toString(),
         )
     } catch (e: Exception) {
         mapOf(
             "status" to e.toString(),
             "header" to " ",
-            "body" to " "
+            "body" to " ",
         )
     }
 }

@@ -15,15 +15,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 class RestResponseEntityExceptionHandler : ResponseEntityExceptionHandler() {
 
     @ExceptionHandler(value = [RuntimeException::class])
-    fun handleCustomExceptions(
-        ex: RuntimeException, request: WebRequest
-    ): ResponseEntity<Any> =
-        when (ex::class) {
-            CustomNotFoundException::class -> ResponseEntity(HttpStatus.NOT_FOUND)
-            CustomNotAcceptableException::class -> ResponseEntity(HttpStatus.NOT_FOUND)
-            CustomBadRequestException::class -> ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
-            CustomInternalServerErrorException::class -> ResponseEntity(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
-            else -> ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
-        }
-
+    fun handleCustomExceptions(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> = when (ex::class) {
+        CustomNotFoundException::class -> ResponseEntity(HttpStatus.NOT_FOUND)
+        CustomNotAcceptableException::class -> ResponseEntity(HttpStatus.NOT_FOUND)
+        CustomBadRequestException::class -> ResponseEntity(ex.message, HttpStatus.BAD_REQUEST)
+        CustomInternalServerErrorException::class -> ResponseEntity(ex.message, HttpStatus.INTERNAL_SERVER_ERROR)
+        else -> ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR)
+    }
 }

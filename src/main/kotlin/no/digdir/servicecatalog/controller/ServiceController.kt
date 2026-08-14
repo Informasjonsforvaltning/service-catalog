@@ -1,8 +1,8 @@
 package no.digdir.servicecatalog.controller
 
+import no.digdir.servicecatalog.domain.ServiceValues
 import no.digdir.servicecatalog.dto.JsonPatchOperation
 import no.digdir.servicecatalog.dto.ServiceDTO
-import no.digdir.servicecatalog.domain.ServiceValues
 import no.digdir.servicecatalog.security.EndpointPermissions
 import no.digdir.servicecatalog.service.ServiceService
 import org.springframework.http.HttpHeaders
@@ -34,88 +34,84 @@ class ServiceController(private val serviceService: ServiceService, private val 
             ResponseEntity(HttpStatus.FORBIDDEN)
         }
 
-    @GetMapping(value = [ "/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getServiceById(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @PathVariable id: String): ResponseEntity<ServiceDTO> =
-        if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
-            serviceService.findServiceById(id, catalogId)
-                ?.let { ResponseEntity(it, HttpStatus.OK) }
-                ?: ResponseEntity(HttpStatus.NOT_FOUND)
-        } else {
-            ResponseEntity(HttpStatus.FORBIDDEN)
-        }
+        @PathVariable id: String,
+    ): ResponseEntity<ServiceDTO> = if (endpointPermissions.hasOrgReadPermission(jwt, catalogId)) {
+        serviceService.findServiceById(id, catalogId)
+            ?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NOT_FOUND)
+    } else {
+        ResponseEntity(HttpStatus.FORBIDDEN)
+    }
 
     @PatchMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun patchService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-        @RequestBody patchOperations: List<JsonPatchOperation>
-    ): ResponseEntity<ServiceDTO> =
-        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
-            serviceService.patchService(id, catalogId, patchOperations)
-                ?.let { ResponseEntity(it, HttpStatus.OK) }
-                ?: ResponseEntity(HttpStatus.NOT_FOUND)
-        } else {
-            ResponseEntity(HttpStatus.FORBIDDEN)
-        }
+        @RequestBody patchOperations: List<JsonPatchOperation>,
+    ): ResponseEntity<ServiceDTO> = if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+        serviceService.patchService(id, catalogId, patchOperations)
+            ?.let { ResponseEntity(it, HttpStatus.OK) }
+            ?: ResponseEntity(HttpStatus.NOT_FOUND)
+    } else {
+        ResponseEntity(HttpStatus.FORBIDDEN)
+    }
 
     @DeleteMapping(value = ["/{id}"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun deleteService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<HttpStatus> =
-        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
-            serviceService.deleteService(id, catalogId)
-            ResponseEntity(HttpStatus.NO_CONTENT)
-        } else {
-            ResponseEntity(HttpStatus.FORBIDDEN)
-        }
+    ): ResponseEntity<HttpStatus> = if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+        serviceService.deleteService(id, catalogId)
+        ResponseEntity(HttpStatus.NO_CONTENT)
+    } else {
+        ResponseEntity(HttpStatus.FORBIDDEN)
+    }
 
     @PostMapping(consumes = [MediaType.APPLICATION_JSON_VALUE])
     fun createService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
-        @RequestBody serviceToBeCreated: ServiceValues
-    ): ResponseEntity<HttpStatus> =
-        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
-            val created = serviceService.createService(catalogId, serviceToBeCreated)
-            ResponseEntity(
-                locationHeaderForCreated(newId = created.id, catalogId),
-                HttpStatus.CREATED
-            )
-        } else ResponseEntity<HttpStatus>(HttpStatus.FORBIDDEN)
+        @RequestBody serviceToBeCreated: ServiceValues,
+    ): ResponseEntity<HttpStatus> = if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+        val created = serviceService.createService(catalogId, serviceToBeCreated)
+        ResponseEntity(
+            locationHeaderForCreated(newId = created.id, catalogId),
+            HttpStatus.CREATED,
+        )
+    } else {
+        ResponseEntity<HttpStatus>(HttpStatus.FORBIDDEN)
+    }
 
     @PostMapping(value = ["/{id}/publish"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun publishService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<ServiceDTO> =
-        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
-            ResponseEntity(serviceService.publishService(id, catalogId), HttpStatus.OK)
-        } else {
-            ResponseEntity(HttpStatus.FORBIDDEN)
-        }
+    ): ResponseEntity<ServiceDTO> = if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+        ResponseEntity(serviceService.publishService(id, catalogId), HttpStatus.OK)
+    } else {
+        ResponseEntity(HttpStatus.FORBIDDEN)
+    }
 
     @PostMapping(value = ["/{id}/unpublish"], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun unpublishService(
         @AuthenticationPrincipal jwt: Jwt,
         @PathVariable catalogId: String,
         @PathVariable id: String,
-    ): ResponseEntity<ServiceDTO> =
-        if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
-            ResponseEntity(serviceService.unpublishService(id, catalogId), HttpStatus.OK)
-        } else {
-            ResponseEntity(HttpStatus.FORBIDDEN)
-        }
+    ): ResponseEntity<ServiceDTO> = if (endpointPermissions.hasOrgWritePermission(jwt, catalogId)) {
+        ResponseEntity(serviceService.unpublishService(id, catalogId), HttpStatus.OK)
+    } else {
+        ResponseEntity(HttpStatus.FORBIDDEN)
+    }
 }
 
-private fun locationHeaderForCreated(newId: String, catalogId: String): HttpHeaders =
-    HttpHeaders().apply {
-        add(HttpHeaders.LOCATION, "/internal/catalogs/$catalogId/services/$newId")
-        add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION)
-    }
+private fun locationHeaderForCreated(newId: String, catalogId: String): HttpHeaders = HttpHeaders().apply {
+    add(HttpHeaders.LOCATION, "/internal/catalogs/$catalogId/services/$newId")
+    add(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, HttpHeaders.LOCATION)
+}

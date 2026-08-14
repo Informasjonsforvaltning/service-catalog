@@ -16,9 +16,12 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @CrossOrigin
 @RequestMapping(
-    produces = ["text/turtle", "text/n3", "application/rdf+json", "application/rdf+xml",
-        "application/n-triples", "application/n-quads", "application/trig", "application/trix"],
-    value = ["/catalogs"])
+    produces = [
+        "text/turtle", "text/n3", "application/rdf+json", "application/rdf+xml",
+        "application/n-triples", "application/n-quads", "application/trig", "application/trix",
+    ],
+    value = ["/catalogs"],
+)
 class RDFController(private val rdfService: RDFService) {
 
     @GetMapping(value = ["/{catalogId}"])
@@ -29,21 +32,19 @@ class RDFController(private val rdfService: RDFService) {
     fun getPublicServiceRDF(
         @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
         @PathVariable catalogId: String,
-        @PathVariable id: String
-    ): ResponseEntity<String> =
-        ResponseEntity(
-            rdfService.serializePublicService(catalogId, id, jenaLangFromAcceptHeader(accept)),
-            HttpStatus.OK
-        )
+        @PathVariable id: String,
+    ): ResponseEntity<String> = ResponseEntity(
+        rdfService.serializePublicService(catalogId, id, jenaLangFromAcceptHeader(accept)),
+        HttpStatus.OK,
+    )
 
     @GetMapping(value = ["/{catalogId}/services/{id}"])
     fun getServiceRDF(
         @RequestHeader(HttpHeaders.ACCEPT) accept: String?,
         @PathVariable catalogId: String,
-        @PathVariable id: String
-    ): ResponseEntity<String> =
-        ResponseEntity(
-            rdfService.serializeService(catalogId, id, jenaLangFromAcceptHeader(accept)),
-            HttpStatus.OK
-        )
+        @PathVariable id: String,
+    ): ResponseEntity<String> = ResponseEntity(
+        rdfService.serializeService(catalogId, id, jenaLangFromAcceptHeader(accept)),
+        HttpStatus.OK,
+    )
 }

@@ -12,11 +12,12 @@ import org.springframework.http.HttpStatus
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = ["spring.profiles.active=test"])
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = ["spring.profiles.active=test"],
+)
 @ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
-class HealthTest: ApiTestContext() {
+class HealthTest : ApiTestContext() {
     @Test
     fun ping() {
         val response = apiGet(port, "/actuator/health/liveness", null)
@@ -30,5 +31,4 @@ class HealthTest: ApiTestContext() {
 
         assertEquals(HttpStatus.OK.value(), response["status"])
     }
-
 }
