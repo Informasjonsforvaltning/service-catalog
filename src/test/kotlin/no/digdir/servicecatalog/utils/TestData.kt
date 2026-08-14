@@ -2,133 +2,175 @@ package no.digdir.servicecatalog.utils
 
 import com.fasterxml.jackson.module.kotlin.convertValue
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import no.digdir.servicecatalog.domain.*
-import no.digdir.servicecatalog.dto.*
+import no.digdir.servicecatalog.domain.ContactPoint
+import no.digdir.servicecatalog.domain.Cost
+import no.digdir.servicecatalog.domain.Evidence
+import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.domain.Output
+import no.digdir.servicecatalog.domain.PublicServiceValues
+import no.digdir.servicecatalog.domain.ServiceValues
+import no.digdir.servicecatalog.dto.PublicServiceDTO
+import no.digdir.servicecatalog.dto.ServiceCount
+import no.digdir.servicecatalog.dto.ServiceDTO
 import no.digdir.servicecatalog.entity.ServiceEntity
 import no.digdir.servicecatalog.entity.ServiceType
 
 private val mapper = jacksonObjectMapper()
 
-val SERVICE_0 = ServiceDTO("00", "910244132",
+val SERVICE_0 = ServiceDTO(
+    "00", "910244132",
     title = LocalizedStrings("NB Tittel 00", "NN Tittel 00", "EN Tittel 00"),
     description = LocalizedStrings("Beskrivelse 00", "Beskriving 00", "Description 00"),
     published = true,
-    produces = listOf(Output(
-        identifier = "321",
-        title = LocalizedStrings(en = "Output title", nb = null, nn = null),
-        description = LocalizedStrings(en = "Output description", nb = null, nn = null),
-        language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
-        isPartOf = listOf("http://test.eu/dataset/123"),
-        type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration")
-    )),
-    contactPoints = listOf(ContactPoint(
-        category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
-        email = "email@digdir.no",
-        telephone = "+47 12 34 56 78",
-        contactPage = "digdir.no",
-        language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-    )),
-    homepage = "digdir.no", status = "http://purl.org/adms/status/Completed",
-    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
-    subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
-    losTheme = setOf("https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning"),
-    evidence = listOf(Evidence(
-        identifier = "342549912",
-        title = LocalizedStrings(en = "Evidence title", nb = null, nn = null),
-        description = LocalizedStrings(en = "Evidence description", nb = null, nn = null),
-        language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
-        relatedDocumentation = listOf("http://related.documentation.eu"),
-        dataset = listOf("http://test.eu/dataset/123")
-    )),
-    costs = listOf(
-        Cost(
-            value = 125.57,
-            description = LocalizedStrings(nb = "med doc", nn = null, en = "with doc"),
-            documentation = listOf("https://gebyr-doc.no"),
-            currency = "http://publications.europa.eu/resource/authority/currency/EUR"
-        )
-    )
-)
-val SERVICE_1 = ServiceDTO("01", "910244132",
-    title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
-    description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
-    published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
-    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
-val SERVICE_2 = ServiceDTO("02", "910244132",
-    title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
-    description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
-    published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
-    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
-
-val SERVICE_TO_BE_CREATED = ServiceValues(title = LocalizedStrings("Ny tittel", "Ny tittel", "New title"), null, null, null, null, null, null, null, null, null, null)
-
-val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
-
-val PUBLIC_SERVICE_0 =
-    PublicServiceDTO("0", "910244132",
-        title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
-        description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
-        published = true,
-        produces = listOf(Output(
-            identifier = "123",
+    produces = listOf(
+        Output(
+            identifier = "321",
             title = LocalizedStrings(en = "Output title", nb = null, nn = null),
             description = LocalizedStrings(en = "Output description", nb = null, nn = null),
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
             isPartOf = listOf("http://test.eu/dataset/123"),
-            type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration")
-        )),
-        contactPoints = listOf(ContactPoint(
+            type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration"),
+        ),
+    ),
+    contactPoints = listOf(
+        ContactPoint(
             category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
             email = "email@digdir.no",
             telephone = "+47 12 34 56 78",
             contactPage = "digdir.no",
-            language = listOf("http://publications.europa.eu/resource/authority/language/ENG")
-        )),
-        homepage = "data.norge.no", status = "http://purl.org/adms/status/UnderDevelopment",
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
-        subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
-        dctType = setOf("https://publications.europa.eu/resource/authority/main-activity/airport"),
-        losTheme = setOf("https://psi.norge.no/los/tema/varslingstjenester"),
-        evidence = listOf(Evidence(
+            language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+        ),
+    ),
+    homepage = "digdir.no", status = "http://purl.org/adms/status/Completed",
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
+    subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
+    losTheme = setOf("https://psi.norge.no/los/tema/okonomiske-ytelser-og-radgivning"),
+    evidence = listOf(
+        Evidence(
             identifier = "342549912",
             title = LocalizedStrings(en = "Evidence title", nb = null, nn = null),
             description = LocalizedStrings(en = "Evidence description", nb = null, nn = null),
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
             relatedDocumentation = listOf("http://related.documentation.eu"),
-            dataset = listOf("http://test.eu/dataset/123")
-        )),
+            dataset = listOf("http://test.eu/dataset/123"),
+        ),
+    ),
+    costs = listOf(
+        Cost(
+            value = 125.57,
+            description = LocalizedStrings(nb = "med doc", nn = null, en = "with doc"),
+            documentation = listOf("https://gebyr-doc.no"),
+            currency = "http://publications.europa.eu/resource/authority/currency/EUR",
+        ),
+    ),
+)
+val SERVICE_1 = ServiceDTO(
+    "01", "910244132",
+    title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
+    description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
+    published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null,
+)
+val SERVICE_2 = ServiceDTO(
+    "02", "910244132",
+    title = LocalizedStrings("NB Tittel 02", "NN Tittel 02", "EN Tittel 02"),
+    description = LocalizedStrings("Beskrivelse 02", "Beskriving 02", "Description 02"),
+    published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null,
+    spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null,
+)
+
+val SERVICE_TO_BE_CREATED =
+    ServiceValues(
+        title = LocalizedStrings(
+            "Ny tittel",
+            "Ny tittel",
+            "New title",
+        ),
+        null, null, null, null, null, null, null, null, null, null,
+    )
+
+val SERVICES = listOf(SERVICE_0, SERVICE_1, SERVICE_2)
+
+val PUBLIC_SERVICE_0 =
+    PublicServiceDTO(
+        "0", "910244132",
+        title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
+        description = LocalizedStrings("Beskrivelse 0", "Beskriving 0", "Description 0"),
+        published = true,
+        produces = listOf(
+            Output(
+                identifier = "123",
+                title = LocalizedStrings(en = "Output title", nb = null, nn = null),
+                description = LocalizedStrings(en = "Output description", nb = null, nn = null),
+                language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+                isPartOf = listOf("http://test.eu/dataset/123"),
+                type = listOf("https://data.norge.no/vocabulary/service-output-type#declaration"),
+            ),
+        ),
+        contactPoints = listOf(
+            ContactPoint(
+                category = LocalizedStrings(en = "Contact category title", nb = null, nn = null),
+                email = "email@digdir.no",
+                telephone = "+47 12 34 56 78",
+                contactPage = "digdir.no",
+                language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+            ),
+        ),
+        homepage = "data.norge.no", status = "http://purl.org/adms/status/UnderDevelopment",
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"),
+        subject = setOf("https://data-david.github.io/Begrep/begrep/Enhet"),
+        dctType = setOf("https://publications.europa.eu/resource/authority/main-activity/airport"),
+        losTheme = setOf("https://psi.norge.no/los/tema/varslingstjenester"),
+        evidence = listOf(
+            Evidence(
+                identifier = "342549912",
+                title = LocalizedStrings(en = "Evidence title", nb = null, nn = null),
+                description = LocalizedStrings(en = "Evidence description", nb = null, nn = null),
+                language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
+                relatedDocumentation = listOf("http://related.documentation.eu"),
+                dataset = listOf("http://test.eu/dataset/123"),
+            ),
+        ),
         costs = listOf(
             Cost(
                 value = 125.57,
-                currency = "http://publications.europa.eu/resource/authority/currency/EUR"
+                currency = "http://publications.europa.eu/resource/authority/currency/EUR",
             ),
             Cost(
                 description = LocalizedStrings(nb = "med doc", nn = null, en = null),
-                documentation = listOf("https://gebyr-doc.no")
-            )
-        )
+                documentation = listOf("https://gebyr-doc.no"),
+            ),
+        ),
     )
 val PUBLIC_SERVICE_1 =
-    PublicServiceDTO("1", "910244132",
+    PublicServiceDTO(
+        "1", "910244132",
         title = LocalizedStrings("NB Tittel 1", "NN Tittel 1", "EN Tittel 1"),
         description = LocalizedStrings("Beskrivelse 1", "Beskriving 1", "Description 1"),
         published = false, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null,
+    )
 val PUBLIC_SERVICE_2 =
-    PublicServiceDTO("2", "910244132",
+    PublicServiceDTO(
+        "2", "910244132",
         title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null,
+    )
 val PUBLIC_SERVICE_DIFFERENT_CATALOG =
-    PublicServiceDTO("123", "123456789",
+    PublicServiceDTO(
+        "123", "123456789",
         title = LocalizedStrings("NB Tittel 0", "NN Tittel 0", "EN Tittel 0"),
         description = null,
         published = true, produces = null, contactPoints = null, homepage = null, status = null, subject = null, dctType = null,
-        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null)
+        spatial = listOf("https://data.geonorge.no/administrativeEnheter/nasjon/id/173163"), losTheme = emptySet(), evidence = null,
+    )
 
-val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
-    null, null, null, null, null, null, null, null, null, null, null)
+val PUBLIC_SERVICE_TO_BE_CREATED = PublicServiceValues(
+    title = LocalizedStrings("NB Tittel 2", "NN Tittel 2", "EN Tittel 2"),
+    null, null, null, null, null, null, null, null, null, null, null,
+)
 
 val PUBLIC_SERVICES = listOf(PUBLIC_SERVICE_0, PUBLIC_SERVICE_1, PUBLIC_SERVICE_2)
 
@@ -148,9 +190,9 @@ fun ServiceDTO.toEntity() = ServiceEntity(
             title = title, description = description, produces = produces,
             contactPoints = contactPoints, homepage = homepage, status = status,
             spatial = spatial, subject = subject, losTheme = losTheme,
-            evidence = evidence, costs = costs
-        )
-    )
+            evidence = evidence, costs = costs,
+        ),
+    ),
 )
 
 fun PublicServiceDTO.toEntity() = ServiceEntity(
@@ -163,7 +205,7 @@ fun PublicServiceDTO.toEntity() = ServiceEntity(
             title = title, description = description, dctType = dctType,
             produces = produces, contactPoints = contactPoints, homepage = homepage,
             status = status, spatial = spatial, subject = subject, losTheme = losTheme,
-            evidence = evidence, costs = costs
-        )
-    )
+            evidence = evidence, costs = costs,
+        ),
+    ),
 )

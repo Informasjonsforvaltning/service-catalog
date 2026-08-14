@@ -7,7 +7,17 @@ import no.digdir.servicecatalog.domain.Output
 import no.digdir.servicecatalog.domain.hasData
 import no.digdir.servicecatalog.dto.PublicServiceDTO
 import no.digdir.servicecatalog.dto.ServiceDTO
-import no.digdir.servicecatalog.rdf.*
+import no.digdir.servicecatalog.rdf.ADMS
+import no.digdir.servicecatalog.rdf.CPSV
+import no.digdir.servicecatalog.rdf.CPSVNO
+import no.digdir.servicecatalog.rdf.CV
+import no.digdir.servicecatalog.rdf.DCATNO
+import no.digdir.servicecatalog.rdf.addAsResourceIfValid
+import no.digdir.servicecatalog.rdf.addCosts
+import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
+import no.digdir.servicecatalog.rdf.addPropertyIfExists
+import no.digdir.servicecatalog.rdf.addStringsAsResources
+import no.digdir.servicecatalog.rdf.serialize
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Resource
@@ -23,7 +33,8 @@ import org.springframework.stereotype.Service
 class RDFService(
     private val applicationProperties: ApplicationProperties,
     private val publicServiceService: PublicServiceService,
-    private val serviceService: ServiceService) {
+    private val serviceService: ServiceService,
+) {
 
     fun serializeCatalog(catalogId: String, lang: Lang): String {
         val model = ModelFactory.createDefaultModel()
@@ -64,12 +75,12 @@ class RDFService(
     private fun Model.setDefaultPrefixes() {
         setNsPrefix("dct", DCTerms.NS)
         setNsPrefix("dcat", DCAT.NS)
-        setNsPrefix("dcatno", DCATNO.uri)
-        setNsPrefix("cpsv", CPSV.uri)
-        setNsPrefix("cv", CV.uri)
+        setNsPrefix("dcatno", DCATNO.URI)
+        setNsPrefix("cpsv", CPSV.URI)
+        setNsPrefix("cv", CV.URI)
         setNsPrefix("vcard", VCARD4.getURI())
         setNsPrefix("foaf", FOAF.getURI())
-        setNsPrefix("adms", ADMS.uri)
+        setNsPrefix("adms", ADMS.URI)
     }
 
     private fun Resource.addServiceToCatalog(service: ServiceDTO): Resource {
@@ -138,7 +149,7 @@ class RDFService(
     private fun Resource.addRequiredEvidence(evidenceList: List<Evidence>?): Resource {
         evidenceList?.filter { it.isValid() }
             ?.forEach { evidence ->
-                val evidenceResource = if ( evidence.identifier != null) {
+                val evidenceResource = if (evidence.identifier != null) {
                     val evidenceURI = "$uri/evidence/${evidence.identifier}"
                     model.createResource(evidenceURI)
                         .addProperty(DCTerms.identifier, model.createResource(evidenceURI))
@@ -159,11 +170,9 @@ class RDFService(
         return this
     }
 
-    private fun Output.isValid(): Boolean =
-        title != null && title.hasData()
+    private fun Output.isValid(): Boolean = title != null && title.hasData()
 
-    private fun Evidence.isValid(): Boolean =
-        title != null && title.hasData()
+    private fun Evidence.isValid(): Boolean = title != null && title.hasData()
 
     private fun Resource.addContactPoints(contactPoints: List<ContactPoint>?): Resource {
         contactPoints?.filter { it.isValid() }
@@ -180,25 +189,20 @@ class RDFService(
         return this
     }
 
-    private fun ContactPoint.isValid(): Boolean =
-        when {
-            !contactPage.isNullOrBlank() -> true
-            !email.isNullOrBlank() -> true
-            !telephone.isNullOrBlank() -> true
-            else -> false
-        }
+    private fun ContactPoint.isValid(): Boolean = when {
+        !contactPage.isNullOrBlank() -> true
+        !email.isNullOrBlank() -> true
+        !telephone.isNullOrBlank() -> true
+        else -> false
+    }
 
-    private fun publisherURI(catalogId: String): String =
-        "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
+    private fun publisherURI(catalogId: String): String = "https://data.brreg.no/enhetsregisteret/api/enheter/$catalogId"
 
-    private fun catalogURI(catalogId: String): String =
-        "${applicationProperties.serviceCatalogUri}/rdf/catalogs/$catalogId"
+    private fun catalogURI(catalogId: String): String = "${applicationProperties.serviceCatalogUri}/rdf/catalogs/$catalogId"
 
-    private fun serviceURI(id: String, catalogURI: String): String =
-        "${catalogURI}/services/$id"
+    private fun serviceURI(id: String, catalogURI: String): String = "$catalogURI/services/$id"
 
-    private fun publicServiceURI(id: String, catalogURI: String): String =
-        "${catalogURI}/public-services/$id"
+    private fun publicServiceURI(id: String, catalogURI: String): String = "$catalogURI/public-services/$id"
 
     private fun Model.createPublicServiceResource(publicService: PublicServiceDTO, catalogUri: String): Resource {
         val publicServiceResource = createResource(publicServiceURI(publicService.id, catalogUri))

@@ -6,19 +6,14 @@ import no.digdir.servicecatalog.repository.ServiceRepository
 import org.springframework.stereotype.Service
 
 @Service
-class CountService(
-    private val serviceRepository: ServiceRepository,
-) {
-    private fun getAllDistinctCatalogIds(): List<String> =
-        serviceRepository.findAll()
-            .map { it.catalogId }
-            .distinct()
+class CountService(private val serviceRepository: ServiceRepository) {
+    private fun getAllDistinctCatalogIds(): List<String> = serviceRepository.findAll()
+        .map { it.catalogId }
+        .distinct()
 
-    fun getServiceCountForListOfCatalogs(catalogIds: Set<String>): List<ServiceCount> =
-        catalogIds.map { getServiceCountForCatalog(it) }
+    fun getServiceCountForListOfCatalogs(catalogIds: Set<String>): List<ServiceCount> = catalogIds.map { getServiceCountForCatalog(it) }
 
-    fun getServiceCountForAllCatalogs(): List<ServiceCount> =
-        getAllDistinctCatalogIds().map { getServiceCountForCatalog(it) }
+    fun getServiceCountForAllCatalogs(): List<ServiceCount> = getAllDistinctCatalogIds().map { getServiceCountForCatalog(it) }
 
     private fun getServiceCountForCatalog(catalogId: String): ServiceCount {
         val allServices = serviceRepository.findByCatalogId(catalogId)

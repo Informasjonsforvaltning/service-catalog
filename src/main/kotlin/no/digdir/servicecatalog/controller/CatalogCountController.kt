@@ -16,27 +16,22 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @CrossOrigin
 @RequestMapping(value = ["/internal/catalogs/count"])
-class CatalogCountController(
-    private val endpointPermissions: EndpointPermissions,
-    private val countService: CountService
-) {
+class CatalogCountController(private val endpointPermissions: EndpointPermissions, private val countService: CountService) {
 
     @GetMapping(produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getServiceCountsForPermittedCatalogs(
-        @AuthenticationPrincipal jwt: Jwt
-    ): ResponseEntity<List<ServiceCount>> {
-        return when {
-            endpointPermissions.hasSysAdminPermission(jwt) -> {
-                ResponseEntity(
-                    countService.getServiceCountForAllCatalogs(),
-                    HttpStatus.OK
-                )
-            }
-            else -> ResponseEntity(
-                countService.getServiceCountForListOfCatalogs(
-                    endpointPermissions.getOrgsWithMinimumReadPermission(jwt)
-                ), HttpStatus.OK
+    fun getServiceCountsForPermittedCatalogs(@AuthenticationPrincipal jwt: Jwt): ResponseEntity<List<ServiceCount>> = when {
+        endpointPermissions.hasSysAdminPermission(jwt) -> {
+            ResponseEntity(
+                countService.getServiceCountForAllCatalogs(),
+                HttpStatus.OK,
             )
         }
+
+        else -> ResponseEntity(
+            countService.getServiceCountForListOfCatalogs(
+                endpointPermissions.getOrgsWithMinimumReadPermission(jwt),
+            ),
+            HttpStatus.OK,
+        )
     }
 }

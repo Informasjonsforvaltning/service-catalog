@@ -10,5 +10,5 @@ data class ContactPoint(
     val contactPage: String?,
     val telephone: String?,
     val email: String?,
-    val language: List<String>?
+    val language: List<String>?,
 )

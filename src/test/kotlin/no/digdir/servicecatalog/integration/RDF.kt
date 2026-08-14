@@ -19,10 +19,11 @@ import java.io.StringReader
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = ["spring.profiles.active=test"])
+    properties = ["spring.profiles.active=test"],
+)
 @ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
-class RDF: ApiTestContext() {
+class RDF : ApiTestContext() {
     val responseReader = TestResponseReader()
 
     @Nested
@@ -109,7 +110,9 @@ class RDF: ApiTestContext() {
         fun `able to get rdf for service`() {
             val response = apiGet(
                 port,
-                servicePath,Lang.TURTLE.headerString)
+                servicePath,
+                Lang.TURTLE.headerString,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val expected = responseReader.parseFile("service.ttl", Lang.TURTLE.name)

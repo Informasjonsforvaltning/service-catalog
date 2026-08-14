@@ -1,5 +1,6 @@
 package no.digdir.servicecatalog.entity
 
 enum class ServiceType {
-    PUBLIC_SERVICE, SERVICE
+    PUBLIC_SERVICE,
+    SERVICE,
 }

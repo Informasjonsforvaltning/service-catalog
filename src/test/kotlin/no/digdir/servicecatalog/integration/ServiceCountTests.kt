@@ -18,11 +18,10 @@ import org.springframework.boot.testcontainers.context.ImportTestcontainers
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 
-
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
     webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-    properties = ["spring.profiles.active=test"]
+    properties = ["spring.profiles.active=test"],
 )
 @ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
@@ -32,13 +31,12 @@ class ServiceCountTests : ApiTestContext() {
 
     @Test
     fun `get service counts when sysAdmin`() {
-
         val response = apiAuthorizedRequest(
             path,
             port,
             null,
             JwtToken(Access.ROOT).toString(),
-            HttpMethod.GET
+            HttpMethod.GET,
         )
         Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
@@ -53,7 +51,7 @@ class ServiceCountTests : ApiTestContext() {
             port,
             null,
             JwtToken(Access.ORG_READ).toString(),
-            HttpMethod.GET
+            HttpMethod.GET,
         )
         Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
@@ -68,7 +66,7 @@ class ServiceCountTests : ApiTestContext() {
             port,
             null,
             JwtToken(Access.ORG_WRITE).toString(),
-            HttpMethod.GET
+            HttpMethod.GET,
         )
         Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
@@ -83,7 +81,8 @@ class ServiceCountTests : ApiTestContext() {
             port,
             null,
             null,
-            HttpMethod.GET)
+            HttpMethod.GET,
+        )
         Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
     }
 }
