@@ -5,8 +5,4 @@ import com.fasterxml.jackson.annotation.JsonInclude
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-data class ServiceCount(
-    val catalogId: String,
-    val serviceCount: Int,
-    val publicServiceCount: Int
-)
+data class ServiceCount(val catalogId: String, val serviceCount: Int, val publicServiceCount: Int)

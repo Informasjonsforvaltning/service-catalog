@@ -49,5 +49,4 @@ class EndpointPermissions {
             ?.toSet()
             ?: emptySet()
     }
-
 }

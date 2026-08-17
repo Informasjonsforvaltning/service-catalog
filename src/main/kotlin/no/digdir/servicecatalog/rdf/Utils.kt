@@ -16,12 +16,11 @@ import java.io.ByteArrayOutputStream
 import java.net.URI
 import kotlin.Exception
 
-fun Model.serialize(lang: Lang): String =
-    ByteArrayOutputStream().use { out ->
-        write(out, lang.name)
-        out.flush()
-        out.toString("UTF-8")
-    }
+fun Model.serialize(lang: Lang): String = ByteArrayOutputStream().use { out ->
+    write(out, lang.name)
+    out.flush()
+    out.toString("UTF-8")
+}
 
 fun Resource.addLocalizedStringsAsProperty(property: Property, strings: LocalizedStrings?): Resource {
     if (strings?.nb != null) addProperty(property, strings.nb, "nb")
@@ -34,46 +33,47 @@ fun Resource.addStringsAsResources(property: Property, strings: List<String>?): 
     strings?.forEach {
         val stringAsURI = try {
             it.let(::URI).takeIf { parsedURI ->
-                parsedURI.isAbsolute
-                        && !parsedURI.isOpaque
-                        && !parsedURI.host.isNullOrEmpty()
+                parsedURI.isAbsolute &&
+                    !parsedURI.isOpaque &&
+                    !parsedURI.host.isNullOrEmpty()
             }
         } catch (ex: Exception) {
             MAIN_LOGGER.error("unable to parse $it as uri", ex)
             null
         }
-        if (stringAsURI != null) addProperty(property, model.createResource(it))
-        else MAIN_LOGGER.error("$it is not valid as uri")
+        if (stringAsURI != null) {
+            addProperty(property, model.createResource(it))
+        } else {
+            MAIN_LOGGER.error("$it is not valid as uri")
+        }
     }
     return this
 }
 
-fun jenaLangFromAcceptHeader(accept: String?): Lang =
-    when {
-        accept == null -> Lang.TURTLE
-        accept.contains(Lang.TURTLE.headerString) -> Lang.TURTLE
-        accept.contains(Lang.RDFXML.headerString) -> Lang.RDFXML
-        accept.contains(Lang.RDFJSON.headerString) -> Lang.RDFJSON
-        accept.contains(Lang.NTRIPLES.headerString) -> Lang.NTRIPLES
-        accept.contains(Lang.NQUADS.headerString) -> Lang.NQUADS
-        accept.contains(Lang.TRIG.headerString) -> Lang.TRIG
-        accept.contains(Lang.TRIX.headerString) -> Lang.TRIX
-        accept.contains("text/n3") -> Lang.N3
-        accept.contains("*/*") -> Lang.TURTLE
-        else -> throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
-    }
+fun jenaLangFromAcceptHeader(accept: String?): Lang = when {
+    accept == null -> Lang.TURTLE
+    accept.contains(Lang.TURTLE.headerString) -> Lang.TURTLE
+    accept.contains(Lang.RDFXML.headerString) -> Lang.RDFXML
+    accept.contains(Lang.RDFJSON.headerString) -> Lang.RDFJSON
+    accept.contains(Lang.NTRIPLES.headerString) -> Lang.NTRIPLES
+    accept.contains(Lang.NQUADS.headerString) -> Lang.NQUADS
+    accept.contains(Lang.TRIG.headerString) -> Lang.TRIG
+    accept.contains(Lang.TRIX.headerString) -> Lang.TRIX
+    accept.contains("text/n3") -> Lang.N3
+    accept.contains("*/*") -> Lang.TURTLE
+    else -> throw ResponseStatusException(HttpStatus.NOT_ACCEPTABLE)
+}
 
-fun Resource.addAsResourceIfValid(predicate: Property, value: String?): Resource =
-    try {
-        value
-            ?.let(::URI)
-            ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
-            ?.let { model.createResource(value) }
-            ?.let { addProperty(predicate, it) }
-        this
-    } catch (e: Exception) {
-        this
-    }
+fun Resource.addAsResourceIfValid(predicate: Property, value: String?): Resource = try {
+    value
+        ?.let(::URI)
+        ?.takeIf { it.isAbsolute && !it.isOpaque && !it.host.isNullOrEmpty() }
+        ?.let { model.createResource(value) }
+        ?.let { addProperty(predicate, it) }
+    this
+} catch (e: Exception) {
+    this
+}
 
 fun Resource.addPropertyIfExists(predicate: Property, value: String?): Resource {
     value?.let { addProperty(predicate, value) }

@@ -6,18 +6,22 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
-import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator
-import org.springframework.security.oauth2.jwt.*
-import org.springframework.security.oauth2.jwt.JwtClaimNames.AUD
-import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.config.annotation.web.invoke
+import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator
+import org.springframework.security.oauth2.jwt.JwtClaimNames.AUD
+import org.springframework.security.oauth2.jwt.JwtClaimValidator
+import org.springframework.security.oauth2.jwt.JwtDecoder
+import org.springframework.security.oauth2.jwt.JwtIssuerValidator
+import org.springframework.security.oauth2.jwt.JwtTimestampValidator
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder
+import org.springframework.security.web.SecurityFilterChain
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 
 @Configuration
 open class SecurityConfig(
     @param:Value("\${application.cors.originPatterns}")
-    val corsOriginPatterns: Array<String>
+    val corsOriginPatterns: Array<String>,
 ) {
     @Bean
     open fun filterChain(http: HttpSecurity): SecurityFilterChain {
@@ -47,15 +51,20 @@ open class SecurityConfig(
 
     @Bean
     open fun jwtDecoder(properties: OAuth2ResourceServerProperties): JwtDecoder {
-        val jwtDecoder = NimbusJwtDecoder.withJwkSetUri(properties.jwt.jwkSetUri).build()
+        val jwkSetUri = requireNotNull(properties.jwt.jwkSetUri) {
+            "spring.security.oauth2.resourceserver.jwt.jwk-set-uri must be set"
+        }
+        val issuerUri = requireNotNull(properties.jwt.issuerUri) {
+            "spring.security.oauth2.resourceserver.jwt.issuer-uri must be set"
+        }
+        val jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build()
         jwtDecoder.setJwtValidator(
-                DelegatingOAuth2TokenValidator(
-                        JwtTimestampValidator(),
-                        JwtIssuerValidator(properties.jwt.issuerUri),
-                        JwtClaimValidator(AUD) { aud: List<String> -> aud.contains("service-catalog") }
-                )
+            DelegatingOAuth2TokenValidator(
+                JwtTimestampValidator(),
+                JwtIssuerValidator(issuerUri),
+                JwtClaimValidator(AUD) { aud: List<String> -> aud.contains("service-catalog") },
+            ),
         )
         return jwtDecoder
     }
-
 }

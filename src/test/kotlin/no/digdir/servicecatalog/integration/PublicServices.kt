@@ -2,11 +2,17 @@ package no.digdir.servicecatalog.integration
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import no.digdir.servicecatalog.dto.JsonPatchOperation
 import no.digdir.servicecatalog.domain.LocalizedStrings
+import no.digdir.servicecatalog.dto.JsonPatchOperation
 import no.digdir.servicecatalog.dto.OpEnum
 import no.digdir.servicecatalog.dto.PublicServiceDTO
-import no.digdir.servicecatalog.utils.*
+import no.digdir.servicecatalog.utils.ApiTestContext
+import no.digdir.servicecatalog.utils.PUBLIC_SERVICES
+import no.digdir.servicecatalog.utils.PUBLIC_SERVICE_0
+import no.digdir.servicecatalog.utils.PUBLIC_SERVICE_1
+import no.digdir.servicecatalog.utils.PUBLIC_SERVICE_2
+import no.digdir.servicecatalog.utils.PUBLIC_SERVICE_TO_BE_CREATED
+import no.digdir.servicecatalog.utils.apiAuthorizedRequest
 import no.digdir.servicecatalog.utils.jwt.Access
 import no.digdir.servicecatalog.utils.jwt.JwtToken
 import org.junit.jupiter.api.Assertions
@@ -22,11 +28,12 @@ import kotlin.test.assertEquals
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @SpringBootTest(
-        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
-        properties = ["spring.profiles.active=test"])
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = ["spring.profiles.active=test"],
+)
 @ImportTestcontainers(ApiTestContext::class)
 @Tag("integration")
-class PublicServices: ApiTestContext() {
+class PublicServices : ApiTestContext() {
     private val mapper = jacksonObjectMapper()
 
     @Nested
@@ -38,7 +45,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: List<PublicServiceDTO> = mapper.readValue(response["body"] as String)
@@ -52,7 +60,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 null,
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.UNAUTHORIZED.value(), response["status"])
         }
 
@@ -63,7 +72,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
     }
@@ -77,7 +87,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
             Assertions.assertEquals(PUBLIC_SERVICE_1, result)
@@ -90,7 +101,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
     }
@@ -101,7 +113,9 @@ class PublicServices: ApiTestContext() {
         val replaceOperation = JsonPatchOperation(
             op = OpEnum.REPLACE,
             path = "/title/nb",
-            value = "oppdater tittel")
+            value = "oppdater tittel",
+        )
+
         @Test
         fun `forbidden when missing token`() {
             val operations = listOf(replaceOperation)
@@ -110,7 +124,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 null,
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
@@ -122,7 +137,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
@@ -134,7 +150,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
@@ -146,7 +163,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
 
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
@@ -158,15 +176,19 @@ class PublicServices: ApiTestContext() {
 
         @Test
         fun `able to remove public service title when authenticated as write user`() {
-            val operations = listOf(JsonPatchOperation(
-                op = OpEnum.REMOVE,
-                path = "/title/nb"))
+            val operations = listOf(
+                JsonPatchOperation(
+                    op = OpEnum.REMOVE,
+                    path = "/title/nb",
+                ),
+            )
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -177,16 +199,20 @@ class PublicServices: ApiTestContext() {
 
         @Test
         fun `able to add public service description when authenticated as write user`() {
-            val operations = listOf(JsonPatchOperation(
-                op = OpEnum.ADD,
-                path = "/description",
-                value = LocalizedStrings("added nb description", null, null)))
+            val operations = listOf(
+                JsonPatchOperation(
+                    op = OpEnum.ADD,
+                    path = "/description",
+                    value = LocalizedStrings("added nb description", null, null),
+                ),
+            )
             val response = apiAuthorizedRequest(
                 "/internal/catalogs/910244132/public-services/2",
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -198,16 +224,20 @@ class PublicServices: ApiTestContext() {
 
         @Test
         fun `able to move public service nb title to nn when authenticated as write user`() {
-            val operations = listOf(JsonPatchOperation(
-                op = OpEnum.MOVE,
-                path = "/title/nn",
-                from = "/title/nb"))
+            val operations = listOf(
+                JsonPatchOperation(
+                    op = OpEnum.MOVE,
+                    path = "/title/nn",
+                    from = "/title/nb",
+                ),
+            )
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -219,16 +249,20 @@ class PublicServices: ApiTestContext() {
 
         @Test
         fun `able to copy public service nb description to nn when authenticated as write user`() {
-            val operations = listOf(JsonPatchOperation(
-                op = OpEnum.COPY,
-                path = "/title/nn",
-                from = "/title/nb"))
+            val operations = listOf(
+                JsonPatchOperation(
+                    op = OpEnum.COPY,
+                    path = "/title/nn",
+                    from = "/title/nb",
+                ),
+            )
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -246,7 +280,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -258,7 +293,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
     }
@@ -268,25 +304,27 @@ class PublicServices: ApiTestContext() {
         val pathService1 = "/internal/catalogs/910244132/public-services/1"
 
         @Test
-        fun `forbidden when missing token` () {
+        fun `forbidden when missing token`() {
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 null,
                 null,
-                HttpMethod.DELETE)
+                HttpMethod.DELETE,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
-        fun `forbidden when authenticated as read user` () {
+        fun `forbidden when authenticated as read user`() {
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.DELETE)
+                HttpMethod.DELETE,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
@@ -298,7 +336,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.DELETE)
+                HttpMethod.DELETE,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -309,7 +348,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.DELETE)
+                HttpMethod.DELETE,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -320,7 +360,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.DELETE)
+                HttpMethod.DELETE,
+            )
             Assertions.assertEquals(HttpStatus.NO_CONTENT.value(), response["status"])
 
             val notFoundResponse = apiAuthorizedRequest(
@@ -328,7 +369,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.GET)
+                HttpMethod.GET,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), notFoundResponse["status"])
         }
     }
@@ -344,7 +386,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_ADMIN).toString(),
-                HttpMethod.GET
+                HttpMethod.GET,
             )
             assertEquals(HttpStatus.OK.value(), before["status"])
 
@@ -353,7 +395,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST
+                HttpMethod.POST,
             )
             assertEquals(HttpStatus.CREATED.value(), createResponse["status"])
 
@@ -362,7 +404,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_ADMIN).toString(),
-                HttpMethod.GET
+                HttpMethod.GET,
             )
             assertEquals(HttpStatus.OK.value(), after["status"])
 
@@ -378,7 +420,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
                 JwtToken(Access.ORG_ADMIN).toString(),
-                HttpMethod.POST
+                HttpMethod.POST,
             )
             assertEquals(HttpStatus.CREATED.value(), createResponse["status"])
         }
@@ -390,7 +432,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.POST
+                HttpMethod.POST,
             )
             assertEquals(HttpStatus.FORBIDDEN.value(), createResponse["status"])
         }
@@ -402,7 +444,7 @@ class PublicServices: ApiTestContext() {
                 port,
                 mapper.writeValueAsString(PUBLIC_SERVICE_TO_BE_CREATED),
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.POST
+                HttpMethod.POST,
             )
             assertEquals(HttpStatus.FORBIDDEN.value(), createResponse["status"])
         }
@@ -411,26 +453,29 @@ class PublicServices: ApiTestContext() {
     @Nested
     internal inner class PublishPublicService {
         val pathService1 = "/internal/catalogs/910244132/public-services/1/publish"
+
         @Test
-        fun `forbidden when missing token` () {
+        fun `forbidden when missing token`() {
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 null,
                 null,
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
-        fun `forbidden when authenticated as read user` () {
+        fun `forbidden when authenticated as read user`() {
             val response = apiAuthorizedRequest(
                 pathService1,
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
@@ -442,7 +487,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -453,7 +499,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -464,7 +511,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -474,16 +522,20 @@ class PublicServices: ApiTestContext() {
 
         @Test
         fun `bad request when updating published with normal patch updates`() {
-            val operations = listOf(JsonPatchOperation(
-                op = OpEnum.REPLACE,
-                path = "/published",
-                value = true))
+            val operations = listOf(
+                JsonPatchOperation(
+                    op = OpEnum.REPLACE,
+                    path = "/published",
+                    value = true,
+                ),
+            )
             val response = apiAuthorizedRequest(
                 "/internal/catalogs/910244132/public-services/1",
                 port,
                 mapper.writeValueAsString(operations),
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.PATCH)
+                HttpMethod.PATCH,
+            )
 
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
         }
@@ -495,7 +547,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
         }
@@ -504,26 +557,29 @@ class PublicServices: ApiTestContext() {
     @Nested
     internal inner class UnpublishPublicService {
         val path = "/internal/catalogs/910244132/public-services/0/unpublish"
+
         @Test
-        fun `forbidden when missing token` () {
+        fun `forbidden when missing token`() {
             val response = apiAuthorizedRequest(
                 path,
                 port,
                 null,
                 null,
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
 
         @Test
-        fun `forbidden when authenticated as read user` () {
+        fun `forbidden when authenticated as read user`() {
             val response = apiAuthorizedRequest(
                 path,
                 port,
                 null,
                 JwtToken(Access.ORG_READ).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.FORBIDDEN.value(), response["status"])
         }
@@ -535,7 +591,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.WRONG_ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -546,7 +603,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.NOT_FOUND.value(), response["status"])
         }
 
@@ -557,7 +615,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
             Assertions.assertEquals(HttpStatus.OK.value(), response["status"])
 
             val result: PublicServiceDTO = mapper.readValue(response["body"] as String)
@@ -572,7 +631,8 @@ class PublicServices: ApiTestContext() {
                 port,
                 null,
                 JwtToken(Access.ORG_WRITE).toString(),
-                HttpMethod.POST)
+                HttpMethod.POST,
+            )
 
             Assertions.assertEquals(HttpStatus.BAD_REQUEST.value(), response["status"])
         }

@@ -12,5 +12,5 @@ data class Evidence(
     val description: LocalizedStrings?,
     val language: List<String>?,
     val relatedDocumentation: List<String>?,
-    val dataset: List<String>?
+    val dataset: List<String>?,
 )
