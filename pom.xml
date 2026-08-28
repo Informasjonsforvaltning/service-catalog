@@ -28,6 +28,10 @@
 
         <kotlin.version>2.4.10</kotlin.version>
         <testcontainers.version>2.0.5</testcontainers.version>
+        <!-- Overrides Spring Boot 4.1.0 (5.4.2), which is still affected by CVE-2026-54399 and CVE-2026-54428 -->
+        <httpcore5.version>5.4.3</httpcore5.version>
+        <!-- Overrides Spring Boot 4.1.0 (42.7.11), which is still affected by CVE-2026-54291 -->
+        <postgresql.version>42.7.13</postgresql.version>
     </properties>
 
     <dependencies>
@@ -99,12 +103,12 @@
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-core</artifactId>
-            <version>6.1.0</version>
+            <version>6.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.jena</groupId>
             <artifactId>jena-arq</artifactId>
-            <version>6.1.0</version>
+            <version>6.2.0</version>
         </dependency>
 
         <!-- Test -->
