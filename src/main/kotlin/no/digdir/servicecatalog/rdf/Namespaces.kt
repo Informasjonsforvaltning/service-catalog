@@ -27,6 +27,7 @@ class CPSVNO {
         const val URI = "https://data.norge.no/vocabulary/cpsvno#"
 
         val hasRequiredEvidence: Property = ResourceFactory.createProperty("${URI}hasRequiredEvidence")
+        val validityDuration: Property = ResourceFactory.createProperty("${URI}validityDuration")
 
         val Service: Resource = ResourceFactory.createResource("${URI}Service")
         val RequiredEvidence: Resource = ResourceFactory.createResource("${URI}RequiredEvidence")

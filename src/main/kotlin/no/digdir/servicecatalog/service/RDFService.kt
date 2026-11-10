@@ -18,6 +18,7 @@ import no.digdir.servicecatalog.rdf.addLocalizedStringsAsProperty
 import no.digdir.servicecatalog.rdf.addPropertyIfExists
 import no.digdir.servicecatalog.rdf.addStringsAsResources
 import no.digdir.servicecatalog.rdf.serialize
+import org.apache.jena.datatypes.xsd.XSDDatatype
 import org.apache.jena.rdf.model.Model
 import org.apache.jena.rdf.model.ModelFactory
 import org.apache.jena.rdf.model.Resource
@@ -164,6 +165,14 @@ class RDFService(
                     .addStringsAsResources(DCTerms.language, evidence.language)
                     .addStringsAsResources(FOAF.page, evidence.relatedDocumentation)
                     .addStringsAsResources(DCTerms.isPartOf, evidence.dataset)
+                    .addStringsAsResources(DCTerms.type, evidence.type)
+
+                evidence.validityDuration?.takeIf { it.isNotBlank() }?.let {
+                    evidenceResource.addLiteral(
+                        CPSVNO.validityDuration,
+                        model.createTypedLiteral(it, XSDDatatype.XSDduration),
+                    )
+                }
 
                 addProperty(CPSVNO.hasRequiredEvidence, evidenceResource)
             }

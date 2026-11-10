@@ -46,7 +46,9 @@
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
         dct:title        "Evidence title"@en;
         foaf:page        <http://related.documentation.eu>;
-        dct:isPartOf     <http://test.eu/dataset/123> .
+        dct:isPartOf     <http://test.eu/dataset/123>;
+        dct:type         <http://test.eu/evidence-type/123>;
+        cpsvno:validityDuration "P1Y"^^xsd:duration .
 
 <http://localhost:5050/rdf/catalogs/910244132/public-services/0/output/123>
         a                cv:Output;
@@ -105,7 +107,9 @@
         dct:language     <http://publications.europa.eu/resource/authority/language/ENG>;
         dct:title        "Evidence title"@en;
         foaf:page        <http://related.documentation.eu>;
-        dct:isPartOf     <http://test.eu/dataset/123> .
+        dct:isPartOf     <http://test.eu/dataset/123>;
+        dct:type         <http://test.eu/evidence-type/123>;
+        cpsvno:validityDuration "P1Y"^^xsd:duration .
 
 <http://localhost:5050/rdf/catalogs/910244132/services/00/output/321>
         a                cv:Output;

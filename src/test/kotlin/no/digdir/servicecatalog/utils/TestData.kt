@@ -53,6 +53,8 @@ val SERVICE_0 = ServiceDTO(
             language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
             relatedDocumentation = listOf("http://related.documentation.eu"),
             dataset = listOf("http://test.eu/dataset/123"),
+            type = listOf("http://test.eu/evidence-type/123"),
+            validityDuration = "P1Y",
         ),
     ),
     costs = listOf(
@@ -129,6 +131,8 @@ val PUBLIC_SERVICE_0 =
                 language = listOf("http://publications.europa.eu/resource/authority/language/ENG"),
                 relatedDocumentation = listOf("http://related.documentation.eu"),
                 dataset = listOf("http://test.eu/dataset/123"),
+                type = listOf("http://test.eu/evidence-type/123"),
+                validityDuration = "P1Y",
             ),
         ),
         costs = listOf(

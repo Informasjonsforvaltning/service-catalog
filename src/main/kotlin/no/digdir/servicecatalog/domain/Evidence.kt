@@ -13,4 +13,6 @@ data class Evidence(
     val language: List<String>?,
     val relatedDocumentation: List<String>?,
     val dataset: List<String>?,
+    val type: List<String>?,
+    val validityDuration: String?,
 )
