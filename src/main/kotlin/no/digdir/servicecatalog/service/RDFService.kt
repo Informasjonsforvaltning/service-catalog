@@ -165,7 +165,7 @@ class RDFService(
                     .addStringsAsResources(DCTerms.language, evidence.language)
                     .addStringsAsResources(FOAF.page, evidence.relatedDocumentation)
                     .addStringsAsResources(DCTerms.isPartOf, evidence.dataset)
-                    .addStringsAsResources(DCTerms.type, evidence.type)
+                    .addAsResourceIfValid(DCTerms.type, evidence.type)
 
                 evidence.validityDuration?.takeIf { it.isNotBlank() }?.let {
                     evidenceResource.addLiteral(
